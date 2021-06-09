@@ -2,6 +2,10 @@
 
 アルバムアプリ「日の目」のクライアントサイド
 
+## Proposal
+
+https://docs.google.com/presentation/d/1LannnlIllrHsIeDaJn2ZEqqydPsqNhCMqUXsaruBh7o/edit
+
 # Installation
 
 ## expo
