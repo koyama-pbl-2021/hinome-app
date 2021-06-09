@@ -6,8 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "eslint src/*",
-    "lint:fix": "eslint --fix src/*"
+    "lint": "eslint src/*"
   },
   "dependencies": {
     "expo": "~41.0.1",
