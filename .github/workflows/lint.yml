@@ -21,3 +21,5 @@ jobs:
           reporter: github-pr-review
           eslint_flags: "src/"
       # Jestは設定後追加実装
+      - name: 検証
+        run: npm run lint
