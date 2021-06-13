@@ -1,5 +1,7 @@
 # ブランチ運用
 
+## 通常フロー
+
 ![ブランチ運用（通常フロー）](https://user-images.githubusercontent.com/34410077/121796281-c4702300-cc52-11eb-969a-333f90d3eeea.jpg)
 
 ① develop ブランチから feature/◯◯ ブランチを切る。
@@ -28,7 +30,7 @@
 
 ⑦ main ブランチへ Pull Request を作成し、マージする。
 
-# HotFix
+## HotFix
 
 ![ブランチ運用（HotFix）](https://user-images.githubusercontent.com/34410077/121796293-d05be500-cc52-11eb-8a0f-9dc1b91141c6.jpg)
 
