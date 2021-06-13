@@ -1,0 +1,25 @@
+name: Lint and Test
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  Lint:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: npm install
+        run: npm install # パッケージ増えてきたらnpm install eslintのみで
+      - name: eslint reviewdog
+        uses: reviewdog/action-eslint@v1
+        with:
+          reporter: github-pr-review
+          eslint_flags: "src/"
+      # Jestは設定後追加実装
+      - name: 検証
+        run: npm run lint
