@@ -1,1 +1,2 @@
-var hoge = 1;
+const hoge = 1;
+console.log(hoge);
