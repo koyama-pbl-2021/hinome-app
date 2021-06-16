@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { AuthScreen } from "../screens/AuthScreen";
 /* contexts */
 
-export const AppNavigator = () => {
+export const AppNavigator: React.FC = () => {
   return (
     <NavigationContainer>
       <AuthScreen />

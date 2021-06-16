@@ -36,7 +36,7 @@ const HinomeStack = () => {
   );
 };
 
-export const MainTabNavigator = () => {
+export const MainTabNavigator: React.FC = () => {
   return (
     <NavigationContainer>
       <Tab.Navigator
