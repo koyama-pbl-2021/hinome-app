@@ -10,8 +10,6 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 
 export const AuthScreen: React.FC = () => {
-  const onLoginPressed = () => {}; // 未実装
-  const onForgotYourPasswordPressed = () => {}; // 未実装
   return (
     <LinearGradient
       start={{
@@ -50,7 +48,7 @@ export const AuthScreen: React.FC = () => {
             flex: 1,
           }}
         />
-        <TouchableOpacity onPress={onLoginPressed} style={styles.loginButton}>
+        <TouchableOpacity onPress={() => {}} style={styles.loginButton}>
           <Image
             source={require("../../assets/icon-log-in.png")}
             style={styles.loginButtonImage}
@@ -58,7 +56,7 @@ export const AuthScreen: React.FC = () => {
           <Text style={styles.loginButtonText}>LOG IN</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={onForgotYourPasswordPressed}
+          onPress={() => {}}
           style={styles.forgotYourPasswordButton}
         >
           <Text style={styles.forgotYourPasswordButtonText}>
