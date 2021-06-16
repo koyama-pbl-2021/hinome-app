@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-export const AuthScreen: React.FC = () => {
+export const SignUpScreen: React.FC = () => {
   return (
     <LinearGradient
       start={{
@@ -22,18 +22,15 @@ export const AuthScreen: React.FC = () => {
       }}
       locations={[0, 1]}
       colors={["rgb(247, 132, 98)", "rgb(139, 27, 140)"]}
-      style={styles.loginViewLinearGradient}
+      style={styles.signUpViewLinearGradient}
     >
-      <View style={styles.loginView}>
-        <Text style={styles.logInText}>Log in</Text>
-        <Text style={styles.welcomeBackText}>
-          Welcome back.{"\n"}Hinome awaits you.
-        </Text>
-        <View style={styles.loginFieldsView}>
+      <View style={styles.signUpView}>
+        <Text style={styles.signUpText}>Sign Up</Text>
+        <View style={styles.signUpFieldsView}>
           <TextInput
             autoCorrect={false}
-            placeholder="Your nickname"
-            style={styles.yourNicknameTextInput}
+            placeholder="Your email"
+            style={styles.yourEmailTextInput}
           />
           <View style={styles.separatorView} />
           <TextInput
@@ -48,20 +45,12 @@ export const AuthScreen: React.FC = () => {
             flex: 1,
           }}
         />
-        <TouchableOpacity onPress={() => {}} style={styles.loginButton}>
+        <TouchableOpacity onPress={() => {}} style={styles.signUpButton}>
           <Image
             source={require("../../assets/icon-log-in.png")}
-            style={styles.loginButtonImage}
+            style={styles.signUpButtonImage}
           />
-          <Text style={styles.loginButtonText}>LOG IN</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {}}
-          style={styles.forgotYourPasswordButton}
-        >
-          <Text style={styles.forgotYourPasswordButtonText}>
-            Forgot your password?
-          </Text>
+          <Text style={styles.signUpButtonText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -77,15 +66,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginLeft: 8,
   },
-  loginView: {
+  signUpView: {
     width: "100%",
     height: "100%",
     alignItems: "center",
   },
-  loginViewLinearGradient: {
+  signUpViewLinearGradient: {
     flex: 1,
   },
-  logInText: {
+  signUpText: {
     backgroundColor: "transparent",
     color: "white",
     fontSize: 42,
@@ -94,16 +83,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 114,
   },
-  welcomeBackText: {
-    color: "white",
-    fontSize: 18,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "center",
-    backgroundColor: "transparent",
-    marginTop: 20,
-  },
-  loginFieldsView: {
+  signUpFieldsView: {
     backgroundColor: "white",
     borderRadius: 2,
     shadowColor: "rgba(0, 0, 0, 00.20)",
@@ -115,7 +95,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginTop: 70,
   },
-  yourNicknameTextInput: {
+  yourEmailTextInput: {
     backgroundColor: "transparent",
     padding: 0,
     color: "black",
@@ -147,7 +127,7 @@ const styles = StyleSheet.create({
     marginRight: 15,
     marginTop: 14,
   },
-  loginButton: {
+  signUpButton: {
     backgroundColor: "white",
     borderRadius: 2,
     shadowColor: "rgba(0, 0, 0, 00.20)",
@@ -163,35 +143,14 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginBottom: 11,
   },
-  loginButtonText: {
+  signUpButtonText: {
     color: "rgb(217, 103, 110)",
     fontSize: 15,
     fontStyle: "normal",
     fontWeight: "normal",
     textAlign: "center",
   },
-  loginButtonImage: {
-    resizeMode: "contain",
-    marginRight: 10,
-  },
-  forgotYourPasswordButton: {
-    backgroundColor: "transparent",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 0,
-    width: 150,
-    height: 18,
-    marginBottom: 19,
-  },
-  forgotYourPasswordButtonText: {
-    color: "white",
-    fontSize: 15,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "center",
-  },
-  forgotYourPasswordButtonImage: {
+  signUpButtonImage: {
     resizeMode: "contain",
     marginRight: 10,
   },

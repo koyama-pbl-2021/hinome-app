@@ -2,13 +2,14 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 /* navigators */
 /* screens */
-import { AuthScreen } from "../screens/AuthScreen";
+import { LogInScreen } from "../screens/LogInScreen";
+import { SignUpScreen } from "../screens/SignUpScreen";
 /* contexts */
 
 export const AppNavigator: React.FC = () => {
   return (
     <NavigationContainer>
-      <AuthScreen />
+      <SignUpScreen />
     </NavigationContainer>
   );
 };
