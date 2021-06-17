@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { signUp } from "../lib/firebase";
 import {
   Image,
   StyleSheet,
@@ -10,6 +11,12 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 
 export const SignUpScreen: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const onSubmit = async () => {
+    await signUp(email, password);
+  };
   return (
     <LinearGradient
       start={{
@@ -29,12 +36,20 @@ export const SignUpScreen: React.FC = () => {
         <View style={styles.signUpFieldsView}>
           <TextInput
             autoCorrect={false}
+            value={email}
+            onChangeText={(text) => {
+              setEmail(text);
+            }}
             placeholder="Your email"
             style={styles.yourEmailTextInput}
           />
           <View style={styles.separatorView} />
           <TextInput
             autoCorrect={false}
+            value={password}
+            onChangeText={(text) => {
+              setPassword(text);
+            }}
             placeholder="Your password"
             secureTextEntry={true}
             style={styles.yourPasswordTextInput}
@@ -45,7 +60,7 @@ export const SignUpScreen: React.FC = () => {
             flex: 1,
           }}
         />
-        <TouchableOpacity onPress={() => {}} style={styles.signUpButton}>
+        <TouchableOpacity onPress={onSubmit} style={styles.signUpButton}>
           <Image
             source={require("../../assets/icon-log-in.png")}
             style={styles.signUpButtonImage}
