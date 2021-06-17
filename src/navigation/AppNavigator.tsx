@@ -9,7 +9,7 @@ import { SignUpScreen } from "../screens/SignUpScreen";
 export const AppNavigator: React.FC = () => {
   return (
     <NavigationContainer>
-      <SignUpScreen />
+      <LogInScreen />
     </NavigationContainer>
   );
 };

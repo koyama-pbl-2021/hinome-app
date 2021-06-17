@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+/* lib */
 import { signUp } from "../lib/firebase";
 import {
   Image,

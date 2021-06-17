@@ -19,3 +19,10 @@ export const signUp = async (email: string, password: string) => {
     .createUserWithEmailAndPassword(email, password);
   console.log(userCredential);
 };
+
+export const logIn = async (email: string, password: string) => {
+  const userCredential = await firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password);
+  console.log(userCredential);
+};
