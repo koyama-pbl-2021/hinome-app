@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+/* lib */
+import { logIn } from "../lib/firebase";
 import {
   Image,
   StyleSheet,
@@ -10,6 +12,12 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 
 export const LogInScreen: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+
+  const onSubmit = async () => {
+    await logIn(email, password);
+  };
   return (
     <LinearGradient
       start={{
@@ -32,12 +40,20 @@ export const LogInScreen: React.FC = () => {
         <View style={styles.loginFieldsView}>
           <TextInput
             autoCorrect={false}
-            placeholder="Your nickname"
-            style={styles.yourNicknameTextInput}
+            value={email}
+            onChangeText={(text) => {
+              setEmail(text);
+            }}
+            placeholder="Your email"
+            style={styles.yourEmailTextInput}
           />
           <View style={styles.separatorView} />
           <TextInput
             autoCorrect={false}
+            value={password}
+            onChangeText={(text) => {
+              setPassword(text);
+            }}
             placeholder="Your password"
             secureTextEntry={true}
             style={styles.yourPasswordTextInput}
@@ -48,7 +64,7 @@ export const LogInScreen: React.FC = () => {
             flex: 1,
           }}
         />
-        <TouchableOpacity onPress={() => {}} style={styles.loginButton}>
+        <TouchableOpacity onPress={onSubmit} style={styles.loginButton}>
           <Image
             source={require("../../assets/icon-log-in.png")}
             style={styles.loginButtonImage}
@@ -115,7 +131,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginTop: 70,
   },
-  yourNicknameTextInput: {
+  yourEmailTextInput: {
     backgroundColor: "transparent",
     padding: 0,
     color: "black",
