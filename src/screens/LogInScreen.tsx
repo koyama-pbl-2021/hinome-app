@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { StackNavigationProp } from "@react-navigation/stack";
+/* components */
+import { Loading } from "../components/Loading";
 /* contexts */
 import { UserContext } from "../contexts/UserContext";
 /* lib */
@@ -24,11 +26,14 @@ export const LogInScreen = ({ navigation }: Props) => {
   const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = async () => {
+    setLoading(true);
     const user = await logIn(email, password);
     setUser(user);
     console.log(user);
+    setLoading(false);
   };
 
   const onPressSignUp = () => {
@@ -100,6 +105,7 @@ export const LogInScreen = ({ navigation }: Props) => {
           <Text style={styles.signUpButtonText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
+      <Loading visible={loading} />
     </LinearGradient>
   );
 };

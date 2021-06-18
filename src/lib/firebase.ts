@@ -23,7 +23,12 @@ export const signUp = async (email: string, password: string) => {
   const userCredential = await firebase
     .auth()
     .createUserWithEmailAndPassword(email, password);
-  console.log(userCredential);
+  const { uid } = userCredential.user;
+  await firebase.firestore().collection("users").doc(uid).set(initialUser);
+  return {
+    ...initialUser,
+    id: uid,
+  } as User;
 };
 
 export const logIn = async (email: string, password: string) => {

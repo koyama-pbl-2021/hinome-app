@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-/* lib */
-import { signUp } from "../lib/firebase";
+import React, { useContext, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -10,13 +8,32 @@ import {
   View,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { StackNavigationProp } from "@react-navigation/stack";
+/* components */
+import { Loading } from "../components/Loading";
+/* contexts */
+import { UserContext } from "../contexts/UserContext";
+/* lib */
+import { signUp } from "../lib/firebase";
+/* types */
+import { RootStackParamList } from "../types/navigation";
 
-export const SignUpScreen: React.FC = () => {
+type Props = {
+  navigation: StackNavigationProp<RootStackParamList, "SignUp">;
+};
+
+export const SignUpScreen = ({ navigation }: Props) => {
+  const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = async () => {
-    await signUp(email, password);
+    setLoading(true);
+    const user = await signUp(email, password);
+    setUser(user);
+    console.log(user);
+    setLoading(false);
   };
   return (
     <LinearGradient
@@ -69,6 +86,7 @@ export const SignUpScreen: React.FC = () => {
           <Text style={styles.signUpButtonText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
+      <Loading visible={loading} />
     </LinearGradient>
   );
 };
