@@ -14,7 +14,10 @@ const firebaseConfig = {
   measurementId: env.FIREBASE_MEASUREMENT_ID,
 };
 
-firebase.initializeApp(firebaseConfig);
+// Initialize Firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 export const signUp = async (email: string, password: string) => {
   const userCredential = await firebase
@@ -27,6 +30,19 @@ export const logIn = async (email: string, password: string) => {
   const userCredential = await firebase
     .auth()
     .signInWithEmailAndPassword(email, password);
-
-  console.log(userCredential);
+  const { uid } = userCredential.user;
+  const userDoc = await firebase.firestore().collection("users").doc(uid).get();
+  if (!userDoc.exists) {
+    // userDocが存在しないときはinitialUserをdatastoreに追加する
+    await firebase.firestore().collection("users").doc(uid).set(initialUser);
+    return {
+      ...initialUser,
+      id: uid,
+    } as User;
+  } else {
+    return {
+      id: uid,
+      ...userDoc.data(),
+    } as User;
+  }
 };

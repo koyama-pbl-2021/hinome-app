@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Image,
   StyleSheet,
@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { StackNavigationProp } from "@react-navigation/stack";
+/* contexts */
+import { UserContext } from "../contexts/UserContext";
 /* lib */
 import { logIn } from "../lib/firebase";
 /* types */
@@ -19,11 +21,14 @@ type Props = {
 };
 
 export const LogInScreen = ({ navigation }: Props) => {
+  const { setUser } = useContext(UserContext);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const onSubmit = async () => {
-    await logIn(email, password);
+    const user = await logIn(email, password);
+    setUser(user);
+    console.log(user);
   };
 
   const onPressSignUp = () => {
