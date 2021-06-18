@@ -3,6 +3,7 @@ import firebase from "firebase";
 import env from "../../env.json";
 /* types */
 import { initialUser, User } from "../types/user";
+import { Album } from "../types/album";
 
 const firebaseConfig = {
   apiKey: env.FIREBASE_API_KEY,
@@ -50,4 +51,16 @@ export const logIn = async (email: string, password: string) => {
       ...userDoc.data(),
     } as User;
   }
+};
+
+export const getAlbums = async () => {
+  const snapshot = await firebase
+    .firestore()
+    .collection("albums")
+    // .orderBy('score', 'desc') //ここは日付でソートしたい
+    .get();
+  const albums = snapshot.docs.map(
+    (doc) => ({ ...doc.data(), id: doc.id } as Album)
+  );
+  return albums;
 };
