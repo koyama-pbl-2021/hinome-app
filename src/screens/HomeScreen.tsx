@@ -20,7 +20,7 @@ export const HomeScreen: React.FC = () => {
     setAlbums(albums);
     console.log(albums);
   };
-  const onPressShop = (album: Album) => {};
+  const onPressAlbum = (album: Album) => {};
 
   return (
     <LinearGradient
@@ -40,7 +40,7 @@ export const HomeScreen: React.FC = () => {
         <FlatList
           data={albums}
           renderItem={({ item }: { item: Album }) => (
-            <AlbumItem album={item} onPress={() => onPressShop(item)} />
+            <AlbumItem album={item} onPress={() => onPressAlbum(item)} />
           )}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2}
