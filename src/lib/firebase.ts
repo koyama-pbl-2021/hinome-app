@@ -1,5 +1,8 @@
 import firebase from "firebase";
+/* env */
 import env from "../../env.json";
+/* types */
+import { initialUser, User } from "../types/user";
 
 const firebaseConfig = {
   apiKey: env.FIREBASE_API_KEY,
@@ -24,5 +27,6 @@ export const logIn = async (email: string, password: string) => {
   const userCredential = await firebase
     .auth()
     .signInWithEmailAndPassword(email, password);
+
   console.log(userCredential);
 };

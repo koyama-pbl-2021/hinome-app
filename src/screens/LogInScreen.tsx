@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-/* lib */
-import { logIn } from "../lib/firebase";
 import {
   Image,
   StyleSheet,
@@ -10,14 +8,28 @@ import {
   View,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { StackNavigationProp } from "@react-navigation/stack";
+/* lib */
+import { logIn } from "../lib/firebase";
+/* types */
+import { RootStackParamList } from "../types/navigation";
 
-export const LogInScreen: React.FC = () => {
+type Props = {
+  navigation: StackNavigationProp<RootStackParamList, "SignUp">;
+};
+
+export const LogInScreen = ({ navigation }: Props) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const onSubmit = async () => {
     await logIn(email, password);
   };
+
+  const onPressSignUp = () => {
+    navigation.navigate("SignUp");
+  };
+
   return (
     <LinearGradient
       start={{
@@ -78,6 +90,9 @@ export const LogInScreen: React.FC = () => {
           <Text style={styles.forgotYourPasswordButtonText}>
             Forgot your password?
           </Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onPressSignUp} style={styles.signUpButton}>
+          <Text style={styles.signUpButtonText}>Sign Up</Text>
         </TouchableOpacity>
       </View>
     </LinearGradient>
@@ -208,6 +223,27 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   forgotYourPasswordButtonImage: {
+    resizeMode: "contain",
+    marginRight: 10,
+  },
+  signUpButton: {
+    backgroundColor: "transparent",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 0,
+    width: 150,
+    height: 18,
+    marginBottom: 19,
+  },
+  signUpButtonText: {
+    color: "white",
+    fontSize: 15,
+    fontStyle: "normal",
+    fontWeight: "normal",
+    textAlign: "center",
+  },
+  signUpButtonImage: {
     resizeMode: "contain",
     marginRight: 10,
   },
