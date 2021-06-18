@@ -1,6 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 /* navigators */
+import { AuthStackNavigator } from "./AuthStackNavigator";
 /* screens */
 import { LogInScreen } from "../screens/LogInScreen";
 import { SignUpScreen } from "../screens/SignUpScreen";
@@ -9,7 +10,7 @@ import { SignUpScreen } from "../screens/SignUpScreen";
 export const AppNavigator: React.FC = () => {
   return (
     <NavigationContainer>
-      <LogInScreen />
+      <AuthStackNavigator />
     </NavigationContainer>
   );
 };
