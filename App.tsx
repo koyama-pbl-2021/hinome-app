@@ -1,7 +1,17 @@
 import React, { useState } from "react";
+/* navigators */
 import { AppNavigator } from "./src/navigation/AppNavigator";
-import { MainTabNavigator } from "./src/navigation/MainTabNavigator";
+/* contexts */
+import { UserContext } from "./src/contexts/UserContext";
+/* types */
+import { User } from "./src/types/user";
 
 export default function App() {
-  return <AppNavigator />;
+  const [user, setUser] = useState<User>();
+
+  return (
+    <UserContext.Provider value={{ user, setUser }}>
+      <AppNavigator />
+    </UserContext.Provider>
+  );
 }
