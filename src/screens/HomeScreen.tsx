@@ -1,8 +1,27 @@
-import React from "react";
-import { StyleSheet, Text } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, SafeAreaView, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+/* components */
+import { AlbumItem } from "../components/AlbumItem";
+/* lib */
+import { getAlbums } from "../lib/firebase";
+/* types */
+import { Album } from "../types/album";
 
 export const HomeScreen: React.FC = () => {
+  const [albums, setAlbums] = useState<Album[]>([]);
+
+  useEffect(() => {
+    getFirebaseItems();
+  }, []);
+
+  const getFirebaseItems = async () => {
+    const albums = await getAlbums();
+    setAlbums(albums);
+    console.log(albums);
+  };
+  const onPressShop = (album: Album) => {};
+
   return (
     <LinearGradient
       start={{
@@ -17,7 +36,16 @@ export const HomeScreen: React.FC = () => {
       colors={["rgb(247, 132, 98)", "rgb(139, 27, 140)"]}
       style={styles.loginViewLinearGradient}
     >
-      <Text style={styles.welcomeBackText}>HomeScreen</Text>
+      <SafeAreaView>
+        <FlatList
+          data={albums}
+          renderItem={({ item }: { item: Album }) => (
+            <AlbumItem album={item} onPress={() => onPressShop(item)} />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          numColumns={2}
+        />
+      </SafeAreaView>
     </LinearGradient>
   );
 };
