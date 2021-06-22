@@ -3,6 +3,8 @@ import { SafeAreaView, StyleSheet, Text, View, Button} from 'react-native';
 import { Camera as ExpoCamera } from 'expo-camera';
 import CountDown from 'react-native-countdown-component';
 import moment from 'moment';
+import {upLoadImg} from '../lib/firebase'
+
 
 export const TimerScreen: React.FC = () => {
   const [totalDuration, setTotalDuration] = useState(0);
@@ -14,7 +16,9 @@ export const TimerScreen: React.FC = () => {
       const { uri } = await cameraRef.current.takePictureAsync(); // uriはローカルイメージURIで一時的にローカルに保存される
       const response = await fetch(uri);
       const blob = await response.blob();
+      const imgName = blob.data.name;
       // console.log(blob.data.name);
+      upLoadImg(imgName, blob).then((url) => { console.log(url); });
     }
   };
   return (
@@ -22,7 +26,6 @@ export const TimerScreen: React.FC = () => {
       <ExpoCamera ref={cameraRef}>
         <Button
           onPress={() => snap()}
-        
           title="Press Me"
         >
         </Button>
