@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Feather, Entypo, MaterialIcons} from "@expo/vector-icons";
+import { Feather, Entypo, MaterialIcons } from "@expo/vector-icons";
 /* navigators */
 /* screens */
 import { HomeScreen } from "../screens/HomeScreen";
