@@ -1,0 +1,22 @@
+name: Build and Deploy of integration environment
+
+on:
+  pull_request:
+    branches:
+      - develop
+    types: [closed]
+
+jobs:
+  BuildAndDeploy:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true # PR merge時に発火
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - name: npm install
+        run: npm install
+      - name: expo publish
+        run: expo publish --release-channel integration
