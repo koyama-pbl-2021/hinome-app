@@ -65,15 +65,19 @@ export const getAlbums = async () => {
   return albums;
 };
 
-export const upLoadImg = (imgName, blob): Promise<string> => new Promise((resolve) => {
-  const storageRef = firebase.storage().ref();
-  const cloudStoragePath = storageRef.child(imgName);
-  cloudStoragePath.put(blob).then((snapshot): void => {
-    cloudStoragePath.getDownloadURL().then((url) => {
-      console.log('ok');
-      resolve(url);
-    }).catch((error) => {
-      console.log(error);
+export const upLoadImg = (imgName, blob): Promise<string> =>
+  new Promise((resolve) => {
+    const storageRef = firebase.storage().ref();
+    const cloudStoragePath = storageRef.child(imgName);
+    cloudStoragePath.put(blob).then((snapshot): void => {
+      cloudStoragePath
+        .getDownloadURL()
+        .then((url) => {
+          console.log("ok");
+          resolve(url);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     });
   });
-});

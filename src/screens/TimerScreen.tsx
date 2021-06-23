@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Button} from 'react-native';
-import { Camera as ExpoCamera } from 'expo-camera';
-import CountDown from 'react-native-countdown-component';
-import moment from 'moment';
-import {upLoadImg} from '../lib/firebase'
-
+import React, { useState, useEffect, useRef } from "react";
+import { SafeAreaView, StyleSheet, Text, View, Button } from "react-native";
+import { Camera as ExpoCamera } from "expo-camera";
+import CountDown from "react-native-countdown-component";
+import moment from "moment";
+import { upLoadImg } from "../lib/firebase";
 
 export const TimerScreen: React.FC = () => {
   const [totalDuration, setTotalDuration] = useState(0);
@@ -18,26 +17,24 @@ export const TimerScreen: React.FC = () => {
       const blob = await response.blob();
       const imgName = blob.data.name;
       // console.log(blob.data.name);
-      upLoadImg(imgName, blob).then((url) => { console.log(url); });
+      upLoadImg(imgName, blob).then((url) => {
+        console.log(url);
+      });
     }
   };
   return (
     <SafeAreaView style={styles.container}>
       <ExpoCamera ref={cameraRef}>
-        <Button
-          onPress={() => snap()}
-          title="Press Me"
-        >
-        </Button>
-      </ExpoCamera>
-      <CountDown
-        until={+10}
-        size={30}
-        onFinish={() => snap() }
-        digitStyle={{backgroundColor: '#FFF'}}
-        digitTxtStyle={{color: '#1CC625'}}
-        timeToShow={['S']}
+        <Button onPress={() => snap()} title="Press Me"></Button>
+        <CountDown
+          until={+10}
+          size={30}
+          onFinish={() => snap()}
+          digitStyle={{ backgroundColor: "#FFF" }}
+          digitTxtStyle={{ color: "#1CC625" }}
+          timeToShow={["S"]}
         />
+      </ExpoCamera>
     </SafeAreaView>
   );
 };
@@ -46,25 +43,25 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     padding: 20,
   },
   button: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 100,
     zIndex: 1,
-    alignSelf: 'center',
+    alignSelf: "center",
     height: 80,
     width: 80,
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
 });
-  
+
 export default TimerScreen;
