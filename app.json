@@ -1,9 +1,9 @@
 {
   "expo": {
     "name": "hinome-app",
-    "owner": "hinome-owner",
+    "owner": "koyama-pbl-2021",
     "slug": "hinome-app",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
