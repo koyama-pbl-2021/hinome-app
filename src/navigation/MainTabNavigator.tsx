@@ -87,6 +87,5 @@ export const MainTabNavigator: React.FC = () => {
         }}
       />
     </Tab.Navigator>
-
   );
 };
