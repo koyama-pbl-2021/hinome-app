@@ -33,7 +33,7 @@ export const TimerScreen: React.FC = () => {
           digitStyle={{ backgroundColor: "#FFF" }}
           digitTxtStyle={{ color: "#1CC625" }}
           timeToShow={["S"]}
-      />
+        />
       </ExpoCamera>
     </SafeAreaView>
   );
