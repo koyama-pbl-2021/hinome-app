@@ -82,7 +82,7 @@ export const MainTabNavigator: React.FC = () => {
         options={{
           tabBarLabel: "Hinome",
           tabBarIcon: ({ color, size }) => (
-           <Entypo name="adjust" color={color} size={size} />
+            <Entypo name="adjust" color={color} size={size} />
           ),
         }}
       />
