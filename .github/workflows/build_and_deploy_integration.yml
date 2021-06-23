@@ -4,12 +4,12 @@ on:
   pull_request:
     branches:
       - develop
-    types: [closed]
+#    types: [closed]
 
 jobs:
   BuildAndDeploy:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true # PR merge時に発火
+    #    if: github.event.pull_request.merged == true # PR merge時に発火
     env:
       EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
     steps:
