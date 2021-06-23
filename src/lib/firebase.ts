@@ -80,4 +80,4 @@ export const upLoadImg = (imgName, blob): Promise<string> =>
           console.log(error);
         });
     });
-    });
+        });
