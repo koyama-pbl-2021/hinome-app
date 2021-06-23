@@ -17,11 +17,24 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
-      - uses: expo/expo-github-action@v6
-        with:
-          expo-version: 4.x
-          token: ${{ secrets.EXPO_TOKEN }}
-      - name: npm install
-        run: npm install
-      - name: expo publish
-        run: expo publish --release-channel integration
+      # - uses: expo/expo-github-action@v6
+      #   with:
+      #     expo-version: 4.x
+      #     token: ${{ secrets.EXPO_TOKEN }}
+      # - name: npm install
+      #   run: npm install
+      - name: make env.json from secrets
+        run: | cat << EOF > ./env.json
+            { "FIREBASE_API_KEY": "${{ secrets.TEST }}",\
+              "FIREBASE_AUTH_DOMAIN": "${{ secrets.TEST }}",\
+              "FIREBASE_PROJECT_ID": "${{ secrets.TEST }}",\
+              "FIREBASE_STORAGE": "${{ secrets.TEST }}",\
+              "FIREBASE_SENDER_ID": "${{ secrets.TEST }}",\
+              "FIREBASE_APP_ID": "${{ secrets.TEST }}",\
+              "FIREBASE_MEASUREMENT_ID": "${{ secrets.TEST }}"\
+            }
+            EOF
+      - name: ls
+        run: ls
+      # - name: expo publish
+      #   run: expo publish --release-channel integration
