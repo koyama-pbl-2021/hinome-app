@@ -10,12 +10,17 @@ jobs:
   BuildAndDeploy:
     runs-on: ubuntu-latest
     #    if: github.event.pull_request.merged == true # PR merge時に発火
-    env:
-      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - uses: expo/expo-github-action@v6
+        with:
+          expo-version: 4.x
+          token: ${{ secrets.EXPO_TOKEN }}
       - name: npm install
         run: npm install
       - name: expo publish
