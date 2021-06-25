@@ -8,7 +8,7 @@ import { RootStackParamList } from "../types/navigation";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export const HomeStackNavigator = () => {
+export const HomeStackNavigator: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
