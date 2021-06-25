@@ -16,7 +16,7 @@ type Props = {
   route: RouteProp<RootStackParamList, "Album">;
 };
 
-export const AlbumScreen = ({ navigation, route }: Props) => {
+export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { album } = route.params;
   const [photos, setPhotos] = useState<Photo[]>([]);
 

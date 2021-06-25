@@ -14,7 +14,7 @@ type Props = {
   navigation: StackNavigationProp<RootStackParamList, "Home">;
 };
 
-export const HomeScreen = ({ navigation }: Props) => {
+export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   const [albums, setAlbums] = useState<Album[]>([]);
 
   useEffect(() => {
