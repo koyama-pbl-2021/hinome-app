@@ -4,6 +4,7 @@ import env from "../../env.json";
 /* types */
 import { initialUser, User } from "../types/user";
 import { Album } from "../types/album";
+import { Photo } from "../types/photo";
 
 const firebaseConfig = {
   apiKey: env.FIREBASE_API_KEY,
