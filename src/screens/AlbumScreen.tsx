@@ -4,30 +4,34 @@ import { LinearGradient } from "expo-linear-gradient";
 /* components */
 import { AlbumItem } from "../components/AlbumItem";
 /* lib */
-import { getAlbums } from "../lib/firebase";
+import { getPhotos } from "../lib/firebase";
 /* types */
-import { Album } from "../types/album";
+import { Photo } from "../types/photo";
+import { RouteProp } from "@react-navigation/native";
 import { RootStackParamList } from "../types/navigation";
 import { StackNavigationProp } from "@react-navigation/stack";
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParamList, "Home">;
+  navigation: StackNavigationProp<RootStackParamList, "Album">;
+  route: RouteProp<RootStackParamList, "Album">;
 };
 
-export const HomeScreen = ({ navigation }: Props) => {
-  const [albums, setAlbums] = useState<Album[]>([]);
+export const AlbumScreen = ({ navigation, route }: Props) => {
+  const { album } = route.params;
+  const [photos, setPhotos] = useState<Photo[]>([]);
 
   useEffect(() => {
     getFirebaseItems();
   }, []);
 
   const getFirebaseItems = async () => {
-    const albums = await getAlbums();
-    setAlbums(albums);
+    const photos = await getPhotos(album.id);
+    setPhotos(photos);
+    console.log(photos);
   };
 
-  const onPressAlbum = (album: Album) => {
-    navigation.navigate("Album", { album });
+  const onPressPhoto = (photo: Photo) => {
+    // 画像を表示する処理
   };
 
   return (
@@ -46,9 +50,9 @@ export const HomeScreen = ({ navigation }: Props) => {
     >
       <SafeAreaView>
         <FlatList
-          data={albums}
-          renderItem={({ item }: { item: Album }) => (
-            <AlbumItem album={item} onPress={() => onPressAlbum(item)} />
+          data={photos}
+          renderItem={({ item }: { item: Photo }) => (
+            <AlbumItem album={item} onPress={() => onPressPhoto(item)} />
           )}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2}
