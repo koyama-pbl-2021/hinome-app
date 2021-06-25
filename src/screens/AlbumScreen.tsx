@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, SafeAreaView, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 /* components */
-import { AlbumItem } from "../components/AlbumItem";
+import { PhotoItem } from "../components/PhotoItem";
 /* lib */
 import { getPhotos } from "../lib/firebase";
 /* types */
@@ -52,7 +52,7 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
         <FlatList
           data={photos}
           renderItem={({ item }: { item: Photo }) => (
-            <AlbumItem album={item} onPress={() => onPressPhoto(item)} />
+            <PhotoItem photo={item} onPress={() => onPressPhoto(item)} />
           )}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2}
