@@ -64,3 +64,18 @@ export const getAlbums = async () => {
   );
   return albums;
 };
+
+// albumIdで引っ張ってくる
+export const getPhotos = async (albumId: string) => {
+  const snapshot = await firebase
+    .firestore()
+    .collection("albums")
+    .doc(albumId)
+    .collection("photos")
+    .orderBy("createdAt", "desc")
+    .get();
+  const photos = snapshot.docs.map(
+    (doc) => ({ ...doc.data(), id: doc.id } as Album)
+  );
+  return photos;
+};
