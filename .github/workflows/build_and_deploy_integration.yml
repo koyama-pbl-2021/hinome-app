@@ -1,0 +1,39 @@
+name: Build and Deploy of integration environment
+
+on:
+  pull_request:
+    branches:
+      - develop
+#    types: [closed]
+
+jobs:
+  BuildAndDeploy:
+    runs-on: ubuntu-latest
+    #    if: github.event.pull_request.merged == true # PR merge時に発火
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+      - uses: expo/expo-github-action@v6
+        with:
+          expo-version: 4.x
+          token: ${{ secrets.EXPO_TOKEN }}
+      - name: npm install
+        run: npm install
+      - name: make env.json from secrets
+        run: |
+          cat << EOF > ./env.json
+            { "FIREBASE_API_KEY": "${{ secrets.FIREBASE_API_KEY }}",\
+              "FIREBASE_AUTH_DOMAIN": "${{ secrets.FIREBASE_AUTH_DOMAIN }}",\
+              "FIREBASE_PROJECT_ID": "${{ secrets.FIREBASE_PROJECT_ID }}",\
+              "FIREBASE_STORAGE": "${{ secrets.FIREBASE_STORAGE }}",\
+              "FIREBASE_SENDER_ID": "${{ secrets.FIREBASE_SENDER_ID }}",\
+              "FIREBASE_APP_ID": "${{ secrets.FIREBASE_APP_ID }}",\
+              "FIREBASE_MEASUREMENT_ID": "${{ secrets.FIREBASE_MEASUREMENT_ID }}"\
+            }
+            EOF
+      - name: expo publish
+        run: expo publish --release-channel integration
