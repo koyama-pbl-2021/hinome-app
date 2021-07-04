@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 /* navigators */
-import { AppNavigator } from "./src/navigation/AppNavigator";
+import { AppNavigator } from './src/navigation/AppNavigator';
 /* contexts */
-import { UserContext } from "./src/contexts/UserContext";
+import { UserContext } from './src/contexts/UserContext';
 /* types */
-import { User } from "./src/types/user";
+import { User } from './src/types/user';
 
 export default function App() {
   const [user, setUser] = useState<User>();

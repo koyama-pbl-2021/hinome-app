@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState } from 'react';
 import {
   Image,
   StyleSheet,
@@ -6,26 +6,26 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { StackNavigationProp } from "@react-navigation/stack";
+} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { StackNavigationProp } from '@react-navigation/stack';
 /* components */
-import { Loading } from "../components/Loading";
+import { Loading } from '../components/Loading';
 /* contexts */
-import { UserContext } from "../contexts/UserContext";
+import { UserContext } from '../contexts/UserContext';
 /* lib */
-import { signUp } from "../lib/firebase";
+import { signUp } from '../lib/firebase';
 /* types */
-import { RootStackParamList } from "../types/navigation";
+import { RootStackParamList } from '../types/navigation';
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParamList, "SignUp">;
+  navigation: StackNavigationProp<RootStackParamList, 'SignUp'>;
 };
 
 export const SignUpScreen = ({ navigation }: Props) => {
   const { setUser } = useContext(UserContext);
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = async () => {
@@ -46,7 +46,7 @@ export const SignUpScreen = ({ navigation }: Props) => {
         y: -0.1,
       }}
       locations={[0, 1]}
-      colors={["rgb(247, 132, 98)", "rgb(139, 27, 140)"]}
+      colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
       style={styles.signUpViewLinearGradient}
     >
       <View style={styles.signUpView}>
@@ -80,7 +80,7 @@ export const SignUpScreen = ({ navigation }: Props) => {
         />
         <TouchableOpacity onPress={onSubmit} style={styles.signUpButton}>
           <Image
-            source={require("../../assets/icon-log-in.png")}
+            source={require('../../assets/icon-log-in.png')}
             style={styles.signUpButtonImage}
           />
           <Text style={styles.signUpButtonText}>Sign Up</Text>
@@ -93,99 +93,99 @@ export const SignUpScreen = ({ navigation }: Props) => {
 
 const styles = StyleSheet.create({
   navigationBarItemIcon: {
-    tintColor: "white",
+    tintColor: 'white',
   },
   navigationBarItem: {},
   headerLeftContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginLeft: 8,
   },
   signUpView: {
-    width: "100%",
-    height: "100%",
-    alignItems: "center",
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
   },
   signUpViewLinearGradient: {
     flex: 1,
   },
   signUpText: {
-    backgroundColor: "transparent",
-    color: "white",
+    backgroundColor: 'transparent',
+    color: 'white',
     fontSize: 42,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "center",
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
     marginTop: 114,
   },
   signUpFieldsView: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 2,
-    shadowColor: "rgba(0, 0, 0, 00.20)",
+    shadowColor: 'rgba(0, 0, 0, 00.20)',
     shadowRadius: 25,
     shadowOpacity: 1,
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
     height: 101,
     marginLeft: 20,
     marginRight: 20,
     marginTop: 70,
   },
   yourEmailTextInput: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     padding: 0,
-    color: "black",
+    color: 'black',
     fontSize: 15,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "left",
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
     height: 20,
     marginLeft: 15,
     marginRight: 15,
     marginTop: 14,
   },
   separatorView: {
-    backgroundColor: "black",
+    backgroundColor: 'black',
     opacity: 0.1,
     height: 1,
     marginTop: 16,
   },
   yourPasswordTextInput: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     padding: 0,
-    color: "black",
+    color: 'black',
     fontSize: 15,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "left",
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
     height: 20,
     marginLeft: 15,
     marginRight: 15,
     marginTop: 14,
   },
   signUpButton: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 2,
-    shadowColor: "rgba(0, 0, 0, 00.20)",
+    shadowColor: 'rgba(0, 0, 0, 00.20)',
     shadowRadius: 25,
     shadowOpacity: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: 0,
-    alignSelf: "stretch",
+    alignSelf: 'stretch',
     height: 60,
     marginLeft: 20,
     marginRight: 20,
     marginBottom: 11,
   },
   signUpButtonText: {
-    color: "rgb(217, 103, 110)",
+    color: 'rgb(217, 103, 110)',
     fontSize: 15,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "center",
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
   },
   signUpButtonImage: {
-    resizeMode: "contain",
+    resizeMode: 'contain',
     marginRight: 10,
   },
 });

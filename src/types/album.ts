@@ -1,4 +1,4 @@
-import firebase from "firebase";
+import firebase from 'firebase';
 
 // [TODO]ここは適切なものに修正
 export type Album = {
