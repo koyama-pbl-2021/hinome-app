@@ -1,28 +1,16 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Feather, Entypo, MaterialIcons} from "@expo/vector-icons";
+import { Feather, Entypo, MaterialIcons } from "@expo/vector-icons";
 /* navigators */
+import { HomeStackNavigator } from "./HomeStackNavigator";
 /* screens */
-import { HomeScreen } from "../screens/HomeScreen";
 import { HinomeScreen } from "../screens/HinomeScreen";
 import { CameraScreen } from "../screens/CameraScreen";
 /* contexts */
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
-const HomeStack = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  );
-};
 
 const HinomeStack = () => {
   return (
@@ -58,7 +46,7 @@ export const MainTabNavigator: React.FC = () => {
     >
       <Tab.Screen
         name="Home"
-        component={HomeStack}
+        component={HomeStackNavigator}
         options={{
           tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (
@@ -82,11 +70,10 @@ export const MainTabNavigator: React.FC = () => {
         options={{
           tabBarLabel: "Hinome",
           tabBarIcon: ({ color, size }) => (
-           <Entypo name="adjust" color={color} size={size} />
+            <Entypo name="adjust" color={color} size={size} />
           ),
         }}
       />
     </Tab.Navigator>
-
   );
 };

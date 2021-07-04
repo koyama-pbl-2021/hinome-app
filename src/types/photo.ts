@@ -1,7 +1,6 @@
 import firebase from "firebase";
 
-// [TODO]ここは適切なものに修正
-export type Album = {
+export type Photo = {
   id?: string;
   place: string;
   imageUrl: string;
