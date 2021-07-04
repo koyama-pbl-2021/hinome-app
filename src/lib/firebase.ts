@@ -65,22 +65,21 @@ export const getAlbums = async () => {
   return albums;
 };
 
-export const upLoadImg = (imgName, blob): Promise<string> =>
-  new Promise((resolve) => {
-    const storageRef = firebase.storage().ref();
-    const cloudStoragePath = storageRef.child(imgName);
-    cloudStoragePath.put(blob).then((snapshot): void => {
-      cloudStoragePath
-        .getDownloadURL()
-        .then((url) => {
-          console.log("ok");
-          resolve(url);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    });
-  });
+export const upLoadImg = async (uri: string, path: string) => {
+  const ImageUrl = await fetch(uri);
+  const blob = await ImageUrl.blob();
+
+  const ref = firebase.storage().ref().child(path);
+  let downloadUrl = "";
+
+  try {
+    await ref.put(blob);
+    downloadUrl = await ref.getDownloadURL();
+  } catch (err) {
+    console.log(err);
+  }
+  return downloadUrl;
+};
 // albumIdで引っ張ってくる
 export const getPhotos = async (albumId: string) => {
   const snapshot = await firebase

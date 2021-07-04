@@ -1,11 +1,15 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Button } from "react-native";
 import { Camera } from "expo-camera";
 import { Timer } from "../components/Timer";
+import { getExetention } from "../utils/file";
 import { Audio } from "expo-av";
+import { UserContext } from "../contexts/UserContext";
+import { upLoadImg } from "../lib/firebase";
 
 export const CameraScreen: React.FC = () => {
   const cameraRef = useRef(null);
+  const { user } = useContext(UserContext);
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
   useEffect(() => {
@@ -24,13 +28,9 @@ export const CameraScreen: React.FC = () => {
   const snap = async () => {
     if (cameraRef) {
       const { uri } = await cameraRef.current.takePictureAsync(); // uriはローカルイメージURIで一時的にローカルに保存される
-      const response = await fetch(uri);
-      const blob = await response.blob();
-      const imgName = blob.data.name;
-      // console.log(blob.data.name);
-      upLoadImg(imgName, blob).then((url) => {
-        console.log(url);
-      });
+      const ext = getExetention(uri);
+      const storagePath = `users/${user.id}/0/0.${ext}`;
+      const downloadUrl = await upLoadImg(uri, storagePath);
     }
   };
   return (
