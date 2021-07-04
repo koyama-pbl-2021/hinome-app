@@ -5,7 +5,7 @@ type Props = {
   visible: boolean;
 };
 
-export const Loading = ({ visible = false }: Props) => {
+export const Loading: React.FC<Props> = ({ visible = false }: Props) => {
   return visible ? (
     <View style={styles.container}>
       <ActivityIndicator size="large" />

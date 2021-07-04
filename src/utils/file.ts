@@ -1,3 +1,3 @@
-export const getExetention = (path: string) => {
-  return path.split('.').pop();
+export const getExetention = (path: string): string => {
+  return path.split('.').pop()!;
 };

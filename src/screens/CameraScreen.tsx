@@ -1,10 +1,9 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
 import { Camera } from 'expo-camera';
 import { Timer } from '../components/Timer';
 import { getExetention } from '../utils/file';
-import { Audio } from 'expo-av';
 import { UserContext } from '../contexts/UserContext';
 import { upLoadImg, createPhotoRef } from '../lib/firebase';
 import { Photo } from '../types/photo';

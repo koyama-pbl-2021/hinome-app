@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, GestureResponderEvent } from 'react-native';
 import CountDown from 'react-native-countdown-component';
 

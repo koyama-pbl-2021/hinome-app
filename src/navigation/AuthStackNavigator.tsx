@@ -8,7 +8,7 @@ import { RootStackParamList } from '../types/navigation';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-export const AuthStackNavigator = () => {
+export const AuthStackNavigator: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
