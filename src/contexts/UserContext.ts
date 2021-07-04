@@ -1,5 +1,5 @@
-import { createContext } from "react";
-import { User } from "../types/user";
+import { createContext } from 'react';
+import { User } from '../types/user';
 
 type UserContextValue = {
   user: User | null;

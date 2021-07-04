@@ -1,6 +1,6 @@
-import React from "react";
-import { StyleSheet, Text } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import React from 'react';
+import { StyleSheet, Text } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export const HinomeScreen: React.FC = () => {
   return (
@@ -14,7 +14,7 @@ export const HinomeScreen: React.FC = () => {
         y: -0.1,
       }}
       locations={[0, 1]}
-      colors={["rgb(247, 132, 98)", "rgb(139, 27, 140)"]}
+      colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
       style={styles.loginViewLinearGradient}
     >
       <Text style={styles.welcomeBackText}>Hinome</Text>
@@ -27,12 +27,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   welcomeBackText: {
-    color: "white",
+    color: 'white',
     fontSize: 18,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "center",
-    backgroundColor: "transparent",
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
+    backgroundColor: 'transparent',
     marginTop: 20,
   },
 });

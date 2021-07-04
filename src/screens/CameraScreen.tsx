@@ -1,13 +1,13 @@
-import React, { useContext, useState, useEffect, useRef } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Button } from "react-native";
-import firebase from "firebase";
-import { Camera } from "expo-camera";
-import { Timer } from "../components/Timer";
-import { getExetention } from "../utils/file";
-import { Audio } from "expo-av";
-import { UserContext } from "../contexts/UserContext";
-import { upLoadImg, createPhotoRef } from "../lib/firebase";
-import { Photo } from "../types/photo";
+import React, { useContext, useState, useEffect, useRef } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Button } from 'react-native';
+import firebase from 'firebase';
+import { Camera } from 'expo-camera';
+import { Timer } from '../components/Timer';
+import { getExetention } from '../utils/file';
+import { Audio } from 'expo-av';
+import { UserContext } from '../contexts/UserContext';
+import { upLoadImg, createPhotoRef } from '../lib/firebase';
+import { Photo } from '../types/photo';
 
 export const CameraScreen: React.FC = () => {
   const cameraRef = useRef(null);
@@ -17,7 +17,7 @@ export const CameraScreen: React.FC = () => {
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === "granted");
+      setHasPermission(status === 'granted');
     })();
   }, []);
 
@@ -31,14 +31,14 @@ export const CameraScreen: React.FC = () => {
   const snap = async () => {
     if (cameraRef) {
       // TODO albumid
-      const photoDocRef = await createPhotoRef("10001");
+      const photoDocRef = await createPhotoRef('10001');
       const { uri } = await cameraRef.current.takePictureAsync(); // uriはローカルイメージURIで一時的にローカルに保存される
       const ext = getExetention(uri);
       const storagePath = `users/${user.id}/0/0.${ext}`;
       const downloadUrl = await upLoadImg(uri, storagePath);
       const photo = {
         id: photoDocRef.id,
-        place: "matsudo",
+        place: 'matsudo',
         imageUrl: downloadUrl,
         createdAt: firebase.firestore.Timestamp.now(),
       } as Photo;
@@ -77,17 +77,17 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
-    backgroundColor: "transparent",
-    flexDirection: "row",
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
     margin: 20,
   },
   button: {
     flex: 0.1,
-    alignSelf: "flex-end",
-    alignItems: "center",
+    alignSelf: 'flex-end',
+    alignItems: 'center',
   },
   text: {
     fontSize: 18,
-    color: "white",
+    color: 'white',
   },
 });

@@ -1,4 +1,4 @@
-import firebase from "firebase";
+import firebase from 'firebase';
 
 export type User = {
   id?: string;
@@ -8,7 +8,7 @@ export type User = {
 };
 
 export const initialUser: User = {
-  email: "",
+  email: '',
   updatedAt: firebase.firestore.Timestamp.now(),
   createdAt: firebase.firestore.Timestamp.now(),
 };
