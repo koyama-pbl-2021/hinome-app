@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, SafeAreaView, FlatList } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 /* components */
-import { AlbumItem } from "../components/AlbumItem";
+import { AlbumItem } from '../components/AlbumItem';
 /* lib */
-import { getAlbums } from "../lib/firebase";
+import { getAlbums } from '../lib/firebase';
 /* types */
-import { Album } from "../types/album";
-import { RootStackParamList } from "../types/navigation";
-import { StackNavigationProp } from "@react-navigation/stack";
+import { Album } from '../types/album';
+import { RootStackParamList } from '../types/navigation';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParamList, "Home">;
+  navigation: StackNavigationProp<RootStackParamList, 'Home'>;
 };
 
 export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
@@ -27,7 +27,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   };
 
   const onPressAlbum = (album: Album) => {
-    navigation.navigate("Album", { album });
+    navigation.navigate('Album', { album });
   };
 
   return (
@@ -41,7 +41,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
         y: -0.1,
       }}
       locations={[0, 1]}
-      colors={["rgb(247, 132, 98)", "rgb(139, 27, 140)"]}
+      colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
       style={styles.loginViewLinearGradient}
     >
       <SafeAreaView>
@@ -63,12 +63,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   welcomeBackText: {
-    color: "white",
+    color: 'white',
     fontSize: 18,
-    fontStyle: "normal",
-    fontWeight: "normal",
-    textAlign: "center",
-    backgroundColor: "transparent",
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
+    backgroundColor: 'transparent',
     marginTop: 20,
   },
 });

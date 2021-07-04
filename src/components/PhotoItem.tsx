@@ -1,16 +1,16 @@
-import React from "react";
+import React from 'react';
 import {
   StyleSheet,
   Image,
   Text,
   Dimensions,
   TouchableOpacity,
-} from "react-native";
+} from 'react-native';
 /* components */
 /* types */
-import { Photo } from "../types/photo";
+import { Photo } from '../types/photo';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
 const CONTAINER_WIDTH = width / 2;
 const PADDING = 16;
 const IMAGE_WIDTH = CONTAINER_WIDTH - PADDING * 2;
@@ -43,13 +43,13 @@ const styles = StyleSheet.create({
   },
   nameText: {
     fontSize: 16,
-    color: "#000",
+    color: '#000',
     marginTop: 8,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   placeText: {
     fontSize: 12,
-    color: "#888",
+    color: '#888',
     marginTop: 8,
   },
 });

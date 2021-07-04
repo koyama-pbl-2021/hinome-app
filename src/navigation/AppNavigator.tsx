@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import React, { useContext } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 /* navigators */
-import { AuthStackNavigator } from "./AuthStackNavigator";
-import { MainTabNavigator } from "./MainTabNavigator";
+import { AuthStackNavigator } from './AuthStackNavigator';
+import { MainTabNavigator } from './MainTabNavigator';
 /* contexts */
-import { UserContext } from "../contexts/UserContext";
+import { UserContext } from '../contexts/UserContext';
 
 export const AppNavigator: React.FC = () => {
   // Contextからuserオブジェクトを取得

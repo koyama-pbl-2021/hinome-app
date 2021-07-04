@@ -1,4 +1,4 @@
-import { Album } from "./album";
+import { Album } from './album';
 
 export type RootStackParamList = {
   Main: undefined;
