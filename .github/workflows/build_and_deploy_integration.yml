@@ -9,7 +9,7 @@ on:
 jobs:
   BuildAndDeploy:
     runs-on: ubuntu-latest
-        if: github.event.pull_request.merged == true # PR merge時に発火
+      if: github.event.pull_request.merged == true # PR merge時に発火
     steps:
       - uses: actions/checkout@v2
         with:
