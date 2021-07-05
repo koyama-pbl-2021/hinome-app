@@ -1,14 +1,6 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Image,
-  Text,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, Text, Dimensions, TouchableOpacity } from 'react-native';
 /* components */
-/* types */
-import { Album } from '../types/album';
 
 const { width } = Dimensions.get('window');
 const CONTAINER_WIDTH = width / 2;
@@ -16,16 +8,16 @@ const PADDING = 16;
 const IMAGE_WIDTH = CONTAINER_WIDTH - PADDING * 2;
 
 type Props = {
-  album: Album;
+  hour: string;
   onPress: () => void;
 };
 
-export const AlbumItem: React.FC<Props> = ({ album, onPress }: Props) => {
-  const { imageUrl } = album;
+export const HourButton: React.FC<Props> = ({ hour, onPress }: Props) => {
   // [TODO] dateの追加
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Image source={{ uri: imageUrl }} style={styles.image} />
+      <Text style={styles.hourText}>{hour}</Text>
+      <Text style={styles.placeText}>hour</Text>
     </TouchableOpacity>
   );
 };
@@ -39,8 +31,8 @@ const styles = StyleSheet.create({
     width: IMAGE_WIDTH,
     height: IMAGE_WIDTH * 0.7,
   },
-  nameText: {
-    fontSize: 16,
+  hourText: {
+    fontSize: 24,
     color: '#000',
     marginTop: 8,
     fontWeight: 'bold',
