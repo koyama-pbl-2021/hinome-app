@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Feather, Entypo, MaterialIcons } from '@expo/vector-icons';
 /* navigators */
 import { HomeStackNavigator } from './HomeStackNavigator';
+import { HinomeStackNavigator } from './HinomeStackNavigator';
 /* screens */
 import { HinomeScreen } from '../screens/HinomeScreen';
 import { CameraScreen } from '../screens/CameraScreen';
@@ -11,18 +12,6 @@ import { CameraScreen } from '../screens/CameraScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
-const HinomeStack = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Hinome"
-        component={HinomeScreen}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  );
-};
 
 const CameraStack = () => {
   return (
@@ -66,7 +55,7 @@ export const MainTabNavigator: React.FC = () => {
       />
       <Tab.Screen
         name="Hinome"
-        component={HinomeStack}
+        component={HinomeStackNavigator}
         options={{
           tabBarLabel: 'Hinome',
           tabBarIcon: ({ color, size }) => (
