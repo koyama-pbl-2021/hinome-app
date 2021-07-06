@@ -41,7 +41,7 @@ export const CameraScreen: React.FC = () => {
       const photoDocRef = await createPhotoRef(album.id);
       const { uri } = await cameraRef.current.takePictureAsync();
       const ext = getExetention(uri);
-      const storagePath = `users/${user.id}/0/0.${ext}`;
+      const storagePath = `users/${user.id}/${album.id}/${photoDocRef.id}.${ext}`;
       const downloadUrl = await upLoadImg(uri, storagePath);
       const photo = {
         id: photoDocRef.id,
