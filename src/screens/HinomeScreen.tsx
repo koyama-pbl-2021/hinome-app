@@ -31,6 +31,14 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     setAlbum(null);
     console.log(album);
   };
+
+  const timeFormat = (date: Date) => {
+    let month = date.getMonth();
+    let day = date.getDay();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    return `${month}月${day}日${hours}時${minutes}分`;
+  };
   // アルバムオブジェクトの有無で日の目画面を変更する
   return (
     <LinearGradient
@@ -60,9 +68,11 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       ) : (
         <SafeAreaView>
           <Text style={styles.timeText}>
-            {album.startAt.toDate().toString()}
+            開始：{timeFormat(album.startAt.toDate())}
           </Text>
-          <Text style={styles.timeText}>{album.endAt.toDate().toString()}</Text>
+          <Text style={styles.timeText}>
+            終了：{timeFormat(album.endAt.toDate())}
+          </Text>
           <TouchableOpacity onPress={onStop} style={styles.stopButton}>
             <Text style={styles.stopButtonText}>中止</Text>
           </TouchableOpacity>
