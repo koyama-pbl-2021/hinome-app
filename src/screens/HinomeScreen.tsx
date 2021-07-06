@@ -33,10 +33,10 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   };
 
   const timeFormat = (date: Date) => {
-    let month = date.getMonth();
-    let day = date.getDay();
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
+    const month = date.getMonth();
+    const day = date.getDay();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
     return `${month}月${day}日${hours}時${minutes}分`;
   };
   // アルバムオブジェクトの有無で日の目画面を変更する
