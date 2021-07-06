@@ -21,14 +21,15 @@ type Props = {
 
 export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   // Contextからalbumオブジェクトを取得
-  const { album } = useContext(AlbumContext);
+  const { album, setAlbum } = useContext(AlbumContext);
   const [hours] = useState<string[]>(['1', '2', '4', '8', '12', '24']);
   const onPressHour = (hour: string) => {
     navigation.navigate('HinomeStart', { hour });
   };
 
   const onStop = () => {
-    // albumオブジェクトの削除
+    setAlbum(null);
+    console.log(album);
   };
   // アルバムオブジェクトの有無で日の目画面を変更する
   return (
