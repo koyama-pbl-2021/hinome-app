@@ -4,6 +4,6 @@ export type Notification = {
   id?: string;
   userId?: string;
   groupId?: string;
-  albumId?: string;
+  albumId: string;
   notifyAt: firebase.firestore.Timestamp;
 };
