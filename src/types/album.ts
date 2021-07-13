@@ -2,7 +2,7 @@ import firebase from 'firebase';
 
 // [TODO]ここは適切なものに修正
 export type Album = {
-  id?: string;
+  id: string;
   userId?: string;
   groupId?: string;
   imageUrl: string;
