@@ -2,14 +2,22 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
 import { Camera } from 'expo-camera';
-import { Timer } from '../components/Timer';
-import { getExetention } from '../utils/file';
-import { UserContext } from '../contexts/UserContext';
+/* lib */
 import { upLoadImg, createPhotoRef } from '../lib/firebase';
+/* components */
+import { Timer } from '../components/Timer';
+/* contexts */
+import { UserContext } from '../contexts/UserContext';
+import { AlbumContext } from '../contexts/AlbumContext';
+/* types */
 import { Photo } from '../types/photo';
+/* utils */
+import { getExetention } from '../utils/file';
 
 export const CameraScreen: React.FC = () => {
   const cameraRef = useRef(null);
+  // Contextからalbumオブジェクトを取得
+  const { album } = useContext(AlbumContext);
   const { user } = useContext(UserContext);
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -29,11 +37,11 @@ export const CameraScreen: React.FC = () => {
 
   const snap = async () => {
     if (cameraRef) {
-      // TODO albumid
-      const photoDocRef = await createPhotoRef('10001');
-      const { uri } = await cameraRef.current.takePictureAsync(); // uriはローカルイメージURIで一時的にローカルに保存される
+      // 現状albumがnullになる場合がある。通知からであればnullになることない
+      const photoDocRef = await createPhotoRef(album.id);
+      const { uri } = await cameraRef.current.takePictureAsync();
       const ext = getExetention(uri);
-      const storagePath = `users/${user.id}/0/0.${ext}`;
+      const storagePath = `users/${user.id}/${album.id}/${photoDocRef.id}.${ext}`;
       const downloadUrl = await upLoadImg(uri, storagePath);
       const photo = {
         id: photoDocRef.id,

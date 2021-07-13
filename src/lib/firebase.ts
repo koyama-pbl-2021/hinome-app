@@ -80,6 +80,11 @@ export const upLoadImg = async (uri: string, path: string) => {
   }
   return downloadUrl;
 };
+
+export const createAlbumRef = async () => {
+  return await firebase.firestore().collection('albums').doc();
+};
+
 export const createPhotoRef = async (albumId: string) => {
   return await firebase
     .firestore()
@@ -88,6 +93,7 @@ export const createPhotoRef = async (albumId: string) => {
     .collection('photos')
     .doc();
 };
+
 // albumIdで引っ張ってくる
 export const getPhotos = async (albumId: string) => {
   const snapshot = await firebase
