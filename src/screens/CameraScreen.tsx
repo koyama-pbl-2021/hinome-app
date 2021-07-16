@@ -19,7 +19,7 @@ export const CameraScreen: React.FC = () => {
   // Contextからalbumオブジェクトを取得
   const { album } = useContext(AlbumContext);
   const { user } = useContext(UserContext);
-  const [hasPermission, setHasPermission] = useState(null);
+  const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
   useEffect(() => {
     (async () => {

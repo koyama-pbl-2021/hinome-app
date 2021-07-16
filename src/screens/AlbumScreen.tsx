@@ -27,7 +27,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const getFirebaseItems = async () => {
     const photos = await getPhotos(album.id);
     setPhotos(photos);
-    console.log(photos);
   };
 
   const onPressPhoto = (photo: Photo) => {

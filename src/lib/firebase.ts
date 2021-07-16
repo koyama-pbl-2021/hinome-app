@@ -4,6 +4,7 @@ import env from '../../env.json';
 /* types */
 import { initialUser, User } from '../types/user';
 import { Album } from '../types/album';
+import { Notification } from '../types/notification';
 
 const firebaseConfig = {
   apiKey: env.FIREBASE_API_KEY,
@@ -107,4 +108,21 @@ export const getPhotos = async (albumId: string) => {
     (doc) => ({ ...doc.data(), id: doc.id } as Album)
   );
   return photos;
+};
+
+// イテレーション1は出番なし
+export const getNotifications = async (albumId: string) => {
+  const snapshot = await firebase
+    .firestore()
+    .collection('notifications')
+    .where('albumId', '==', albumId)
+    .orderBy('notifyAt', 'desc')
+    .get();
+  if (snapshot.empty) {
+    return false;
+  }
+  const notifications = snapshot.docs.map(
+    (doc) => ({ ...doc.data(), id: doc.id } as Notification)
+  );
+  return notifications;
 };
