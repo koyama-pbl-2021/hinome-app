@@ -43,11 +43,9 @@ export const HinomeStartScreen: React.FC<Props> = ({
   // get permission
   useEffect(() => {
     requestPermissionsAsync();
-    const subscription = Notifications.addNotificationResponseReceivedListener(
-      (e) => {
-        navigation.navigate('Camera');
-      }
-    );
+    Notifications.addNotificationResponseReceivedListener(() => {
+      navigation.navigate('Camera');
+    });
   }, []);
 
   const requestPermissionsAsync = async () => {
