@@ -54,9 +54,11 @@ export const logIn = async (email: string, password: string) => {
   }
 };
 
-export const getAlbums = async () => {
+export const getAlbums = async (userId: string) => {
   const snapshot = await firebase
     .firestore()
+    .collection('users')
+    .doc(userId)
     .collection('albums')
     // .orderBy('score', 'desc') //ここは日付でソートしたい
     .get();
@@ -82,13 +84,20 @@ export const upLoadImg = async (uri: string, path: string) => {
   return downloadUrl;
 };
 
-export const createAlbumRef = async () => {
-  return await firebase.firestore().collection('albums').doc();
-};
-
-export const createPhotoRef = async (albumId: string) => {
+export const createAlbumRef = async (userId: string) => {
   return await firebase
     .firestore()
+    .collection('users')
+    .doc(userId)
+    .collection('albums')
+    .doc();
+};
+
+export const createPhotoRef = async (albumId: string, userId: string) => {
+  return await firebase
+    .firestore()
+    .collection('users')
+    .doc(userId)
     .collection('albums')
     .doc(albumId)
     .collection('photos')
@@ -96,9 +105,11 @@ export const createPhotoRef = async (albumId: string) => {
 };
 
 // albumIdで引っ張ってくる
-export const getPhotos = async (albumId: string) => {
+export const getPhotos = async (albumId: string, userId: string) => {
   const snapshot = await firebase
     .firestore()
+    .collection('users')
+    .doc(userId)
     .collection('albums')
     .doc(albumId)
     .collection('photos')
@@ -111,9 +122,11 @@ export const getPhotos = async (albumId: string) => {
 };
 
 // イテレーション1は出番なし
-export const getNotifications = async (albumId: string) => {
+export const getNotifications = async (albumId: string, userId: string) => {
   const snapshot = await firebase
     .firestore()
+    .collection('users')
+    .doc(userId)
     .collection('notifications')
     .where('albumId', '==', albumId)
     .orderBy('notifyAt', 'desc')

@@ -38,7 +38,7 @@ export const CameraScreen: React.FC = () => {
   const snap = async () => {
     if (cameraRef) {
       // 現状albumがnullになる場合がある。通知からであればnullになることない
-      const photoDocRef = await createPhotoRef(album.id);
+      const photoDocRef = await createPhotoRef(album.id, user.id);
       const { uri } = await cameraRef.current.takePictureAsync();
       const ext = getExetention(uri);
       const storagePath = `users/${user.id}/${album.id}/${photoDocRef.id}.${ext}`;

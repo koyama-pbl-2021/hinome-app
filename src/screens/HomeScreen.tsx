@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 /* components */
 import { AlbumItem } from '../components/AlbumItem';
+/* contexts */
+import { UserContext } from '../contexts/UserContext';
 /* lib */
 import { getAlbums } from '../lib/firebase';
 /* types */
@@ -16,13 +18,14 @@ type Props = {
 
 export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   const [albums, setAlbums] = useState<Album[]>([]);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     getFirebaseItems();
   }, []);
 
   const getFirebaseItems = async () => {
-    const albums = await getAlbums();
+    const albums = await getAlbums(user.id);
     setAlbums(albums);
   };
 
