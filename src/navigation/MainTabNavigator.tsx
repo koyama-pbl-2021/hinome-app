@@ -1,29 +1,11 @@
 import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Feather, Entypo, MaterialIcons } from '@expo/vector-icons';
+import { Feather, Entypo } from '@expo/vector-icons';
 /* navigators */
 import { HomeStackNavigator } from './HomeStackNavigator';
 import { HinomeStackNavigator } from './HinomeStackNavigator';
-/* screens */
-import { HinomeScreen } from '../screens/HinomeScreen';
-import { CameraScreen } from '../screens/CameraScreen';
-/* contexts */
 
-const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
-
-const CameraStack = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Camera"
-        component={CameraScreen}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
-  );
-};
 
 export const MainTabNavigator: React.FC = () => {
   return (
@@ -40,16 +22,6 @@ export const MainTabNavigator: React.FC = () => {
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (
             <Feather name="home" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Camera"
-        component={CameraStack}
-        options={{
-          tabBarLabel: 'Camera',
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="featured-video" color={color} size={size} />
           ),
         }}
       />

@@ -19,7 +19,7 @@ export const CameraScreen: React.FC = () => {
   // Contextからalbumオブジェクトを取得
   const { album } = useContext(AlbumContext);
   const { user } = useContext(UserContext);
-  const [hasPermission, setHasPermission] = useState(null);
+  const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
   useEffect(() => {
     (async () => {
@@ -38,7 +38,7 @@ export const CameraScreen: React.FC = () => {
   const snap = async () => {
     if (cameraRef) {
       // 現状albumがnullになる場合がある。通知からであればnullになることない
-      const photoDocRef = await createPhotoRef(album.id);
+      const photoDocRef = await createPhotoRef(album.id, user.id);
       const { uri } = await cameraRef.current.takePictureAsync();
       const ext = getExetention(uri);
       const storagePath = `users/${user.id}/${album.id}/${photoDocRef.id}.${ext}`;
