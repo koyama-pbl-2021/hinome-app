@@ -66,6 +66,7 @@ export const SignUpScreen = ({ navigation }: Props) => {
     >
       <View style={styles.signUpView}>
         <Text style={styles.signUpText}>Sign Up</Text>
+        <Text style={styles.label}>Email</Text>
         <Controller
           control={control}
           rules={{
@@ -95,15 +96,16 @@ export const SignUpScreen = ({ navigation }: Props) => {
           <Text style={styles.errorMessage}>適切な形式で入力してください</Text>
         )}
         <View style={styles.separatorView} />
+        <Text style={styles.label}>Password</Text>
         <Controller
           control={control}
           rules={{
+            required: true,
             maxLength: 60,
             minLength: 8,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
-              autoCorrect={false}
               value={value}
               onChangeText={(value) => {
                 onChange(value);
@@ -148,10 +150,13 @@ const styles = StyleSheet.create({
   signUpView: {
     width: '100%',
     height: '100%',
-    alignItems: 'center',
   },
   signUpViewLinearGradient: {
     flex: 1,
+  },
+  label: {
+    color: 'white',
+    marginLeft: 10,
   },
   signUpText: {
     backgroundColor: 'transparent',
@@ -161,6 +166,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     marginTop: 120,
+    marginBottom: 50,
   },
   emailTextInput: {
     backgroundColor: 'white',
@@ -175,13 +181,12 @@ const styles = StyleSheet.create({
     height: 50,
     marginLeft: 20,
     marginRight: 20,
-    marginTop: 70,
+    marginTop: 20,
   },
   separatorView: {
-    backgroundColor: 'black',
     opacity: 0.1,
-    height: 20,
-    marginTop: 20,
+    height: 10,
+    marginTop: 10,
   },
   passwordTextInput: {
     backgroundColor: 'white',
@@ -220,7 +225,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
-    width: 150,
     height: 20,
     marginTop: 10,
     marginBottom: 20,
@@ -236,6 +240,9 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   errorMessage: {
-    color: 'red',
+    fontSize: 15,
+    color: 'white',
+    textAlign: 'center',
+    marginTop: 5,
   },
 });
