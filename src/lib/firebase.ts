@@ -26,31 +26,37 @@ export const signUp = async (email: string, password: string) => {
     .auth()
     .createUserWithEmailAndPassword(email, password);
   const { uid } = userCredential.user;
-  await firebase.firestore().collection('users').doc(uid).set(initialUser);
-  return {
-    ...initialUser,
+  const user = {
     id: uid,
+    email,
+    updatedAt: firebase.firestore.Timestamp.now(),
+    createdAt: firebase.firestore.Timestamp.now(),
   } as User;
+  await firebase.firestore().collection('users').doc(uid).set(user);
+  return user;
 };
 
 export const logIn = async (email: string, password: string) => {
-  const userCredential = await firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password);
-  const { uid } = userCredential.user;
-  const userDoc = await firebase.firestore().collection('users').doc(uid).get();
-  if (!userDoc.exists) {
-    // userDocが存在しないときはinitialUserをdatastoreに追加する
-    await firebase.firestore().collection('users').doc(uid).set(initialUser);
-    return {
-      ...initialUser,
-      id: uid,
-    } as User;
-  } else {
-    return {
-      id: uid,
-      ...userDoc.data(),
-    } as User;
+  try {
+    const userCredential = await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password);
+    const { uid } = userCredential.user;
+    const userDoc = await firebase
+      .firestore()
+      .collection('users')
+      .doc(uid)
+      .get();
+    if (!userDoc.exists) {
+      return false;
+    } else {
+      return {
+        ...userDoc.data(),
+      } as User;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
   }
 };
 
