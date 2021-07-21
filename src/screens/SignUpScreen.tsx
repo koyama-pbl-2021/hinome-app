@@ -9,6 +9,8 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { useForm, Controller } from 'react-hook-form';
+import { AntDesign } from '@expo/vector-icons';
 /* components */
 import { Loading } from '../components/Loading';
 /* contexts */
@@ -22,19 +24,32 @@ type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'SignUp'>;
 };
 
+type FormData = {
+  email: string;
+  password: string;
+};
+
 export const SignUpScreen = ({ navigation }: Props) => {
   const { setUser } = useContext(UserContext);
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  // for validation
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
-  const onSubmit = async () => {
+  const onSubmit = async (d: FormData) => {
     setLoading(true);
-    const user = await signUp(email, password);
+    const user = await signUp(d.email, d.password);
     setUser(user);
-    console.log(user);
     setLoading(false);
   };
+
+  const onPressLogIn = () => {
+    navigation.pop();
+  };
+
   return (
     <LinearGradient
       start={{
@@ -51,39 +66,77 @@ export const SignUpScreen = ({ navigation }: Props) => {
     >
       <View style={styles.signUpView}>
         <Text style={styles.signUpText}>Sign Up</Text>
-        <View style={styles.signUpFieldsView}>
-          <TextInput
-            autoCorrect={false}
-            value={email}
-            onChangeText={(text) => {
-              setEmail(text);
-            }}
-            placeholder="Your email"
-            style={styles.yourEmailTextInput}
-          />
-          <View style={styles.separatorView} />
-          <TextInput
-            autoCorrect={false}
-            value={password}
-            onChangeText={(text) => {
-              setPassword(text);
-            }}
-            placeholder="Your password"
-            secureTextEntry={true}
-            style={styles.yourPasswordTextInput}
-          />
-        </View>
-        <View
-          style={{
-            flex: 1,
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+            maxLength: 60,
+            pattern:
+              /^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
           }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              value={value}
+              onChangeText={(value) => {
+                onChange(value);
+              }}
+              onBlur={onBlur}
+              placeholder="Your email"
+              style={styles.emailTextInput}
+            />
+          )}
+          name="email"
+          defaultValue=""
         />
-        <TouchableOpacity onPress={onSubmit} style={styles.signUpButton}>
-          <Image
-            source={require('../../assets/icon-log-in.png')}
+        {errors.email && errors.email.type === 'required' && (
+          <Text style={styles.errorMessage}>必須項目です</Text>
+        )}
+        {errors.email && errors.email.type === 'pattern' && (
+          <Text style={styles.errorMessage}>適切な形式で入力してください</Text>
+        )}
+        <View style={styles.separatorView} />
+        <Controller
+          control={control}
+          rules={{
+            maxLength: 60,
+            minLength: 8,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              autoCorrect={false}
+              value={value}
+              onChangeText={(value) => {
+                onChange(value);
+              }}
+              onBlur={onBlur}
+              placeholder="Your password"
+              secureTextEntry={true}
+              style={styles.passwordTextInput}
+            />
+          )}
+          name="password"
+          defaultValue=""
+        />
+        {errors.password && errors.password.type === 'required' && (
+          <Text style={styles.errorMessage}>必須項目です</Text>
+        )}
+        {errors.password && errors.password.type === 'minLength' && (
+          <Text style={styles.errorMessage}>8文字以上にしてください</Text>
+        )}
+
+        <TouchableOpacity
+          onPress={handleSubmit(onSubmit)}
+          style={styles.signUpButton}
+        >
+          <AntDesign
+            name="adduser"
             style={styles.signUpButtonImage}
+            size={30}
+            color="black"
           />
-          <Text style={styles.signUpButtonText}>Sign Up</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onPressLogIn} style={styles.logInButton}>
+          <Text style={styles.logInButtonText}>Log In</Text>
         </TouchableOpacity>
       </View>
       <Loading visible={loading} />
@@ -92,14 +145,6 @@ export const SignUpScreen = ({ navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  navigationBarItemIcon: {
-    tintColor: 'white',
-  },
-  navigationBarItem: {},
-  headerLeftContainer: {
-    flexDirection: 'row',
-    marginLeft: 8,
-  },
   signUpView: {
     width: '100%',
     height: '100%',
@@ -115,51 +160,43 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    marginTop: 114,
+    marginTop: 120,
   },
-  signUpFieldsView: {
+  emailTextInput: {
     backgroundColor: 'white',
-    borderRadius: 2,
-    shadowColor: 'rgba(0, 0, 0, 00.20)',
-    shadowRadius: 25,
-    shadowOpacity: 1,
+    padding: 0,
+    borderRadius: 10,
+    color: 'black',
+    fontSize: 15,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'left',
     alignSelf: 'stretch',
-    height: 101,
+    height: 50,
     marginLeft: 20,
     marginRight: 20,
     marginTop: 70,
   },
-  yourEmailTextInput: {
-    backgroundColor: 'transparent',
-    padding: 0,
-    color: 'black',
-    fontSize: 15,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    height: 20,
-    marginLeft: 15,
-    marginRight: 15,
-    marginTop: 14,
-  },
   separatorView: {
     backgroundColor: 'black',
     opacity: 0.1,
-    height: 1,
-    marginTop: 16,
+    height: 20,
+    marginTop: 20,
   },
-  yourPasswordTextInput: {
-    backgroundColor: 'transparent',
+  passwordTextInput: {
+    backgroundColor: 'white',
     padding: 0,
+    borderRadius: 10,
     color: 'black',
     fontSize: 15,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'left',
-    height: 20,
-    marginLeft: 15,
-    marginRight: 15,
-    marginTop: 14,
+    alignSelf: 'stretch',
+    height: 50,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: 20,
   },
   signUpButton: {
     backgroundColor: 'white',
@@ -172,20 +209,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     alignSelf: 'stretch',
-    height: 60,
+    height: 70,
     marginLeft: 20,
     marginRight: 20,
-    marginBottom: 11,
+    marginTop: 200,
   },
-  signUpButtonText: {
-    color: 'rgb(217, 103, 110)',
+  logInButton: {
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 0,
+    width: 150,
+    height: 20,
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  logInButtonText: {
+    color: 'white',
     fontSize: 15,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
   },
   signUpButtonImage: {
-    resizeMode: 'contain',
     marginRight: 10,
+  },
+  errorMessage: {
+    color: 'red',
   },
 });
