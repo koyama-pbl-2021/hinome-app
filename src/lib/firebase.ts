@@ -26,37 +26,45 @@ export const signUp = async (email: string, password: string) => {
     .auth()
     .createUserWithEmailAndPassword(email, password);
   const { uid } = userCredential.user;
-  await firebase.firestore().collection('users').doc(uid).set(initialUser);
-  return {
-    ...initialUser,
+  const user = {
     id: uid,
+    email,
+    updatedAt: firebase.firestore.Timestamp.now(),
+    createdAt: firebase.firestore.Timestamp.now(),
   } as User;
+  await firebase.firestore().collection('users').doc(uid).set(user);
+  return user;
 };
 
 export const logIn = async (email: string, password: string) => {
-  const userCredential = await firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password);
-  const { uid } = userCredential.user;
-  const userDoc = await firebase.firestore().collection('users').doc(uid).get();
-  if (!userDoc.exists) {
-    // userDocが存在しないときはinitialUserをdatastoreに追加する
-    await firebase.firestore().collection('users').doc(uid).set(initialUser);
-    return {
-      ...initialUser,
-      id: uid,
-    } as User;
-  } else {
-    return {
-      id: uid,
-      ...userDoc.data(),
-    } as User;
+  try {
+    const userCredential = await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password);
+    const { uid } = userCredential.user;
+    const userDoc = await firebase
+      .firestore()
+      .collection('users')
+      .doc(uid)
+      .get();
+    if (!userDoc.exists) {
+      return false;
+    } else {
+      return {
+        ...userDoc.data(),
+      } as User;
+    }
+  } catch (err) {
+    console.log(err);
+    return false;
   }
 };
 
-export const getAlbums = async () => {
+export const getAlbums = async (userId: string) => {
   const snapshot = await firebase
     .firestore()
+    .collection('users')
+    .doc(userId)
     .collection('albums')
     // .orderBy('score', 'desc') //ここは日付でソートしたい
     .get();
@@ -82,13 +90,20 @@ export const upLoadImg = async (uri: string, path: string) => {
   return downloadUrl;
 };
 
-export const createAlbumRef = async () => {
-  return await firebase.firestore().collection('albums').doc();
-};
-
-export const createPhotoRef = async (albumId: string) => {
+export const createAlbumRef = async (userId: string) => {
   return await firebase
     .firestore()
+    .collection('users')
+    .doc(userId)
+    .collection('albums')
+    .doc();
+};
+
+export const createPhotoRef = async (albumId: string, userId: string) => {
+  return await firebase
+    .firestore()
+    .collection('users')
+    .doc(userId)
     .collection('albums')
     .doc(albumId)
     .collection('photos')
@@ -96,9 +111,11 @@ export const createPhotoRef = async (albumId: string) => {
 };
 
 // albumIdで引っ張ってくる
-export const getPhotos = async (albumId: string) => {
+export const getPhotos = async (albumId: string, userId: string) => {
   const snapshot = await firebase
     .firestore()
+    .collection('users')
+    .doc(userId)
     .collection('albums')
     .doc(albumId)
     .collection('photos')
@@ -111,9 +128,11 @@ export const getPhotos = async (albumId: string) => {
 };
 
 // イテレーション1は出番なし
-export const getNotifications = async (albumId: string) => {
+export const getNotifications = async (albumId: string, userId: string) => {
   const snapshot = await firebase
     .firestore()
+    .collection('users')
+    .doc(userId)
     .collection('notifications')
     .where('albumId', '==', albumId)
     .orderBy('notifyAt', 'desc')

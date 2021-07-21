@@ -74,7 +74,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
 
   const createAlbumContext = async () => {
     // create album reference
-    const albumDocRef = await createAlbumRef();
+    const albumDocRef = await createAlbumRef(user.id);
     // create hinome endTime
     const dt = new Date();
     dt.setHours(dt.getHours() + Number(hour));
