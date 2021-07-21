@@ -79,7 +79,7 @@ export const LogInScreen = ({ navigation }: Props) => {
           control={control}
           rules={{
             required: true,
-            maxLength: 60,
+            maxLength: 128,
             pattern:
               /^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
           }}
@@ -107,7 +107,7 @@ export const LogInScreen = ({ navigation }: Props) => {
           control={control}
           rules={{
             required: true,
-            maxLength: 60,
+            maxLength: 256,
             minLength: 8,
           }}
           render={({ field: { onChange, onBlur, value } }) => (

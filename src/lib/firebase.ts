@@ -48,7 +48,6 @@ export const logIn = async (email: string, password: string) => {
       .doc(uid)
       .get();
     if (!userDoc.exists) {
-      // userDocが存在しないときはinitialUserをdatastoreに追加する
       return false;
     } else {
       return {
