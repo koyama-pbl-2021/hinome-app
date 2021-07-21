@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 /* screens */
 import { HinomeScreen } from '../screens/HinomeScreen';
 import { HinomeStartScreen } from '../screens/HinomeStartScreen';
+import { CameraScreen } from '../screens/CameraScreen';
 /* types */
 import { RootStackParamList } from '../types/navigation';
 
@@ -23,6 +24,11 @@ export const HinomeStackNavigator: React.FC = () => {
       <Stack.Screen
         name="HinomeStart"
         component={HinomeStartScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Camera"
+        component={CameraScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

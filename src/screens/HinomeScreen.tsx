@@ -30,11 +30,9 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   const onStop = () => {
     setAlbum(null);
     // firebaseの通知コレクションを消しに行く処理
-    console.log(album);
   };
 
   const timeFormat = (date: Date) => {
-    console.log(date);
     const month = date.getMonth() + 1;
     const day = date.getDate();
     const hours = date.getHours();

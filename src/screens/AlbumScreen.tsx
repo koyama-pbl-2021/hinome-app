@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 /* components */
 import { PhotoItem } from '../components/PhotoItem';
+/* contexts */
+import { UserContext } from '../contexts/UserContext';
 /* lib */
 import { getPhotos } from '../lib/firebase';
 /* types */
@@ -19,15 +21,15 @@ type Props = {
 export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { album } = route.params;
   const [photos, setPhotos] = useState<Photo[]>([]);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     getFirebaseItems();
   }, []);
 
   const getFirebaseItems = async () => {
-    const photos = await getPhotos(album.id);
+    const photos = await getPhotos(album.id, user.id);
     setPhotos(photos);
-    console.log(photos);
   };
 
   const onPressPhoto = (photo: Photo) => {
