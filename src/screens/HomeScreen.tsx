@@ -5,6 +5,7 @@ import {
   FlatList,
   Platform,
   StatusBar,
+  Text,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 /* components */
@@ -53,16 +54,24 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
       style={styles.loginViewLinearGradient}
     >
-      <SafeAreaView style={styles.container}>
-        <FlatList
-          data={albums}
-          renderItem={({ item }: { item: Album }) => (
-            <AlbumItem album={item} onPress={() => onPressAlbum(item)} />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={2}
-        />
-      </SafeAreaView>
+      {albums.length === 0 ? (
+        <SafeAreaView style={styles.container}>
+          <Text style={styles.noAlbumText}>
+            右下の日の目タブから{'\n'}アルバムを作成しましょう
+          </Text>
+        </SafeAreaView>
+      ) : (
+        <SafeAreaView style={styles.container}>
+          <FlatList
+            data={albums}
+            renderItem={({ item }: { item: Album }) => (
+              <AlbumItem album={item} onPress={() => onPressAlbum(item)} />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={2}
+          />
+        </SafeAreaView>
+      )}
     </LinearGradient>
   );
 };
@@ -73,5 +82,17 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  noAlbumText: {
+    backgroundColor: 'transparent',
+    color: 'white',
+    fontSize: 30,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    textAlign: 'center',
+    marginTop: 120,
+    marginBottom: 0,
+    marginRight: 20,
+    marginLeft: 20,
   },
 });
