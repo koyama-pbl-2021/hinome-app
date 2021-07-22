@@ -1,5 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  FlatList,
+  Platform,
+  StatusBar,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 /* components */
 import { AlbumItem } from '../components/AlbumItem';
@@ -47,7 +53,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
       style={styles.loginViewLinearGradient}
     >
-      <SafeAreaView>
+      <SafeAreaView style={styles.container}>
         <FlatList
           data={albums}
           renderItem={({ item }: { item: Album }) => (
@@ -65,13 +71,7 @@ const styles = StyleSheet.create({
   loginViewLinearGradient: {
     flex: 1,
   },
-  welcomeBackText: {
-    color: 'white',
-    fontSize: 18,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'center',
-    backgroundColor: 'transparent',
-    marginTop: 20,
+  container: {
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
 });

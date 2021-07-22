@@ -9,7 +9,6 @@ import {
   Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 /* components */
 import { HourButton } from '../components/HourButton';
 /* contexts */
