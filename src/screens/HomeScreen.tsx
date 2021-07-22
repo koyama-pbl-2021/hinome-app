@@ -57,7 +57,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       {albums.length === 0 ? (
         <SafeAreaView style={styles.container}>
           <Text style={styles.noAlbumText}>
-            右下の日の目タブから{'\n'}アルバムを作成しましょう
+            右下のタブから日の目を開始すると{'\n'}アルバムが表示されます
           </Text>
         </SafeAreaView>
       ) : (
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   noAlbumText: {
     backgroundColor: 'transparent',
     color: 'white',
-    fontSize: 30,
+    fontSize: 25,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
