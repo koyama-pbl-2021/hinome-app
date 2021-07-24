@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Platform,
   StatusBar,
+  View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Notifications from 'expo-notifications';
@@ -156,13 +157,15 @@ export const HinomeStartScreen: React.FC<Props> = ({
       style={styles.loginViewLinearGradient}
     >
       <SafeAreaView style={styles.container}>
-        <Text style={styles.welcomeBackText}>{hour}時間で日の目します</Text>
-        <TouchableOpacity onPress={onStart} style={styles.startButton}>
-          <Text style={styles.startButtonText}>開始</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onBack} style={styles.startButton}>
-          <Text style={styles.startButtonText}>戻る</Text>
-        </TouchableOpacity>
+        <View style={styles.startContainer}>
+          <Text style={styles.startText}>{hour}時間で日の目します</Text>
+          <TouchableOpacity onPress={onStart} style={styles.startButton}>
+            <Text style={styles.startButtonText}>開始</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onBack} style={styles.startButton}>
+            <Text style={styles.startButtonText}>戻る</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
       <Loading visible={loading} />
     </LinearGradient>
@@ -173,34 +176,35 @@ const styles = StyleSheet.create({
   loginViewLinearGradient: {
     flex: 1,
   },
-  welcomeBackText: {
+  startContainer: {
+    marginTop: 40,
+  },
+  startText: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 30,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
     backgroundColor: 'transparent',
-    marginTop: 20,
+    marginTop: 50,
+    marginBottom: 50,
   },
   startButton: {
     backgroundColor: 'white',
-    borderRadius: 2,
+    borderRadius: 20,
     shadowColor: 'rgba(0, 0, 0, 00.20)',
     shadowRadius: 25,
     shadowOpacity: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
-    alignSelf: 'stretch',
     height: 60,
     marginLeft: 20,
     marginRight: 20,
-    marginBottom: 11,
+    marginBottom: 20,
   },
   startButtonText: {
     color: 'rgb(217, 103, 110)',
-    fontSize: 15,
+    fontSize: 30,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',

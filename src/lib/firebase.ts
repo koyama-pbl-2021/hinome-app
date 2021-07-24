@@ -2,7 +2,7 @@ import firebase from 'firebase';
 /* env */
 import env from '../../env.json';
 /* types */
-import { initialUser, User } from '../types/user';
+import { User } from '../types/user';
 import { Album } from '../types/album';
 import { Notification } from '../types/notification';
 
@@ -30,8 +30,6 @@ export const signUp = async (email: string, password: string) => {
     const user = {
       id: uid,
       email,
-      updatedAt: firebase.firestore.Timestamp.now(),
-      createdAt: firebase.firestore.Timestamp.now(),
     } as User;
     await firebase.firestore().collection('users').doc(uid).set(user);
     return user;
@@ -62,6 +60,27 @@ export const logIn = async (email: string, password: string) => {
   } catch (err) {
     console.log(err);
     return false;
+  }
+};
+
+export const logInCheck = () => {
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      return {
+        userId: user.uid,
+        email: user.email,
+      } as User;
+    } else {
+      return null;
+    }
+  });
+};
+
+export const logOut = async () => {
+  try {
+    await firebase.auth().signOut();
+  } catch (err) {
+    console.log(err);
   }
 };
 
