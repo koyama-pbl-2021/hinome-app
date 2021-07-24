@@ -1,7 +1,5 @@
 import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-/* lib */
-import { logInCheck } from '../lib/firebase';
 /* navigators */
 import { AuthStackNavigator } from './AuthStackNavigator';
 import { MainTabNavigator } from './MainTabNavigator';

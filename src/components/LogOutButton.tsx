@@ -33,9 +33,3 @@ export const LogOutButton: React.FC = () => {
     />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    marginRight: 20,
-  },
-});
