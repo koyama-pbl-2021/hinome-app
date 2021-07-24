@@ -1,5 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, SafeAreaView } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  SafeAreaView,
+  Platform,
+  StatusBar,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Notifications from 'expo-notifications';
 import firebase from 'firebase';
@@ -148,7 +155,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
       style={styles.loginViewLinearGradient}
     >
-      <SafeAreaView>
+      <SafeAreaView style={styles.container}>
         <Text style={styles.welcomeBackText}>{hour}時間で日の目します</Text>
         <TouchableOpacity onPress={onStart} style={styles.startButton}>
           <Text style={styles.startButtonText}>開始</Text>
@@ -197,5 +204,8 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
+  },
+  container: {
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
 });
