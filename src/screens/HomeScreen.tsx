@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, SafeAreaView, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  FlatList,
+  Platform,
+  StatusBar,
+  Text,
+} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 /* components */
 import { AlbumItem } from '../components/AlbumItem';
@@ -47,16 +54,24 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
       style={styles.loginViewLinearGradient}
     >
-      <SafeAreaView>
-        <FlatList
-          data={albums}
-          renderItem={({ item }: { item: Album }) => (
-            <AlbumItem album={item} onPress={() => onPressAlbum(item)} />
-          )}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={2}
-        />
-      </SafeAreaView>
+      {albums.length === 0 ? (
+        <SafeAreaView style={styles.container}>
+          <Text style={styles.noAlbumText}>
+            右下のタブから日の目を開始すると{'\n'}アルバムが表示されます
+          </Text>
+        </SafeAreaView>
+      ) : (
+        <SafeAreaView style={styles.container}>
+          <FlatList
+            data={albums}
+            renderItem={({ item }: { item: Album }) => (
+              <AlbumItem album={item} onPress={() => onPressAlbum(item)} />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={2}
+          />
+        </SafeAreaView>
+      )}
     </LinearGradient>
   );
 };
@@ -65,13 +80,19 @@ const styles = StyleSheet.create({
   loginViewLinearGradient: {
     flex: 1,
   },
-  welcomeBackText: {
+  container: {
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  noAlbumText: {
+    backgroundColor: 'transparent',
     color: 'white',
-    fontSize: 18,
+    fontSize: 25,
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
-    backgroundColor: 'transparent',
-    marginTop: 20,
+    marginTop: 120,
+    marginBottom: 0,
+    marginRight: 20,
+    marginLeft: 20,
   },
 });

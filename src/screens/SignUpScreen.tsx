@@ -44,6 +44,11 @@ export const SignUpScreen = ({ navigation }: Props) => {
     const user = await signUp(d.email, d.password);
     setUser(user);
     setLoading(false);
+    if (!user) {
+      Alert.alert('登録失敗', 'すでに使われているメールアドレスです', [
+        { text: 'OK' },
+      ]);
+    }
   };
 
   const onPressLogIn = () => {

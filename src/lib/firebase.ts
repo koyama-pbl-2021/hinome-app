@@ -22,18 +22,23 @@ if (!firebase.apps.length) {
 }
 
 export const signUp = async (email: string, password: string) => {
-  const userCredential = await firebase
-    .auth()
-    .createUserWithEmailAndPassword(email, password);
-  const { uid } = userCredential.user;
-  const user = {
-    id: uid,
-    email,
-    updatedAt: firebase.firestore.Timestamp.now(),
-    createdAt: firebase.firestore.Timestamp.now(),
-  } as User;
-  await firebase.firestore().collection('users').doc(uid).set(user);
-  return user;
+  try {
+    const userCredential = await firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password);
+    const { uid } = userCredential.user;
+    const user = {
+      id: uid,
+      email,
+      updatedAt: firebase.firestore.Timestamp.now(),
+      createdAt: firebase.firestore.Timestamp.now(),
+    } as User;
+    await firebase.firestore().collection('users').doc(uid).set(user);
+    return user;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
 };
 
 export const logIn = async (email: string, password: string) => {

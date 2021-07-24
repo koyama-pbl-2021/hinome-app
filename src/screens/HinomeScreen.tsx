@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
 import {
   StyleSheet,
+  StatusBar,
   FlatList,
   SafeAreaView,
   TouchableOpacity,
   Text,
+  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 /* components */
@@ -55,7 +57,7 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       style={styles.loginViewLinearGradient}
     >
       {!album ? (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
           <FlatList
             data={hours}
             renderItem={({ item }: { item: string }) => (
@@ -66,7 +68,7 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
           />
         </SafeAreaView>
       ) : (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
           <Text style={styles.timeText}>
             開始：{timeFormat(album.startAt.toDate())}
           </Text>
@@ -85,15 +87,6 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 const styles = StyleSheet.create({
   loginViewLinearGradient: {
     flex: 1,
-  },
-  welcomeBackText: {
-    color: 'white',
-    fontSize: 18,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'center',
-    backgroundColor: 'transparent',
-    marginTop: 20,
   },
   stopButton: {
     backgroundColor: 'white',
@@ -124,5 +117,8 @@ const styles = StyleSheet.create({
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',
+  },
+  container: {
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
 });
