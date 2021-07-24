@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Alert, StyleSheet } from 'react-native';
+import { Alert } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 /* lib */
 import { logOut } from '../lib/firebase';
