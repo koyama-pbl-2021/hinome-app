@@ -16,8 +16,8 @@ export const HourButton: React.FC<Props> = ({ hour, onPress }: Props) => {
   // [TODO] dateの追加
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Text style={styles.hourText}>{hour}</Text>
-      <Text style={styles.placeText}>hour</Text>
+      <Text style={styles.timeText}>{hour}</Text>
+      <Text style={styles.hourText}>時間</Text>
     </TouchableOpacity>
   );
 };
@@ -31,15 +31,15 @@ const styles = StyleSheet.create({
     width: IMAGE_WIDTH,
     height: IMAGE_WIDTH * 0.7,
   },
-  hourText: {
+  timeText: {
     fontSize: 24,
-    color: '#000',
+    color: '#fff',
     marginTop: 8,
     fontWeight: 'bold',
   },
-  placeText: {
-    fontSize: 12,
-    color: '#888',
+  hourText: {
+    fontSize: 15,
+    color: '#80FF00',
     marginTop: 8,
   },
 });

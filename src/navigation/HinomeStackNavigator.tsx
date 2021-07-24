@@ -1,5 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+/* components */
+import { LogOutButton } from '../components/LogOutButton';
 /* screens */
 import { HinomeScreen } from '../screens/HinomeScreen';
 import { HinomeStartScreen } from '../screens/HinomeStartScreen';
@@ -13,18 +15,20 @@ export const HinomeStackNavigator: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerTintColor: '#000',
+        headerTransparent: true,
+        headerTintColor: '#fff',
+        headerRight: () => <LogOutButton />,
       }}
     >
       <Stack.Screen
         name="Hinome"
         component={HinomeScreen}
-        options={{ headerShown: false }}
+        options={{ headerTitle: '' }}
       />
       <Stack.Screen
         name="HinomeStart"
         component={HinomeStartScreen}
-        options={{ headerShown: false }}
+        options={{ headerTitle: '' }}
       />
       <Stack.Screen
         name="Camera"

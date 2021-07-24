@@ -58,6 +58,7 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     >
       <SafeAreaView style={styles.container}>
         <FlatList
+          style={styles.itemContainer}
           data={photos}
           renderItem={({ item }: { item: Photo }) => (
             <PhotoItem photo={item} onPress={() => onPressPhoto(item)} />
@@ -76,5 +77,8 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  itemContainer: {
+    marginTop: 40,
   },
 });
