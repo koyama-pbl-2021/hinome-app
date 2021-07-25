@@ -26,7 +26,6 @@ export const PhotoItem: React.FC<Props> = ({ photo, onPress }: Props) => {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Image source={{ uri: imageUrl }} style={styles.image} />
-      <Text style={styles.placeText}>{place}</Text>
       <Text style={styles.placeText}>{createdAt.toDate().toDateString()}</Text>
     </TouchableOpacity>
   );

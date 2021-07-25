@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
 import { Camera } from 'expo-camera';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 /* lib */
 import { upLoadImg, createPhotoRef } from '../lib/firebase';
 /* components */
@@ -11,10 +12,16 @@ import { UserContext } from '../contexts/UserContext';
 import { AlbumContext } from '../contexts/AlbumContext';
 /* types */
 import { Photo } from '../types/photo';
+import { RootStackParamList } from '../types/navigation';
+import { StackNavigationProp } from '@react-navigation/stack';
 /* utils */
 import { getExetention } from '../utils/file';
 
-export const CameraScreen: React.FC = () => {
+type Props = {
+  navigation: StackNavigationProp<RootStackParamList, 'Camera'>;
+};
+
+export const CameraScreen: React.FC<Props> = ({ navigation }: Props) => {
   const cameraRef = useRef(null);
   // Contextからalbumオブジェクトを取得
   const { album } = useContext(AlbumContext);
@@ -45,32 +52,39 @@ export const CameraScreen: React.FC = () => {
       const downloadUrl = await upLoadImg(uri, storagePath);
       const photo = {
         id: photoDocRef.id,
-        place: 'matsudo',
+        place: '',
         imageUrl: downloadUrl,
         createdAt: firebase.firestore.Timestamp.now(),
       } as Photo;
       await photoDocRef.set(photo);
+      navigation.navigate('Hinome');
     }
   };
   return (
     <View style={styles.container}>
-      <View style={styles.buttonContainer}>
-        <Camera ref={cameraRef} style={styles.camera} type={type}>
-          <Timer onFinish={snap} />
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => {
-              setType(
-                type === Camera.Constants.Type.back
-                  ? Camera.Constants.Type.front
-                  : Camera.Constants.Type.back
-              );
-            }}
-          >
-            <Text style={styles.text}> Flip </Text>
-          </TouchableOpacity>
-        </Camera>
-      </View>
+      <Camera ref={cameraRef} style={styles.camera} type={type}>
+        <Timer onFinish={snap} />
+        <View style={styles.shutter}>
+          <MaterialCommunityIcons
+            name="circle-slice-8"
+            size={80}
+            color="white"
+            onPress={snap}
+          />
+        </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setType(
+              type === Camera.Constants.Type.back
+                ? Camera.Constants.Type.front
+                : Camera.Constants.Type.back
+            );
+          }}
+        >
+          <Text style={styles.text}> Flip </Text>
+        </TouchableOpacity>
+      </Camera>
     </View>
   );
 };
@@ -82,6 +96,7 @@ const styles = StyleSheet.create({
   camera: {
     flex: 1,
   },
+  shutter: { alignItems: 'center' },
   buttonContainer: {
     flex: 1,
     backgroundColor: 'transparent',
