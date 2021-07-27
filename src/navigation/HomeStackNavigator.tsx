@@ -1,5 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+/* components */
+import { LogOutButton } from '../components/LogOutButton';
 /* screens */
 import { HomeScreen } from '../screens/HomeScreen';
 import { AlbumScreen } from '../screens/AlbumScreen';
@@ -12,15 +14,21 @@ export const HomeStackNavigator: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerTintColor: '#000',
+        headerTransparent: true,
+        headerTintColor: '#fff',
+        headerRight: () => <LogOutButton />,
       }}
     >
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ headerShown: false }}
+        options={{ headerTitle: 'アルバム' }}
       />
-      <Stack.Screen name="Album" component={AlbumScreen} />
+      <Stack.Screen
+        name="Album"
+        component={AlbumScreen}
+        options={{ headerTitle: '写真' }}
+      />
     </Stack.Navigator>
   );
 };

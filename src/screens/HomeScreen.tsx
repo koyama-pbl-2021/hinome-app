@@ -63,6 +63,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       ) : (
         <SafeAreaView style={styles.container}>
           <FlatList
+            style={styles.itemContainer}
             data={albums}
             renderItem={({ item }: { item: Album }) => (
               <AlbumItem album={item} onPress={() => onPressAlbum(item)} />
@@ -82,6 +83,9 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  itemContainer: {
+    marginTop: 40,
   },
   noAlbumText: {
     backgroundColor: 'transparent',
