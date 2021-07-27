@@ -3,10 +3,19 @@ import * as Permissions from 'expo-permissions';
 import * as MediaLibrary from 'expo-media-library';
 import { BarChart } from 'react-native-chart-kit';
 import moment from 'moment';
+import { Button, View, Dimensions, StyleSheet } from 'react-native';
+
+/* types */
+import { RootStackParamList } from '../types/navigation';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-import { Button, View, Dimensions, StyleSheet } from 'react-native';
+
+type Props = {
+  navigation: StackNavigationProp<RootStackParamList, 'Analysis'>;
+};
+
 export const AnalysisScreen: React.FC<Props> = ({ navigation }: Props) => {
   //グラフ用の設定
   const chartConfig = {
@@ -48,11 +57,11 @@ export const AnalysisScreen: React.FC<Props> = ({ navigation }: Props) => {
       }
     }
     const data = [
-      earlymornin / total,
-      mornin / total,
-      afternoon / total,
-      evening / total,
-      night / total,
+      (earlymornin / total) * 100,
+      (mornin / total) * 100,
+      (afternoon / total) * 100,
+      (evening / total) * 100,
+      (night / total) * 100,
     ];
     setData(data);
   }
@@ -75,15 +84,15 @@ export const AnalysisScreen: React.FC<Props> = ({ navigation }: Props) => {
     >
       <Button onPress={mediaLibraryAsync} title="分析" />
       {data && ( // データがあればグラフ表示
-        <BarChart>
+        <BarChart
           data={d}
           width={windowWidth * 0.99}
           height={windowHeight / 2}
-          yAxisSuffix={'%'}
+          yAxisLabel="%"
           fromZero={true}
-          showValuesOnTopOfBars={true}
-          chartConfig = {chartConfig}
-        </BarChart>
+          showValuesOnTopOfBars={false}
+          chartConfig={chartConfig}
+        />
       )}
     </View>
   );

@@ -16,7 +16,6 @@ import { AlbumContext } from '../contexts/AlbumContext';
 /* types */
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
-/* utils */
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;
 };
@@ -83,9 +82,6 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
             keyExtractor={(item, index) => index.toString()}
             numColumns={2}
           />
-          <TouchableOpacity onPress={generateHinome} style={styles.stopButton}>
-            <Text style={styles.stopButtonText}>分析</Text>
-          </TouchableOpacity>
         </SafeAreaView>
       ) : (
         <SafeAreaView>

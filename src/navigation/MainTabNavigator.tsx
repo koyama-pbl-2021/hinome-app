@@ -1,6 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Feather, Entypo } from '@expo/vector-icons';
+import { Feather, Entypo, AntDesign } from '@expo/vector-icons';
 /* navigators */
 import { HomeStackNavigator } from './HomeStackNavigator';
 import { HinomeStackNavigator } from './HinomeStackNavigator';
@@ -42,7 +42,7 @@ export const MainTabNavigator: React.FC = () => {
         options={{
           tabBarLabel: 'Analysis',
           tabBarIcon: ({ color, size }) => (
-            <Feather name="analysis" color={color} size={size} />
+            <AntDesign name="question" color={color} size={size} />
           ),
         }}
       />
