@@ -9,4 +9,5 @@ export type RootStackParamList = {
   Camera: undefined;
   LogIn: undefined;
   SignUp: undefined;
+  Analysis: undefined;
 };

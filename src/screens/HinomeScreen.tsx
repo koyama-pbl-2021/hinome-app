@@ -17,7 +17,7 @@ import { AlbumContext } from '../contexts/AlbumContext';
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
 /* utils */
-import { generateHinome } from '../utils/generateHinome';
+// import { generateHinome } from '../utils/generateHinome';
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;
 };

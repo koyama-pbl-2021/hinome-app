@@ -3,10 +3,19 @@ import * as Permissions from 'expo-permissions';
 import * as MediaLibrary from 'expo-media-library';
 import { BarChart } from 'react-native-chart-kit';
 import moment from 'moment';
+import { Button, View, Dimensions, StyleSheet } from 'react-native';
+
+/* types */
+import { RootStackParamList } from '../types/navigation';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-import { Button, View, Dimensions, StyleSheet } from 'react-native';
+
+type Props = {
+  navigation: StackNavigationProp<RootStackParamList, 'Analysis'>;
+};
+
 export const AnalysisScreen: React.FC<Props> = ({ navigation }: Props) => {
   //グラフ用の設定
   const chartConfig = {
@@ -75,25 +84,25 @@ export const AnalysisScreen: React.FC<Props> = ({ navigation }: Props) => {
     >
       <Button onPress={mediaLibraryAsync} title="分析" />
       {data && ( // データがあればグラフ表示
-        <BarChart>
+        <BarChart
           data={d}
           width={windowWidth * 0.99}
           height={windowHeight / 2}
-          yAxisSuffix={'%'}
+          yAxisLabel="$"
+          yAxisSuffix="%"
           fromZero={true}
           showValuesOnTopOfBars={true}
-          chartConfig =
-          {{
+          chartConfig={{
             backgroundGradientFrom: 'black',
             backgroundGradientFromOpacity: 0,
             backgroundGradientTo: 'black',
             backgroundGradientToOpacity: 0,
             fillShadowGradient: 'gray',
             fillShadowGradientOpacity: 0.7,
-            color: 'rgba(235, 233, 221, 0.3)',
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
             barPercentage: 1,
           }}
-        </BarChart>
+        />
       )}
     </View>
   );

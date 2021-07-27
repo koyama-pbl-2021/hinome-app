@@ -15,7 +15,7 @@ export const AnalysisStackNavigator: React.FC = () => {
       }}
     >
       <Stack.Screen
-        name="Home"
+        name="Analysis"
         component={AnalysisScreen}
         options={{ headerShown: false }}
       />
