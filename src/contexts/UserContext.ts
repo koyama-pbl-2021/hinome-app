@@ -1,5 +1,6 @@
 import { createContext } from 'react';
 import { User } from '../types/user';
+import { logInCheck } from '../lib/firebase';
 
 type UserContextValue = {
   user: User | null;
@@ -9,6 +10,6 @@ type UserContextValue = {
 export const UserContext = createContext<UserContextValue>({
   user: null,
   setUser: () => {
-    // 何もしない
+    logInCheck();
   },
 });

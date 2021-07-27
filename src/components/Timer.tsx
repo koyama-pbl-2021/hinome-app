@@ -12,7 +12,7 @@ export const Timer: React.FC<Props> = ({ onFinish }: Props) => {
         until={+50}
         size={30}
         onFinish={onFinish}
-        digitStyle={{ backgroundColor: '#FFF' }}
+        digitStyle={{ backgroundColor: 'transparent' }}
         digitTxtStyle={{ color: '#1CC625' }}
         timeToShow={['S']}
       />

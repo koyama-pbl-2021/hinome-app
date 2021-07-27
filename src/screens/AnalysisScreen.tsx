@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import * as Permissions from 'expo-permissions';
 import * as MediaLibrary from 'expo-media-library';
 import { BarChart } from 'react-native-chart-kit';
 import moment from 'moment';
@@ -35,6 +34,7 @@ export const AnalysisScreen: React.FC<Props> = ({ navigation }: Props) => {
     let afternoon = 0;
     let evening = 0;
     let night = 0;
+    let midnight = 0;
     let total = 0;
     const { status } = await MediaLibrary.requestPermissionsAsync();
     const media = await MediaLibrary.getAssetsAsync({
@@ -43,8 +43,9 @@ export const AnalysisScreen: React.FC<Props> = ({ navigation }: Props) => {
     //各時間帯を取得
     for (let { creationTime } of media.assets) {
       let number = Number(moment.unix(creationTime).format('h'));
+
       total += 1;
-      if (number > 4 && number < 9) {
+      if (number >= 4 && number < 9) {
         earlymornin += 1;
       } else if (number >= 9 && number < 12) {
         mornin += 1;
@@ -74,15 +75,8 @@ export const AnalysisScreen: React.FC<Props> = ({ navigation }: Props) => {
     ],
   };
   return (
-    <View
-      style={{
-        // このstyleはstylesheetに[from hikimochi]
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Button onPress={mediaLibraryAsync} title="分析" />
+    <View style={styles.container}>
+      <Button onPress={mediaLibraryAsync} title="普段撮影する時間帯を算出" />
       {data && ( // データがあればグラフ表示
         <BarChart
           data={d}
@@ -101,11 +95,8 @@ export const AnalysisScreen: React.FC<Props> = ({ navigation }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    textAlign: 'center',
-    padding: 10,
   },
   header: {
     textAlign: 'center',

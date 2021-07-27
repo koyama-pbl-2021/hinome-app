@@ -42,8 +42,8 @@ export const LogInScreen = ({ navigation }: Props) => {
   const onSubmit = async (d: FormData) => {
     setLoading(true);
     const user = await logIn(d.email, d.password);
-    setUser(user);
     setLoading(false);
+    setUser(user);
     // Alertダサいので変えたい
     if (!user) {
       Alert.alert(
