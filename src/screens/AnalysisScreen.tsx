@@ -15,7 +15,7 @@ type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Analysis'>;
 };
 
-export const AnalysisScreen: React.FC<Props> = ({ navigation }: Props) => {
+export const AnalysisScreen: React.FC<Props> = ({}: Props) => {
   //グラフ用の設定
   const chartConfig = {
     backgroundGradientFrom: 'black',
@@ -34,14 +34,12 @@ export const AnalysisScreen: React.FC<Props> = ({ navigation }: Props) => {
     let afternoon = 0;
     let evening = 0;
     let night = 0;
-    let midnight = 0;
     let total = 0;
-    const { status } = await MediaLibrary.requestPermissionsAsync();
     const media = await MediaLibrary.getAssetsAsync({
       mediaType: [MediaLibrary.MediaType.photo],
     });
     //各時間帯を取得
-    for (let { creationTime } of media.assets) {
+    for (const { creationTime } of media.assets) {
       let number = Number(moment.unix(creationTime).format('h'));
 
       total += 1;

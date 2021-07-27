@@ -24,7 +24,6 @@ import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
 
-
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'HinomeStart'>;
   route: RouteProp<RootStackParamList, 'HinomeStart'>;
@@ -142,8 +141,6 @@ export const HinomeStartScreen: React.FC<Props> = ({
   const onBack = () => {
     navigation.pop();
   };
-
-
 
   return (
     <LinearGradient

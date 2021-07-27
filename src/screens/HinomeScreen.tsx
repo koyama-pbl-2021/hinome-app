@@ -43,22 +43,6 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     return `${month}月${day}日${hours}時${minutes}分`;
   };
 
-  const _mediaLibraryAsync = async () => {
-    // I ask permissions
-    let { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    // setState({ permissionsGranted: status === 'granted' }, this.getAlbums);
-
-    const options = {
-      first: 10,
-      after: 'pic',
-      mediaType: [mediaType.photo],
-    };
-
-    // if permissions granted
-    let albumsReponse = await MediaLibrary.getAssetsAsync(options);
-
-    console.log('albumsReponse=', albumsReponse);
-  };
   // アルバムオブジェクトの有無で日の目画面を変更する
   return (
     <LinearGradient
