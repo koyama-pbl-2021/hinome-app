@@ -29,8 +29,8 @@ export const AnalysisScreen: React.FC<Props> = ({}: Props) => {
   };
   const [data, setData] = useState<number[]>([]);
   async function mediaLibraryAsync() {
-    let earlymornin = 0;
-    let mornin = 0;
+    let earlymorning = 0;
+    let morning = 0;
     let afternoon = 0;
     let evening = 0;
     let night = 0;
@@ -38,26 +38,30 @@ export const AnalysisScreen: React.FC<Props> = ({}: Props) => {
     const media = await MediaLibrary.getAssetsAsync({
       mediaType: [MediaLibrary.MediaType.photo],
     });
+    const earlymorningboarder = 9;
+    const morningboarder = 12;
+    const afternoonboarder = 15;
+    const eveningboarder = 18;
     //各時間帯を取得
     for (const { creationTime } of media.assets) {
-      let number = Number(moment.unix(creationTime).format('h'));
+      const hour = Number(moment.unix(creationTime).format('h'));
 
       total += 1;
-      if (number >= 4 && number < 9) {
-        earlymornin += 1;
-      } else if (number >= 9 && number < 12) {
-        mornin += 1;
-      } else if (number >= 9 && number < 12) {
+      if (hour < earlymorningboarder) {
+        earlymorning += 1;
+      } else if (hour < morningboarder) {
+        morning += 1;
+      } else if (hour < afternoonboarder) {
         afternoon += 1;
-      } else if (number >= 12 && number < 17) {
+      } else if (hour < eveningboarder) {
         evening += 1;
-      } else if (evening >= 17 && number < 24) {
+      } else {
         night += 1;
       }
     }
     const data = [
-      (earlymornin / total) * 100,
-      (mornin / total) * 100,
+      (earlymorning / total) * 100,
+      (morning / total) * 100,
       (afternoon / total) * 100,
       (evening / total) * 100,
       (night / total) * 100,
