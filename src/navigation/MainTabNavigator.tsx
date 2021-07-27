@@ -4,6 +4,7 @@ import { Feather, Entypo } from '@expo/vector-icons';
 /* navigators */
 import { HomeStackNavigator } from './HomeStackNavigator';
 import { HinomeStackNavigator } from './HinomeStackNavigator';
+import { AnalysisStackNavigator } from './AnalysisStackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,6 +33,16 @@ export const MainTabNavigator: React.FC = () => {
           tabBarLabel: 'Hinome',
           tabBarIcon: ({ color, size }) => (
             <Entypo name="adjust" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Analysis"
+        component={AnalysisStackNavigator}
+        options={{
+          tabBarLabel: 'Analysis',
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="analysis" color={color} size={size} />
           ),
         }}
       />

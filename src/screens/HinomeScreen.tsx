@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
+import { MediaLibrary, Permissions } from 'expo';
 import {
   StyleSheet,
   FlatList,
   SafeAreaView,
   TouchableOpacity,
   Text,
+  Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 /* components */
@@ -14,7 +16,8 @@ import { AlbumContext } from '../contexts/AlbumContext';
 /* types */
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
-
+/* utils */
+import { generateHinome } from '../utils/generateHinome';
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;
 };
@@ -38,6 +41,23 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
     return `${month}月${day}日${hours}時${minutes}分`;
+  };
+
+  const _mediaLibraryAsync = async () => {
+    // I ask permissions
+    let { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    // setState({ permissionsGranted: status === 'granted' }, this.getAlbums);
+
+    const options = {
+      first: 10,
+      after: 'pic',
+      mediaType: [mediaType.photo],
+    };
+
+    // if permissions granted
+    let albumsReponse = await MediaLibrary.getAssetsAsync(options);
+
+    console.log('albumsReponse=', albumsReponse);
   };
   // アルバムオブジェクトの有無で日の目画面を変更する
   return (
@@ -64,6 +84,9 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
             keyExtractor={(item, index) => index.toString()}
             numColumns={2}
           />
+          <TouchableOpacity onPress={generateHinome} style={styles.stopButton}>
+            <Text style={styles.stopButtonText}>分析</Text>
+          </TouchableOpacity>
         </SafeAreaView>
       ) : (
         <SafeAreaView>
