@@ -82,17 +82,7 @@ export const AnalysisScreen: React.FC<Props> = ({ navigation }: Props) => {
           yAxisSuffix={'%'}
           fromZero={true}
           showValuesOnTopOfBars={true}
-          chartConfig =
-          {{
-            backgroundGradientFrom: 'black',
-            backgroundGradientFromOpacity: 0,
-            backgroundGradientTo: 'black',
-            backgroundGradientToOpacity: 0,
-            fillShadowGradient: 'gray',
-            fillShadowGradientOpacity: 0.7,
-            color: 'rgba(235, 233, 221, 0.3)',
-            barPercentage: 1,
-          }}
+          chartConfig = {chartConfig}
         </BarChart>
       )}
     </View>
