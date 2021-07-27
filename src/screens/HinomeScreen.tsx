@@ -20,7 +20,7 @@ import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParamList, 'Home'>;
+  navigation: StackNavigationProp<RootStackParamList, 'Hinome'>;
 };
 
 export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
