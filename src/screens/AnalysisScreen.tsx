@@ -88,7 +88,7 @@ export const AnalysisScreen: React.FC<Props> = ({ navigation }: Props) => {
           data={d}
           width={windowWidth * 0.99}
           height={windowHeight / 2}
-          yAxisLabel="$"
+          yAxisLabel="%"
           yAxisSuffix="%"
           fromZero={true}
           showValuesOnTopOfBars={true}
