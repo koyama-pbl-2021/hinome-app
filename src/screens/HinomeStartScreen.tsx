@@ -158,7 +158,9 @@ export const HinomeStartScreen: React.FC<Props> = ({
     >
       <SafeAreaView style={styles.container}>
         <View style={styles.startContainer}>
-          <Text style={styles.startText}>{hour}時間で日の目します</Text>
+          <Text style={styles.startText}>
+            {hour}時間の間に撮影タイミングを{'\n'}10回通知します
+          </Text>
           <TouchableOpacity onPress={onStart} style={styles.startButton}>
             <Text style={styles.startButtonText}>開始</Text>
           </TouchableOpacity>
