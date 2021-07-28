@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { Alert } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
+import * as Notifications from 'expo-notifications';
 /* lib */
 import { logOut } from '../lib/firebase';
 /* context*/
@@ -24,6 +25,7 @@ export const LogOutButton: React.FC = () => {
           {
             text: 'OK',
             onPress: () => {
+              Notifications.cancelAllScheduledNotificationsAsync();
               logOut();
               setUser(null);
             },
