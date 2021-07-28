@@ -11,6 +11,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 /* components */
 import { AlbumItem } from '../components/AlbumItem';
 /* contexts */
+import { AlbumsContext } from '../contexts/AlbumsContext';
 import { UserContext } from '../contexts/UserContext';
 /* lib */
 import { getAlbums } from '../lib/firebase';
@@ -24,7 +25,7 @@ type Props = {
 };
 
 export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
-  const [albums, setAlbums] = useState<Album[]>([]);
+  const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
