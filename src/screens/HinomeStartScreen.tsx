@@ -16,6 +16,7 @@ import { createAlbumRef } from '../lib/firebase';
 /* components */
 import { Loading } from '../components/Loading';
 /* contexts */
+import { AlbumsContext } from '../contexts/AlbumsContext';
 import { AlbumContext } from '../contexts/AlbumContext';
 import { UserContext } from '../contexts/UserContext';
 /* types */
@@ -45,6 +46,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
   const { hour } = route.params;
   const [loading, setLoading] = useState<boolean>(false);
   // for set album context
+  const { albums, setAlbums } = useContext(AlbumsContext);
   const { setAlbum } = useContext(AlbumContext);
   const { user } = useContext(UserContext);
 
@@ -101,6 +103,8 @@ export const HinomeStartScreen: React.FC<Props> = ({
     await albumDocRef.set(album);
     // store context
     setAlbum(album);
+    // ホーム画面への即時反映のため
+    setAlbums([album, ...albums]);
     return album;
   };
 
