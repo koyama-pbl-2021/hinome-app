@@ -6,9 +6,11 @@ import * as Notifications from 'expo-notifications';
 import { logOut } from '../lib/firebase';
 /* context*/
 import { UserContext } from '../contexts/UserContext';
+import { AlbumContext } from '../contexts/AlbumContext';
 
 export const LogOutButton: React.FC = () => {
   const { setUser } = useContext(UserContext);
+  const { setAlbum } = useContext(AlbumContext);
   return (
     <SimpleLineIcons
       style={{ marginRight: 20 }}
@@ -24,9 +26,10 @@ export const LogOutButton: React.FC = () => {
           },
           {
             text: 'OK',
-            onPress: () => {
-              Notifications.cancelAllScheduledNotificationsAsync();
-              logOut();
+            onPress: async () => {
+              await Notifications.cancelAllScheduledNotificationsAsync();
+              await logOut();
+              setAlbum(null);
               setUser(null);
             },
           },
