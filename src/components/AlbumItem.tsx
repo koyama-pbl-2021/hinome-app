@@ -21,11 +21,12 @@ type Props = {
 };
 
 export const AlbumItem: React.FC<Props> = ({ album, onPress }: Props) => {
-  const { imageUrl } = album;
+  const { imageUrl, createdAt } = album;
   // [TODO] dateの追加
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Image source={{ uri: imageUrl }} style={styles.image} />
+      <Text style={styles.dateText}>{createdAt.toDate().toDateString()}</Text>
     </TouchableOpacity>
   );
 };
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     fontWeight: 'bold',
   },
-  placeText: {
+  dateText: {
     fontSize: 12,
     color: '#888',
     marginTop: 8,

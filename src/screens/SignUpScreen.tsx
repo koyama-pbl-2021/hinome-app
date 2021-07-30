@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import {
-  Image,
+  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -42,8 +42,8 @@ export const SignUpScreen = ({ navigation }: Props) => {
   const onSubmit = async (d: FormData) => {
     setLoading(true);
     const user = await signUp(d.email, d.password);
-    setUser(user);
     setLoading(false);
+    setUser(user);
     if (!user) {
       Alert.alert('登録失敗', 'すでに使われているメールアドレスです', [
         { text: 'OK' },
