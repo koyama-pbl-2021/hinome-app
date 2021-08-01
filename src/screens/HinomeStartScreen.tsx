@@ -94,7 +94,8 @@ export const HinomeStartScreen: React.FC<Props> = ({
       userId: user.id,
       groupId: '', // 未実装なのでとりあえず空
       // ベタがき・将来的になくす
-      imageUrl: '../../assets/album-init.png',
+      imageUrl:
+        'https://firebasestorage.googleapis.com/v0/b/hinome-app-dev.appspot.com/o/public%2Falbum-init.png?alt=media&token=5175414d-84dc-43bc-b846-b75aa783c3fb',
       createdAt: firebase.firestore.Timestamp.now(),
       startAt: firebase.firestore.Timestamp.now(),
       endAt: firebase.firestore.Timestamp.fromDate(dt),
