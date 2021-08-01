@@ -16,10 +16,12 @@ import firebase from 'firebase';
 import { createAlbumRef } from '../lib/firebase';
 /* components */
 import { Loading } from '../components/Loading';
+import { WalkthroughModal } from '../components/WalkthroughModal';
 /* contexts */
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { AlbumContext } from '../contexts/AlbumContext';
 import { UserContext } from '../contexts/UserContext';
+import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* types */
 import { Album } from '../types/album';
 import { RouteProp } from '@react-navigation/native';
@@ -46,10 +48,12 @@ export const HinomeStartScreen: React.FC<Props> = ({
 }: Props) => {
   const { hour } = route.params;
   const [loading, setLoading] = useState<boolean>(false);
-  // for set album context
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { setAlbum } = useContext(AlbumContext);
   const { user } = useContext(UserContext);
+  const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
+    VisibleWalkthroughContext
+  );
 
   // get permission
   useEffect(() => {
@@ -152,6 +156,10 @@ export const HinomeStartScreen: React.FC<Props> = ({
     navigation.pop();
   };
 
+  const dismissModal = async () => {
+    setVisibleWalkthrough(false);
+  };
+
   return (
     <LinearGradient
       start={{
@@ -167,6 +175,10 @@ export const HinomeStartScreen: React.FC<Props> = ({
       style={styles.loginViewLinearGradient}
     >
       <SafeAreaView style={styles.container}>
+        <WalkthroughModal
+          visible={visibleWalkthrough}
+          dismissModal={dismissModal}
+        />
         <View style={styles.startContainer}>
           <Text style={styles.startText}>
             {hour}時間の間に撮影タイミングを{'\n'}10回通知します
