@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Notifications from 'expo-notifications';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 /* components */
 import { HourButton } from '../components/HourButton';
 /* contexts */
@@ -33,6 +34,11 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 
   const onStop = async () => {
     setAlbum(null);
+    try {
+      await AsyncStorage.removeItem('@albumId');
+    } catch (e) {
+      console.log(e);
+    }
     await Notifications.cancelAllScheduledNotificationsAsync();
   };
 

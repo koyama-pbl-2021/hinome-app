@@ -8,13 +8,15 @@ import {
   Text,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 /* components */
 import { AlbumItem } from '../components/AlbumItem';
 /* contexts */
+import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { UserContext } from '../contexts/UserContext';
 /* lib */
-import { getAlbums } from '../lib/firebase';
+import { getAlbum, getAlbums } from '../lib/firebase';
 /* types */
 import { Album } from '../types/album';
 import { RootStackParamList } from '../types/navigation';
@@ -25,16 +27,32 @@ type Props = {
 };
 
 export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
+  const { album, setAlbum } = useContext(AlbumContext);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
     getFirebaseItems();
+    getAlbumFromLocalStorageInfo();
   }, []);
 
   const getFirebaseItems = async () => {
     const albums = await getAlbums(user.id);
     setAlbums(albums);
+  };
+
+  const getAlbumFromLocalStorageInfo = async () => {
+    try {
+      const albumId = await AsyncStorage.getItem('@albumId');
+      if (albumId) {
+        const album = await getAlbum(user.id, albumId);
+        setAlbum(album);
+      } else {
+        setAlbum(null);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const onPressAlbum = (album: Album) => {

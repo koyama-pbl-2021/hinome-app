@@ -144,14 +144,6 @@ export const LogInScreen = ({ navigation }: Props) => {
           />
           <Text style={styles.loginButtonText}>LOG IN</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {}}
-          style={styles.forgotYourPasswordButton}
-        >
-          <Text style={styles.forgotYourPasswordButtonText}>
-            Forgot your password?
-          </Text>
-        </TouchableOpacity>
         <TouchableOpacity onPress={onPressSignUp} style={styles.signUpButton}>
           <Text style={styles.signUpButtonText}>Sign Up</Text>
         </TouchableOpacity>

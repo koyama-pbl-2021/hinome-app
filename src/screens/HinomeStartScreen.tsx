@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import firebase from 'firebase';
 /* lib */
@@ -131,7 +132,12 @@ export const HinomeStartScreen: React.FC<Props> = ({
 
   const onStart = async () => {
     setLoading(true);
-    const { startAt, endAt } = await createAlbumContext();
+    const { id, startAt, endAt } = await createAlbumContext();
+    try {
+      await AsyncStorage.setItem('@albumId', id);
+    } catch (e) {
+      console.log(e);
+    }
     const notifyCount = 10;
     const offset = 120;
     const notifyAts = createNotifyAts(startAt, endAt, notifyCount, offset);

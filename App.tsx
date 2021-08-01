@@ -11,7 +11,6 @@ import { Album } from './src/types/album';
 
 export default function App() {
   const [user, setUser] = useState<User>();
-  // 正直Albumは一番上に持ってくる必要がないと思うので要議論
   const [albums, setAlbums] = useState<Album[]>([]);
   const [album, setAlbum] = useState<Album>();
 
