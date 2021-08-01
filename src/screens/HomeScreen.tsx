@@ -27,7 +27,7 @@ type Props = {
 };
 
 export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
-  const { album, setAlbum } = useContext(AlbumContext);
+  const { setAlbum } = useContext(AlbumContext);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
 
