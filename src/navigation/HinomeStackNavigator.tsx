@@ -1,8 +1,6 @@
 import React from 'react';
-import { View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 /* components */
-import { HelpButton } from '../components/HelpButton';
 import { LogOutButton } from '../components/LogOutButton';
 /* screens */
 import { HinomeScreen } from '../screens/HinomeScreen';
@@ -19,12 +17,7 @@ export const HinomeStackNavigator: React.FC = () => {
       screenOptions={{
         headerTransparent: true,
         headerTintColor: '#fff',
-        headerRight: () => (
-          <View style={{ flexDirection: 'row' }}>
-            <HelpButton />
-            <LogOutButton />
-          </View>
-        ),
+        headerRight: () => <LogOutButton />,
       }}
     >
       <Stack.Screen

@@ -11,12 +11,10 @@ import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 /* components */
 import { AlbumItem } from '../components/AlbumItem';
-import { WalkthroughModal } from '../components/WalkthroughModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { UserContext } from '../contexts/UserContext';
-import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* lib */
 import { getAlbum, getAlbums } from '../lib/firebase';
 /* types */
@@ -29,19 +27,13 @@ type Props = {
 };
 
 export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
-  const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
-    VisibleWalkthroughContext
-  );
   const { setAlbum } = useContext(AlbumContext);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
     getFirebaseItems();
-    // 日の目開始情報
-    getAlbumFromLocalStorage();
-    // Walkthroughモーダル
-    getWalkthroughFromLocalStorage();
+    getAlbumFromLocalStorageInfo();
   }, []);
 
   const getFirebaseItems = async () => {
@@ -49,7 +41,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     setAlbums(albums);
   };
 
-  const getAlbumFromLocalStorage = async () => {
+  const getAlbumFromLocalStorageInfo = async () => {
     try {
       const albumId = await AsyncStorage.getItem('@albumId');
       if (albumId) {
@@ -58,29 +50,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       } else {
         setAlbum(null);
       }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  // Home画面のみ実装
-  const getWalkthroughFromLocalStorage = async () => {
-    try {
-      const invisible = await AsyncStorage.getItem('@invisibleWalkthrough');
-      // AsyncStorageはstringのみしか入れられない
-      if (!invisible) {
-        setVisibleWalkthrough(true);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const dismissModal = async () => {
-    setVisibleWalkthrough(false);
-    // 初回起動はHome画面なのでAsyncStorageへ格納
-    try {
-      await AsyncStorage.setItem('@invisibleWalkthrough', 'true');
     } catch (e) {
       console.log(e);
     }
@@ -104,16 +73,14 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
       style={styles.loginViewLinearGradient}
     >
-      <SafeAreaView style={styles.container}>
-        <WalkthroughModal
-          visible={visibleWalkthrough}
-          dismissModal={dismissModal}
-        />
-        {albums.length === 0 ? (
+      {albums.length === 0 ? (
+        <SafeAreaView style={styles.container}>
           <Text style={styles.noAlbumText}>
             右下のタブから日の目を開始すると{'\n'}アルバムが表示されます
           </Text>
-        ) : (
+        </SafeAreaView>
+      ) : (
+        <SafeAreaView style={styles.container}>
           <FlatList
             style={styles.itemContainer}
             data={albums}
@@ -123,8 +90,8 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
             keyExtractor={(item, index) => index.toString()}
             numColumns={2}
           />
-        )}
-      </SafeAreaView>
+        </SafeAreaView>
+      )}
     </LinearGradient>
   );
 };

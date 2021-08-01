@@ -10,10 +10,8 @@ import ImageView from 'react-native-image-viewing';
 import { LinearGradient } from 'expo-linear-gradient';
 /* components */
 import { PhotoItem } from '../components/PhotoItem';
-import { WalkthroughModal } from '../components/WalkthroughModal';
 /* contexts */
 import { UserContext } from '../contexts/UserContext';
-import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* lib */
 import { getPhotos } from '../lib/firebase';
 /* types */
@@ -33,9 +31,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const [visible, setIsVisible] = useState(false);
   const [index, setIndex] = useState(0);
   const { user } = useContext(UserContext);
-  const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
-    VisibleWalkthroughContext
-  );
   const images = photos.map((photo) => {
     return {
       uri: photo.imageUrl,
@@ -57,10 +52,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     setIsVisible(true);
   };
 
-  const dismissModal = async () => {
-    setVisibleWalkthrough(false);
-  };
-
   return (
     <LinearGradient
       start={{
@@ -76,10 +67,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       style={styles.loginViewLinearGradient}
     >
       <SafeAreaView style={styles.container}>
-        <WalkthroughModal
-          visible={visibleWalkthrough}
-          dismissModal={dismissModal}
-        />
         <ImageView
           images={images}
           imageIndex={index}
