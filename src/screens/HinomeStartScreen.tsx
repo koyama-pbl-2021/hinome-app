@@ -94,8 +94,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
       userId: user.id,
       groupId: '', // 未実装なのでとりあえず空
       // ベタがき・将来的になくす
-      imageUrl:
-        'https://placehold.jp/d1422c/455a91/150x150.png?text=%E3%82%A2%E3%83%AB%E3%83%90%E3%83%A05',
+      imageUrl: '../../assets/album-init.png',
       createdAt: firebase.firestore.Timestamp.now(),
       startAt: firebase.firestore.Timestamp.now(),
       endAt: firebase.firestore.Timestamp.fromDate(dt),
