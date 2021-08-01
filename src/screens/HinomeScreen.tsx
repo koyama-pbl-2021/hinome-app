@@ -14,8 +14,10 @@ import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 /* components */
 import { HourButton } from '../components/HourButton';
+import { WalkthroughModal } from '../components/WalkthroughModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
+import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* types */
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -27,6 +29,9 @@ type Props = {
 export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   // Contextからalbumオブジェクトを取得
   const { album, setAlbum } = useContext(AlbumContext);
+  const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
+    VisibleWalkthroughContext
+  );
   const [hours] = useState<string[]>(['1', '2', '4', '8', '12', '24']);
   const onPressHour = (hour: string) => {
     navigation.navigate('HinomeStart', { hour });
@@ -49,6 +54,11 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     const minutes = date.getMinutes();
     return `${month}月${day}日${hours}時${minutes}分`;
   };
+
+  const dismissModal = async () => {
+    setVisibleWalkthrough(false);
+  };
+
   // アルバムオブジェクトの有無で日の目画面を変更する
   return (
     <LinearGradient
@@ -64,8 +74,12 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
       style={styles.loginViewLinearGradient}
     >
-      {!album ? (
-        <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <WalkthroughModal
+          visible={visibleWalkthrough}
+          dismissModal={dismissModal}
+        />
+        {!album ? (
           <FlatList
             style={styles.itemContainer}
             data={hours}
@@ -75,9 +89,7 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
             keyExtractor={(item, index) => index.toString()}
             numColumns={2}
           />
-        </SafeAreaView>
-      ) : (
-        <SafeAreaView style={styles.container}>
+        ) : (
           <View style={styles.settingContainer}>
             <Text style={styles.timeText}>
               開始：{timeFormat(album.startAt.toDate())}
@@ -89,8 +101,8 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
               <Text style={styles.stopButtonText}>中止</Text>
             </TouchableOpacity>
           </View>
-        </SafeAreaView>
-      )}
+        )}
+      </SafeAreaView>
     </LinearGradient>
   );
 };
