@@ -6492,6 +6492,11 @@
     "invariant" "^2.2.4"
     "prop-types" "^15.7.2"
 
+"react-native-histogram@^0.2.0":
+  "integrity" "sha1-CqScmXVGh3q3+93RUZhl9TZFDO0="
+  "resolved" "https://registry.npmjs.org/react-native-histogram/-/react-native-histogram-0.2.0.tgz"
+  "version" "0.2.0"
+
 "react-native-image-viewing@^0.2.0":
   "integrity" "sha512-j2JXv86WRXGNme4LPsNCJ/2MgX+oVbmJ5ZLbGrYbKXcCPe9OshqlQI5L3SdbAxWu/F5pubcMaXp0zoYNaZVuzA=="
   "resolved" "https://registry.npmjs.org/react-native-image-viewing/-/react-native-image-viewing-0.2.0.tgz"

@@ -1,5 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+/* components */
+import { LogOutButton } from '../components/LogOutButton';
 /* screens */
 import { AnalysisScreen } from '../screens/AnalysisScreen';
 /* types */
@@ -11,13 +13,15 @@ export const AnalysisStackNavigator: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerTintColor: '#000',
+        headerTransparent: true,
+        headerTintColor: '#fff',
+        headerRight: () => <LogOutButton />,
       }}
     >
       <Stack.Screen
         name="Analysis"
         component={AnalysisScreen}
-        options={{ headerShown: false }}
+        options={{ headerTitle: '' }}
       />
     </Stack.Navigator>
   );
