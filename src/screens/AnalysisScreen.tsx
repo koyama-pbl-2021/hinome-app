@@ -164,6 +164,7 @@ export const AnalysisScreen: React.FC<Props> = () => {
         <Button
           onPress={mediaLibraryAsync}
           title="旅先での撮影時間帯"
+          color="#999999"
           style={styles.Button}
         />
         {data && ( // データがあればグラフ表示
