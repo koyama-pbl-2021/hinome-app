@@ -108,7 +108,8 @@ export const AnalysisScreen: React.FC<Props> = () => {
           Math.abs(exif.Latitude - latcur) >= latdistance ||
           Math.abs(exif.Longtitude - loncur) >= londistance
         ) {
-          const hour = Number(moment.unix(metadata.creationTime).format('h'));
+          const hour = Number(moment.unix(metadata.creationTime).format('HH'));
+          console.log(hour);
 
           total += 1;
           if (hour > earlymorningbar && hour <= morningbar) {
@@ -163,7 +164,8 @@ export const AnalysisScreen: React.FC<Props> = () => {
       <View style={styles.container}>
         <Button
           onPress={mediaLibraryAsync}
-          title="旅先での撮影時間帯"
+          title="旅先でカメラを撮る時間帯"
+          text-weight="bold"
           color="#999999"
           style={styles.Button}
         />
@@ -201,7 +203,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     shadowColor: 'rgba(0, 0, 0, 00.20)',
     shadowRadius: 25,
-    shadowOpacity: 1,
+    shadowOpacity: 0.1,
     justifyContent: 'center',
     padding: 0,
     height: 60,
