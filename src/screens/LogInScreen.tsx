@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   label: {
     color: 'white',
-    marginLeft: 10,
+    marginLeft: 20,
   },
   logInText: {
     backgroundColor: 'transparent',
