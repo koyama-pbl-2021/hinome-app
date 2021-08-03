@@ -15,7 +15,10 @@ type Props = {
   dismissModal: () => void;
 };
 
-export const WalkthroughModal = ({ visible, dismissModal }: Props) => {
+export const WalkthroughModal: React.FC<Props> = ({
+  visible,
+  dismissModal,
+}: Props) => {
   const [viewableItemIndex, setViewableItemIndex] = useState<number>(0);
   const [buttonText, setButtonText] = useState<string>('Next');
 

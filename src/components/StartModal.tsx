@@ -15,8 +15,11 @@ type Props = {
   dismissModal: () => void;
 };
 
-export const StartModal = ({ visible, dismissModal }: Props) => {
-  const [viewableItemIndex, setViewableItemIndex] = useState<number>(0);
+export const StartModal: React.FC<Props> = ({
+  visible,
+  dismissModal,
+}: Props) => {
+  const [setViewableItemIndex] = useState<number>(0);
   const [buttonText] = useState<string>('OK');
 
   const flatListRef = useRef(null);
