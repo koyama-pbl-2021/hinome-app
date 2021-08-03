@@ -124,6 +124,6 @@ const slides = [
     key: '1',
     title: '開始しました',
     text: '通知が来るまで待ってください！',
-    image: require('../../assets/logo.png'),
+    image: require('../../assets/camera.png'),
   },
 ];
