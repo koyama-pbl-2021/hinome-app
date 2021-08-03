@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   StyleSheet,
   StatusBar,
@@ -12,6 +12,7 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 /* components */
 import { HourButton } from '../components/HourButton';
 import { WalkthroughModal } from '../components/WalkthroughModal';
@@ -33,6 +34,16 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     VisibleWalkthroughContext
   );
   const [hours] = useState<string[]>(['1', '2', '4', '8', '12', '24']);
+  const [count, setCount] = useState<number>();
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    checkLeftNotificatonCountAsync();
+    if (count === 0) {
+      setAlbum(null);
+    }
+  }, [isFocused]);
+
   const onPressHour = (hour: string) => {
     navigation.navigate('HinomeStart', { hour });
   };
@@ -59,6 +70,12 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     setVisibleWalkthrough(false);
   };
 
+  const checkLeftNotificatonCountAsync = async () => {
+    const notifications =
+      await Notifications.getAllScheduledNotificationsAsync();
+    console.log(notifications.length);
+    setCount(notifications.length);
+  };
   // アルバムオブジェクトの有無で日の目画面を変更する
   return (
     <LinearGradient
@@ -97,6 +114,7 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
             <Text style={styles.timeText}>
               終了：{timeFormat(album.endAt.toDate())}
             </Text>
+            <Text style={styles.timeText}>残り通知回数：{count}回</Text>
             <TouchableOpacity onPress={onStop} style={styles.stopButton}>
               <Text style={styles.stopButtonText}>中止</Text>
             </TouchableOpacity>
