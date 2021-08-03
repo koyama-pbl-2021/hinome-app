@@ -16,6 +16,7 @@ import { useIsFocused } from '@react-navigation/native';
 /* components */
 import { HourButton } from '../components/HourButton';
 import { WalkthroughModal } from '../components/WalkthroughModal';
+import { FinishModal } from '../components/FinishModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
@@ -35,12 +36,14 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   );
   const [hours] = useState<string[]>(['1', '2', '4', '8', '12', '24']);
   const [count, setCount] = useState<number>();
+  const [visibleFinish, setVisibleFinish] = useState<boolean>(false);
   const isFocused = useIsFocused();
 
   useEffect(() => {
     checkLeftNotificatonCountAsync();
-    if (count === 0) {
-      setAlbum(null);
+    if (count === 0 && album) {
+      // モーダルを表示させる
+      setVisibleFinish(true);
     }
   }, [isFocused]);
 
@@ -66,14 +69,19 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     return `${month}月${day}日${hours}時${minutes}分`;
   };
 
-  const dismissModal = async () => {
+  const dismissWalkthroughModal = async () => {
     setVisibleWalkthrough(false);
+  };
+
+  const dismissFinishModal = async () => {
+    // アルバムオブジェクトはここで消させる
+    setVisibleFinish(false);
+    setAlbum(null);
   };
 
   const checkLeftNotificatonCountAsync = async () => {
     const notifications =
       await Notifications.getAllScheduledNotificationsAsync();
-    console.log(notifications.length);
     setCount(notifications.length);
   };
   // アルバムオブジェクトの有無で日の目画面を変更する
@@ -92,9 +100,13 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       style={styles.loginViewLinearGradient}
     >
       <SafeAreaView style={styles.container}>
+        <FinishModal
+          visible={visibleFinish}
+          dismissModal={dismissFinishModal}
+        />
         <WalkthroughModal
           visible={visibleWalkthrough}
-          dismissModal={dismissModal}
+          dismissModal={dismissWalkthroughModal}
         />
         {!album ? (
           <FlatList
@@ -114,7 +126,7 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
             <Text style={styles.timeText}>
               終了：{timeFormat(album.endAt.toDate())}
             </Text>
-            <Text style={styles.timeText}>残り通知回数：{count}回</Text>
+            <Text style={styles.timeText}>通知は残り{count}回</Text>
             <TouchableOpacity onPress={onStop} style={styles.stopButton}>
               <Text style={styles.stopButtonText}>中止</Text>
             </TouchableOpacity>

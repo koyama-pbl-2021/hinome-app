@@ -17,6 +17,7 @@ import { createAlbumRef } from '../lib/firebase';
 /* components */
 import { Loading } from '../components/Loading';
 import { WalkthroughModal } from '../components/WalkthroughModal';
+import { StartModal } from '../components/StartModal';
 /* contexts */
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { AlbumContext } from '../contexts/AlbumContext';
@@ -48,6 +49,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
 }: Props) => {
   const { hour } = route.params;
   const [loading, setLoading] = useState<boolean>(false);
+  const [visibleStart, setVisibleStart] = useState<boolean>(false);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { setAlbum } = useContext(AlbumContext);
   const { user } = useContext(UserContext);
@@ -149,15 +151,20 @@ export const HinomeStartScreen: React.FC<Props> = ({
       scheduleNotificationAsync(notifyAt);
     }
     setLoading(false);
-    navigation.pop();
+    setVisibleStart(true);
   };
 
   const onBack = () => {
     navigation.pop();
   };
 
-  const dismissModal = async () => {
+  const dismissWalkthroughModal = async () => {
     setVisibleWalkthrough(false);
+  };
+
+  const dismissStartModal = async () => {
+    setVisibleWalkthrough(false);
+    navigation.pop();
   };
 
   return (
@@ -177,8 +184,9 @@ export const HinomeStartScreen: React.FC<Props> = ({
       <SafeAreaView style={styles.container}>
         <WalkthroughModal
           visible={visibleWalkthrough}
-          dismissModal={dismissModal}
+          dismissModal={dismissWalkthroughModal}
         />
+        <StartModal visible={visibleStart} dismissModal={dismissStartModal} />
         <View style={styles.startContainer}>
           <Text style={styles.startText}>
             {hour}時間の間に撮影タイミングを{'\n'}10回通知します
