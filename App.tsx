@@ -5,6 +5,7 @@ import { AppNavigator } from './src/navigation/AppNavigator';
 import { UserContext } from './src/contexts/UserContext';
 import { AlbumContext } from './src/contexts/AlbumContext';
 import { AlbumsContext } from './src/contexts/AlbumsContext';
+import { CountContext } from './src/contexts/CountContext';
 import { VisibleWalkthroughContext } from './src/contexts/VisibleWalkthroughContext';
 /* types */
 import { User } from './src/types/user';
@@ -12,6 +13,7 @@ import { Album } from './src/types/album';
 
 export default function App() {
   const [user, setUser] = useState<User>();
+  const [count, setCount] = useState<number>();
   const [albums, setAlbums] = useState<Album[]>([]);
   const [album, setAlbum] = useState<Album>();
   const [visibleWalkthrough, setVisibleWalkthrough] = useState<boolean>();
@@ -23,7 +25,9 @@ export default function App() {
           <VisibleWalkthroughContext.Provider
             value={{ visibleWalkthrough, setVisibleWalkthrough }}
           >
-            <AppNavigator />
+            <CountContext.Provider value={{ count, setCount }}>
+              <AppNavigator />
+            </CountContext.Provider>
           </VisibleWalkthroughContext.Provider>
         </AlbumContext.Provider>
       </AlbumsContext.Provider>

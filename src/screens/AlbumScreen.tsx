@@ -52,7 +52,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   };
 
   const onPressPhoto = (index: number) => {
-    console.log(index);
     setIndex(index);
     setIsVisible(true);
   };

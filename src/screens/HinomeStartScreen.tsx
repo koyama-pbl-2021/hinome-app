@@ -21,6 +21,7 @@ import { StartModal } from '../components/StartModal';
 /* contexts */
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { AlbumContext } from '../contexts/AlbumContext';
+import { CountContext } from '../contexts/CountContext';
 import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* types */
@@ -53,6 +54,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { setAlbum } = useContext(AlbumContext);
   const { user } = useContext(UserContext);
+  const { setCount } = useContext(CountContext);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
@@ -94,7 +96,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     const albumDocRef = await createAlbumRef(user.id);
     // create hinome endTime
     const dt = new Date();
-    dt.setHours(dt.getHours() + Number(hour));
+    dt.setMinutes(dt.getMinutes() + Number(hour));
     const album = {
       id: albumDocRef.id,
       userId: user.id,
@@ -144,8 +146,8 @@ export const HinomeStartScreen: React.FC<Props> = ({
     } catch (e) {
       console.log(e);
     }
-    const notifyCount = 10;
-    const offset = 120;
+    const notifyCount = 2;
+    const offset = 10;
     const notifyAts = createNotifyAts(startAt, endAt, notifyCount, offset);
     for (const notifyAt of notifyAts) {
       scheduleNotificationAsync(notifyAt);
@@ -163,8 +165,15 @@ export const HinomeStartScreen: React.FC<Props> = ({
   };
 
   const dismissStartModal = async () => {
-    setVisibleWalkthrough(false);
-    navigation.pop();
+    await checkLeftNotificatonCountAsync();
+    setVisibleStart(false);
+    navigation.goBack();
+  };
+
+  const checkLeftNotificatonCountAsync = async () => {
+    const notifications =
+      await Notifications.getAllScheduledNotificationsAsync();
+    setCount(notifications.length);
   };
 
   return (

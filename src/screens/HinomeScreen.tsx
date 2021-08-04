@@ -19,6 +19,7 @@ import { WalkthroughModal } from '../components/WalkthroughModal';
 import { FinishModal } from '../components/FinishModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
+import { CountContext } from '../contexts/CountContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* types */
 import { RootStackParamList } from '../types/navigation';
@@ -35,7 +36,7 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     VisibleWalkthroughContext
   );
   const [hours] = useState<string[]>(['1', '2', '4', '8', '12', '24']);
-  const [count, setCount] = useState<number>();
+  const { count, setCount } = useContext(CountContext);
   const [visibleFinish, setVisibleFinish] = useState<boolean>(false);
   const isFocused = useIsFocused();
 
@@ -53,6 +54,7 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 
   const onStop = async () => {
     setAlbum(null);
+    setVisibleFinish(false);
     try {
       await AsyncStorage.removeItem('@albumId');
     } catch (e) {
@@ -100,13 +102,13 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       style={styles.loginViewLinearGradient}
     >
       <SafeAreaView style={styles.container}>
-        <FinishModal
-          visible={visibleFinish}
-          dismissModal={dismissFinishModal}
-        />
         <WalkthroughModal
           visible={visibleWalkthrough}
           dismissModal={dismissWalkthroughModal}
+        />
+        <FinishModal
+          visible={visibleFinish}
+          dismissModal={dismissFinishModal}
         />
         {!album ? (
           <FlatList
