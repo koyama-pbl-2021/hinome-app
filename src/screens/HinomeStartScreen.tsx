@@ -96,7 +96,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     const albumDocRef = await createAlbumRef(user.id);
     // create hinome endTime
     const dt = new Date();
-    dt.setMinutes(dt.getMinutes() + Number(hour));
+    dt.setHours(dt.getHours() + Number(hour));
     const album = {
       id: albumDocRef.id,
       userId: user.id,
@@ -146,8 +146,8 @@ export const HinomeStartScreen: React.FC<Props> = ({
     } catch (e) {
       console.log(e);
     }
-    const notifyCount = 2;
-    const offset = 10;
+    const notifyCount = 10;
+    const offset = 120;
     const notifyAts = createNotifyAts(startAt, endAt, notifyCount, offset);
     for (const notifyAt of notifyAts) {
       scheduleNotificationAsync(notifyAt);
