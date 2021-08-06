@@ -9,16 +9,21 @@ import {
   View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import firebase from 'firebase';
 /* lib */
 import { createAlbumRef } from '../lib/firebase';
 /* components */
 import { Loading } from '../components/Loading';
+import { WalkthroughModal } from '../components/WalkthroughModal';
+import { StartModal } from '../components/StartModal';
 /* contexts */
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { AlbumContext } from '../contexts/AlbumContext';
+import { CountContext } from '../contexts/CountContext';
 import { UserContext } from '../contexts/UserContext';
+import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* types */
 import { Album } from '../types/album';
 import { RouteProp } from '@react-navigation/native';
@@ -45,10 +50,14 @@ export const HinomeStartScreen: React.FC<Props> = ({
 }: Props) => {
   const { hour } = route.params;
   const [loading, setLoading] = useState<boolean>(false);
-  // for set album context
+  const [visibleStart, setVisibleStart] = useState<boolean>(false);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { setAlbum } = useContext(AlbumContext);
   const { user } = useContext(UserContext);
+  const { setCount } = useContext(CountContext);
+  const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
+    VisibleWalkthroughContext
+  );
 
   // get permission
   useEffect(() => {
@@ -94,7 +103,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
       groupId: '', // 未実装なのでとりあえず空
       // ベタがき・将来的になくす
       imageUrl:
-        'https://placehold.jp/d1422c/455a91/150x150.png?text=%E3%82%A2%E3%83%AB%E3%83%90%E3%83%A05',
+        'https://firebasestorage.googleapis.com/v0/b/hinome-app-dev.appspot.com/o/public%2Falbum-init.png?alt=media&token=5175414d-84dc-43bc-b846-b75aa783c3fb',
       createdAt: firebase.firestore.Timestamp.now(),
       startAt: firebase.firestore.Timestamp.now(),
       endAt: firebase.firestore.Timestamp.fromDate(dt),
@@ -131,7 +140,12 @@ export const HinomeStartScreen: React.FC<Props> = ({
 
   const onStart = async () => {
     setLoading(true);
-    const { startAt, endAt } = await createAlbumContext();
+    const { id, startAt, endAt } = await createAlbumContext();
+    try {
+      await AsyncStorage.setItem('@albumId', id);
+    } catch (e) {
+      console.log(e);
+    }
     const notifyCount = 10;
     const offset = 120;
     const notifyAts = createNotifyAts(startAt, endAt, notifyCount, offset);
@@ -139,11 +153,27 @@ export const HinomeStartScreen: React.FC<Props> = ({
       scheduleNotificationAsync(notifyAt);
     }
     setLoading(false);
-    navigation.pop();
+    setVisibleStart(true);
   };
 
   const onBack = () => {
     navigation.pop();
+  };
+
+  const dismissWalkthroughModal = async () => {
+    setVisibleWalkthrough(false);
+  };
+
+  const dismissStartModal = async () => {
+    await checkLeftNotificatonCountAsync();
+    setVisibleStart(false);
+    navigation.goBack();
+  };
+
+  const checkLeftNotificatonCountAsync = async () => {
+    const notifications =
+      await Notifications.getAllScheduledNotificationsAsync();
+    setCount(notifications.length);
   };
 
   return (
@@ -161,6 +191,11 @@ export const HinomeStartScreen: React.FC<Props> = ({
       style={styles.loginViewLinearGradient}
     >
       <SafeAreaView style={styles.container}>
+        <WalkthroughModal
+          visible={visibleWalkthrough}
+          dismissModal={dismissWalkthroughModal}
+        />
+        <StartModal visible={visibleStart} dismissModal={dismissStartModal} />
         <View style={styles.startContainer}>
           <Text style={styles.startText}>
             {hour}時間の間に撮影タイミングを{'\n'}10回通知します
