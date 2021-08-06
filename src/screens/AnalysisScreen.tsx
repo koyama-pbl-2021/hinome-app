@@ -19,6 +19,8 @@ type Props = {
 };
 
 export const AnalysisScreen: React.FC<Props> = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+
   //グラフ用の設定
   const chartConfig = {
     backgroundGradientFrom: 'black',
@@ -31,7 +33,6 @@ export const AnalysisScreen: React.FC<Props> = () => {
     barPercentage: 1,
   };
   const [data, setData] = useState<number[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
   async function mediaLibraryAsync() {
     setLoading(true);
 
@@ -58,26 +59,28 @@ export const AnalysisScreen: React.FC<Props> = () => {
     let total = 0;
 
     // 変数初期化 (GPS)
-    let gpslatarr = [];
-    let gpslonarr = [];
+    const gpslatarr = [];
+    const gpslonarr = [];
     let latcur = 0;
     let latmax = 0;
     let loncur = 0;
     let lonmax = 0;
-    let londistance = 0.1;
-    let latdistance = 0.1;
+    const londistance = 0.1;
+    const latdistance = 0.1;
 
     //普段の場所を算出
-    for (let cur of media.assets) {
-      let mediainfo = await MediaLibrary.getAssetInfoAsync(cur);
+    for (const cur of media.assets) {
+      const mediainfo = await MediaLibrary.getAssetInfoAsync(cur);
       try {
         gpslatarr.push(mediainfo.exif['{GPS}'].Latitude.toFixed(1));
         gpslonarr.push(mediainfo.exif['{GPS}'].Longtitude.toFixed(1));
-      } catch {}
+      } catch {
+        console.log('no gps');
+      }
     }
 
     for (const lat of gpslatarr) {
-      let latlength = gpslatarr.filter(function (x) {
+      const latlength = gpslatarr.filter(function (x) {
         return x == lat;
       }).length;
       if (latlength > latmax) {
@@ -87,7 +90,7 @@ export const AnalysisScreen: React.FC<Props> = () => {
     }
 
     for (const lon of gpslonarr) {
-      let lonlength = gpslonarr.filter(function (x) {
+      const lonlength = gpslonarr.filter(function (x) {
         return x == lon;
       }).length;
       if (lonlength > lonmax) {
@@ -159,7 +162,7 @@ export const AnalysisScreen: React.FC<Props> = () => {
       }}
       locations={[0, 1]}
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
-      style={styles.signUpViewLinearGradient}
+      style={styles.analysisViewLinearGradient}
     >
       <View style={styles.container}>
         <Button
@@ -189,6 +192,7 @@ export const AnalysisScreen: React.FC<Props> = () => {
         <Text>夜:19:00~23:00</Text>
         <Text>深夜:23:00~4:00</Text>
       </View>
+      <Loading visible={loading} />
     </LinearGradient>
   );
 };
@@ -211,13 +215,7 @@ const styles = StyleSheet.create({
     marginRight: 20,
     marginBottom: 20,
   },
-  header: {
-    textAlign: 'center',
-    fontSize: 18,
-    padding: 16,
-    marginTop: 16,
-  },
-  signUpViewLinearGradient: {
+  analysisViewLinearGradient: {
     flex: 1,
   },
 });
