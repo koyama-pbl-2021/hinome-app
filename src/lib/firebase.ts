@@ -84,6 +84,23 @@ export const logOut = async () => {
   }
 };
 
+export const getAlbum = async (userId: string, albumId: string) => {
+  const snapshot = await firebase
+    .firestore()
+    .collection('users')
+    .doc(userId)
+    .collection('albums')
+    .doc(albumId)
+    .get();
+  if (!snapshot.exists) {
+    return null;
+  } else {
+    return {
+      ...snapshot.data(),
+    } as Album;
+  }
+};
+
 export const getAlbums = async (userId: string) => {
   const snapshot = await firebase
     .firestore()

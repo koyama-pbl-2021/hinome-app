@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   StyleSheet,
   StatusBar,
@@ -11,10 +11,16 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Notifications from 'expo-notifications';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 /* components */
 import { HourButton } from '../components/HourButton';
+import { WalkthroughModal } from '../components/WalkthroughModal';
+import { FinishModal } from '../components/FinishModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
+import { CountContext } from '../contexts/CountContext';
+import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* types */
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -26,13 +32,34 @@ type Props = {
 export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   // Contextからalbumオブジェクトを取得
   const { album, setAlbum } = useContext(AlbumContext);
+  const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
+    VisibleWalkthroughContext
+  );
   const [hours] = useState<string[]>(['1', '2', '4', '8', '12', '24']);
+  const { count, setCount } = useContext(CountContext);
+  const [visibleFinish, setVisibleFinish] = useState<boolean>(false);
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    checkLeftNotificatonCountAsync();
+    if (count === 0 && album) {
+      // モーダルを表示させる
+      setVisibleFinish(true);
+    }
+  }, [isFocused]);
+
   const onPressHour = (hour: string) => {
     navigation.navigate('HinomeStart', { hour });
   };
 
   const onStop = async () => {
     setAlbum(null);
+    setVisibleFinish(false);
+    try {
+      await AsyncStorage.removeItem('@albumId');
+    } catch (e) {
+      console.log(e);
+    }
     await Notifications.cancelAllScheduledNotificationsAsync();
   };
 
@@ -42,6 +69,22 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     const hours = date.getHours();
     const minutes = date.getMinutes();
     return `${month}月${day}日${hours}時${minutes}分`;
+  };
+
+  const dismissWalkthroughModal = async () => {
+    setVisibleWalkthrough(false);
+  };
+
+  const dismissFinishModal = async () => {
+    // アルバムオブジェクトはここで消させる
+    setVisibleFinish(false);
+    setAlbum(null);
+  };
+
+  const checkLeftNotificatonCountAsync = async () => {
+    const notifications =
+      await Notifications.getAllScheduledNotificationsAsync();
+    setCount(notifications.length);
   };
   // アルバムオブジェクトの有無で日の目画面を変更する
   return (
@@ -58,8 +101,16 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
       style={styles.loginViewLinearGradient}
     >
-      {!album ? (
-        <SafeAreaView style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <WalkthroughModal
+          visible={visibleWalkthrough}
+          dismissModal={dismissWalkthroughModal}
+        />
+        <FinishModal
+          visible={visibleFinish}
+          dismissModal={dismissFinishModal}
+        />
+        {!album ? (
           <FlatList
             style={styles.itemContainer}
             data={hours}
@@ -69,9 +120,7 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
             keyExtractor={(item, index) => index.toString()}
             numColumns={2}
           />
-        </SafeAreaView>
-      ) : (
-        <SafeAreaView style={styles.container}>
+        ) : (
           <View style={styles.settingContainer}>
             <Text style={styles.timeText}>
               開始：{timeFormat(album.startAt.toDate())}
@@ -79,12 +128,13 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
             <Text style={styles.timeText}>
               終了：{timeFormat(album.endAt.toDate())}
             </Text>
+            <Text style={styles.timeText}>通知は残り{count}回</Text>
             <TouchableOpacity onPress={onStop} style={styles.stopButton}>
               <Text style={styles.stopButtonText}>中止</Text>
             </TouchableOpacity>
           </View>
-        </SafeAreaView>
-      )}
+        )}
+      </SafeAreaView>
     </LinearGradient>
   );
 };
