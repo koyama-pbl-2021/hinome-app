@@ -9,7 +9,7 @@ export const Timer: React.FC<Props> = ({ onFinish }: Props) => {
   return (
     <View style={styles.container}>
       <CountDown
-        until={+50}
+        until={+60}
         size={30}
         onFinish={onFinish}
         digitStyle={{ backgroundColor: 'transparent' }}
