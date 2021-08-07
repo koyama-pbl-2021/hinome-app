@@ -1,9 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Feather, Entypo } from '@expo/vector-icons';
+import { Feather, Entypo, Ionicons } from '@expo/vector-icons';
 /* navigators */
 import { HomeStackNavigator } from './HomeStackNavigator';
 import { HinomeStackNavigator } from './HinomeStackNavigator';
+import { AnalysisStackNavigator } from './AnalysisStackNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,6 +33,16 @@ export const MainTabNavigator: React.FC = () => {
           tabBarLabel: 'Hinome',
           tabBarIcon: ({ color, size }) => (
             <Entypo name="adjust" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Analysis"
+        component={AnalysisStackNavigator}
+        options={{
+          tabBarLabel: 'analytics',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="analytics" color={color} size={size} />
           ),
         }}
       />
