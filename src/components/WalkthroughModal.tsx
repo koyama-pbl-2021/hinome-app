@@ -121,8 +121,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: '5%',
   },
   img: {
-    width: 100,
+    width: 350,
     height: 100,
+    resizeMode: 'contain',
+    borderRadius: 8,
   },
   title: {
     fontSize: 34,
@@ -173,26 +175,26 @@ const styles = StyleSheet.create({
 const slides = [
   {
     key: '1',
-    title: 'This is first Slide',
-    text: 'This is first Slide This is first Slide This is first Slide This is first Slide',
-    image: require('../../assets/logo.png'),
+    title: 'まずはじめに',
+    text: '画面下部の日の目タブに切り替えます！',
+    image: require('../../assets/hinome-tab.png'),
   },
   {
     key: '2',
-    title: 'This is second Slide',
-    text: 'This is first Slide This is first Slide This is first Slide This is first Slide This is first Slide',
-    image: require('../../assets/logo.png'),
+    title: '時間を決めよう',
+    text: '今から何時間の間に通知が来るかを設定してスタートしましょう！',
+    image: require('../../assets/hour-setting.png'),
   },
   {
     key: '3',
-    title: 'This is Third Slide',
-    text: 'This is Third Slide This is Third Slide This is Third Slide',
-    image: require('../../assets/logo.png'),
+    title: 'アルバムを見よう',
+    text: 'アルバムはホーム画面で確認できます！',
+    image: require('../../assets/home-tab.png'),
   },
   {
     key: '4',
-    title: 'This is forth Slide',
-    text: 'This is forth Slide This is forth Slide This is forth Slide This is forth Slide This is forth Slide',
-    image: require('../../assets/logo.png'),
+    title: '分析機能を使おう',
+    text: '分析画面ではよくカメラを使う時間帯を確認できます！',
+    image: require('../../assets/analytics-tab.png'),
   },
 ];
