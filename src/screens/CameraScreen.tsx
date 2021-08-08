@@ -4,7 +4,7 @@ import firebase from 'firebase';
 import { Camera } from 'expo-camera';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 /* lib */
-import { upLoadImg, createPhotoRef } from '../lib/firebase';
+import { upLoadImg, createPhotoRef, getAlbumRef } from '../lib/firebase';
 /* components */
 import { Timer } from '../components/Timer';
 /* contexts */
@@ -24,7 +24,7 @@ type Props = {
 export const CameraScreen: React.FC<Props> = ({ navigation }: Props) => {
   const cameraRef = useRef(null);
   // Contextからalbumオブジェクトを取得
-  const { album } = useContext(AlbumContext);
+  const { album, setAlbum } = useContext(AlbumContext);
   const { user } = useContext(UserContext);
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -42,6 +42,17 @@ export const CameraScreen: React.FC<Props> = ({ navigation }: Props) => {
     return <Text>No access to camera</Text>;
   }
 
+  const updateAlbum = async (
+    userId: string,
+    albumId: string,
+    imageUrl: string
+  ) => {
+    const albumRef = await getAlbumRef(userId, albumId);
+    await albumRef.update({
+      imageUrl: imageUrl,
+    });
+  };
+
   const snap = async () => {
     if (cameraRef) {
       // 現状albumがnullになる場合がある。通知からであればnullになることない
@@ -57,6 +68,10 @@ export const CameraScreen: React.FC<Props> = ({ navigation }: Props) => {
         createdAt: firebase.firestore.Timestamp.now(),
       } as Photo;
       await photoDocRef.set(photo);
+      await updateAlbum(user.id, album.id, downloadUrl);
+      // 即時更新のため
+      album.imageUrl = downloadUrl;
+      setAlbum(album);
       navigation.navigate('Hinome');
     }
   };
