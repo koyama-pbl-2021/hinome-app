@@ -140,6 +140,15 @@ export const createAlbumRef = async (userId: string) => {
     .doc();
 };
 
+export const getAlbumRef = async (userId: string, albumId: string) => {
+  return await firebase
+    .firestore()
+    .collection('users')
+    .doc(userId)
+    .collection('albums')
+    .doc(albumId);
+};
+
 export const createPhotoRef = async (albumId: string, userId: string) => {
   return await firebase
     .firestore()
