@@ -111,7 +111,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
         />
         {albums.length === 0 ? (
           <Text style={styles.noAlbumText}>
-            真ん中のタブから開始すると{'\n'}アルバムが表示されます
+            中央のタブから開始すると{'\n'}アルバムが表示されます
           </Text>
         ) : (
           <FlatList
