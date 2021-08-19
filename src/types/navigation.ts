@@ -6,7 +6,6 @@ export type RootStackParamList = {
   Album: { album: Album };
   Hinome: undefined;
   HinomeStart: { hour: string };
-  Camera: undefined;
   LogIn: undefined;
   SignUp: undefined;
 };
