@@ -18,12 +18,14 @@ import { createAlbumRef } from '../lib/firebase';
 import { Loading } from '../components/Loading';
 import { WalkthroughModal } from '../components/WalkthroughModal';
 import { StartModal } from '../components/StartModal';
+import { CameraModal } from '../components/CameraModal';
 /* contexts */
-import { AlbumsContext } from '../contexts/AlbumsContext';
 import { AlbumContext } from '../contexts/AlbumContext';
+import { AlbumsContext } from '../contexts/AlbumsContext';
 import { CountContext } from '../contexts/CountContext';
 import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
+import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* types */
 import { Album } from '../types/album';
 import { RouteProp } from '@react-navigation/native';
@@ -58,12 +60,13 @@ export const HinomeStartScreen: React.FC<Props> = ({
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
+  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
 
   // get permission
   useEffect(() => {
     requestPermissionsAsync();
     Notifications.addNotificationResponseReceivedListener(() => {
-      navigation.navigate('Camera');
+      setVisibleCamera(true);
     });
   }, []);
 
@@ -96,7 +99,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     const albumDocRef = await createAlbumRef(user.id);
     // create hinome endTime
     const dt = new Date();
-    dt.setHours(dt.getHours() + Number(hour));
+    dt.setMinutes(dt.getMinutes() + Number(hour));
     const album = {
       id: albumDocRef.id,
       userId: user.id,
@@ -110,7 +113,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     } as Album;
     // create document
     await albumDocRef.set(album);
-    // store context
+    // 写真をどのアルバムにいれるか、日の目開始情報として使う
     setAlbum(album);
     // ホーム画面への即時反映のため
     setAlbums([album, ...albums]);
@@ -146,8 +149,8 @@ export const HinomeStartScreen: React.FC<Props> = ({
     } catch (e) {
       console.log(e);
     }
-    const notifyCount = 10;
-    const offset = 120;
+    const notifyCount = 1;
+    const offset = 10;
     const notifyAts = createNotifyAts(startAt, endAt, notifyCount, offset);
     for (const notifyAt of notifyAts) {
       scheduleNotificationAsync(notifyAt);
@@ -162,6 +165,10 @@ export const HinomeStartScreen: React.FC<Props> = ({
 
   const dismissWalkthroughModal = async () => {
     setVisibleWalkthrough(false);
+  };
+
+  const dismissCameraModal = async () => {
+    setVisibleCamera(false);
   };
 
   const dismissStartModal = async () => {
@@ -194,6 +201,10 @@ export const HinomeStartScreen: React.FC<Props> = ({
         <WalkthroughModal
           visible={visibleWalkthrough}
           dismissModal={dismissWalkthroughModal}
+        />
+        <CameraModal
+          visible={visibleCamera}
+          dismissModal={dismissCameraModal}
         />
         <StartModal visible={visibleStart} dismissModal={dismissStartModal} />
         <View style={styles.startContainer}>

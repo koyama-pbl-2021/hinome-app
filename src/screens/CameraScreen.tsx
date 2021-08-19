@@ -28,6 +28,7 @@ export const CameraScreen: React.FC<Props> = ({ navigation }: Props) => {
   const { user } = useContext(UserContext);
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
+
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
