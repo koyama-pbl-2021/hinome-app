@@ -146,7 +146,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     } catch (e) {
       console.log(e);
     }
-    const notifyCount = 1;
+    const notifyCount = 10;
     const offset = 10;
     const notifyAts = createNotifyAts(startAt, endAt, notifyCount, offset);
     for (const notifyAt of notifyAts) {
