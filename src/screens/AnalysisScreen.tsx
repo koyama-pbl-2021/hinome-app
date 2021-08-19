@@ -111,32 +111,29 @@ export const AnalysisScreen: React.FC<Props> = () => {
       let mediainfo = await MediaLibrary.getAssetInfoAsync(metadata);
       try {
         exif = mediainfo.exif['{GPS}'];
-      } catch {}
-      if (exif != null) {
-        if (
-          Math.abs(exif.Latitude - latcur) >= latdistance ||
-          Math.abs(exif.Longtitude - loncur) >= londistance
-        ) {
-          const hour = Number(moment.unix(metadata.creationTime).format('HH'));
-          console.log(hour);
+      } catch {
+        console.log('no gps');
+      }
 
-          total += 1;
-          if (hour > earlymorningbar && hour <= morningbar) {
-            earlymorning += 1;
-          } else if (hour > morningbar && hour <= noonbar) {
-            morning += 1;
-          } else if (hour > noonbar && hour <= eveningboarder) {
-            afternoon += 1;
-          } else if (hour > eveningboarder && hour <= nightboarder) {
-            evening += 1;
-          } else if (hour > nightboarder && hour <= midnightboarder) {
-            night += 1;
-          } else {
-            midnight += 1;
-          }
-        }
+      const hour = Number(moment.unix(metadata.creationTime).format('HH'));
+      console.log(hour);
+
+      total += 1;
+      if (hour > earlymorningbar && hour <= morningbar) {
+        earlymorning += 1;
+      } else if (hour > morningbar && hour <= noonbar) {
+        morning += 1;
+      } else if (hour > noonbar && hour <= eveningboarder) {
+        afternoon += 1;
+      } else if (hour > eveningboarder && hour <= nightboarder) {
+        evening += 1;
+      } else if (hour > nightboarder && hour <= midnightboarder) {
+        night += 1;
+      } else {
+        midnight += 1;
       }
     }
+
     const data = [
       (earlymorning / total) * 100,
       (morning / total) * 100,
