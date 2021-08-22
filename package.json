@@ -6,9 +6,11 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint": "eslint src/*"
+    "lint": "eslint src/*",
+    "postinstall": "patch-package"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.13.0",
     "@react-navigation/bottom-tabs": "^5.11.11",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.5",
@@ -16,6 +18,7 @@
     "expo-av": "~9.1.2",
     "expo-camera": "~11.0.2",
     "expo-linear-gradient": "~9.1.0",
+    "expo-media-library": "^12.1.2",
     "expo-notifications": "~0.11.6",
     "expo-status-bar": "~1.0.4",
     "firebase": "8.2.3",
@@ -24,13 +27,13 @@
     "react-dom": "16.13.1",
     "react-hook-form": "^7.11.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
+    "react-native-chart-kit": "^6.11.0",
     "react-native-countdown-component": "^2.7.1",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-image-viewing": "^0.2.0",
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.0.0",
-    "react-native-web": "~0.13.12",
-    "@react-native-async-storage/async-storage": "^1.13.0"
+    "react-native-web": "~0.13.12"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -41,6 +44,7 @@
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
+    "patch-package": "^6.4.7",
     "prettier": "^2.3.1",
     "typescript": "~4.0.0"
   },
