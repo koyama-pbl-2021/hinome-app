@@ -9,17 +9,13 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused } from '@react-navigation/native';
-import * as Notifications from 'expo-notifications';
 /* components */
 import { AlbumItem } from '../components/AlbumItem';
 import { WalkthroughModal } from '../components/WalkthroughModal';
 import { CameraModal } from '../components/CameraModal';
-import { FinishModal } from '../components/FinishModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
-import { CountContext } from '../contexts/CountContext';
 import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
@@ -39,12 +35,9 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     VisibleWalkthroughContext
   );
   const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
-  const { album, setAlbum } = useContext(AlbumContext);
+  const { setAlbum } = useContext(AlbumContext);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
-  const [visibleFinish, setVisibleFinish] = useState<boolean>(false);
-  const { count, setCount } = useContext(CountContext);
-  const isFocused = useIsFocused();
 
   useEffect(() => {
     getFirebaseItems();
@@ -53,10 +46,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     // Walkthroughモーダル
     getWalkthroughFromLocalStorage();
   }, []);
-
-  useEffect(() => {
-    checkLeftNotificatonCountAsync();
-  }, [isFocused]);
 
   const getFirebaseItems = async () => {
     const albums = await getAlbums(user.id);
@@ -104,25 +93,8 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     setVisibleCamera(false);
   };
 
-  const dismissFinishModal = async () => {
-    // 日の目開始情報
-    setAlbum(null);
-    setVisibleFinish(false);
-  };
-
   const onPressAlbum = (album: Album) => {
     navigation.navigate('Album', { album });
-  };
-
-  const checkLeftNotificatonCountAsync = async () => {
-    const notifications =
-      await Notifications.getAllScheduledNotificationsAsync();
-    setCount(notifications.length);
-    console.log(notifications.length);
-    if (notifications.length === 0 && album) {
-      // モーダルを表示させる
-      setVisibleFinish(true);
-    }
   };
 
   return (
@@ -147,10 +119,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
         <CameraModal
           visible={visibleCamera}
           dismissModal={dismissCameraModal}
-        />
-        <FinishModal
-          visible={visibleFinish}
-          dismissModal={dismissFinishModal}
         />
         {albums.length === 0 ? (
           <Text style={styles.noAlbumText}>

@@ -75,6 +75,10 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   };
 
   const dismissCameraModal = async () => {
+    // この画面でカメラが開いても再レンダリングされないため、カメラモーダルクローズ時にstateを変更させる
+    const notifications =
+      await Notifications.getAllScheduledNotificationsAsync();
+    setCount(notifications.length);
     setVisibleCamera(false);
   };
 

@@ -8,8 +8,6 @@ import {
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useIsFocused } from '@react-navigation/native';
-import * as Notifications from 'expo-notifications';
 /* components */
 import { PhotoItem } from '../components/PhotoItem';
 import { WalkthroughModal } from '../components/WalkthroughModal';
@@ -41,7 +39,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     VisibleWalkthroughContext
   );
   const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
-  const isFocused = useIsFocused();
   const images = photos.map((photo) => {
     return {
       uri: photo.imageUrl,
@@ -68,12 +65,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
 
   const dismissCameraModal = async () => {
     setVisibleCamera(false);
-  };
-
-  const checkLeftNotificatonCountAsync = async () => {
-    const notifications =
-      await Notifications.getAllScheduledNotificationsAsync();
-    setCount(notifications.length);
   };
 
   return (

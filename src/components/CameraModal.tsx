@@ -59,12 +59,6 @@ export const CameraModal: React.FC<Props> = ({
     });
   };
 
-  // buttonを押したら次のViewへ飛ぶ
-  const onBottomButton = () => {
-    // propsでmodalを消す
-    dismissModal();
-  };
-
   const snap = async () => {
     if (cameraRef) {
       // 現状albumがnullになる場合がある。通知からであればnullになることない
@@ -91,13 +85,13 @@ export const CameraModal: React.FC<Props> = ({
   return (
     <Modal visible={visible} animationType="fade" transparent={true}>
       <Camera ref={cameraRef} style={styles.camera} type={type}>
-        <Timer onFinish={() => {}} />
+        <Timer onFinish={snap} />
         <View style={styles.shutter}>
           <MaterialCommunityIcons
             name="circle-slice-8"
             size={80}
             color="white"
-            onPress={onBottomButton}
+            onPress={snap}
           />
         </View>
         <TouchableOpacity
@@ -117,7 +111,6 @@ export const CameraModal: React.FC<Props> = ({
   );
 };
 
-const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   camera: {
     flex: 1,
