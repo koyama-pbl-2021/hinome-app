@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
     height: 70,
     marginLeft: 20,
     marginRight: 20,
-    marginTop: Platform.OS === 'android' ? 100 : 200,
+    marginTop: Platform.OS === 'android' ? 60 : 200,
   },
   logInButton: {
     backgroundColor: 'transparent',

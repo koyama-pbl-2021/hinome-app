@@ -177,7 +177,7 @@ const slides = [
     key: '1',
     title: 'まずはじめに',
     text: '画面下部の日の目タブに切り替えます！',
-    image: require('../../assets/hinome-tab.png'),
+    image: require('../../assets/hinome-tab.jpg'),
   },
   {
     key: '2',
