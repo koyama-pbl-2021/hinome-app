@@ -11,9 +11,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 /* components */
 import { PhotoItem } from '../components/PhotoItem';
 import { WalkthroughModal } from '../components/WalkthroughModal';
+import { CameraModal } from '../components/CameraModal';
 /* contexts */
 import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
+import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* lib */
 import { getPhotos } from '../lib/firebase';
 /* types */
@@ -36,6 +38,7 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
+  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const images = photos.map((photo) => {
     return {
       uri: photo.imageUrl,
@@ -56,8 +59,12 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     setIsVisible(true);
   };
 
-  const dismissModal = async () => {
+  const dismissWalkthroughModal = async () => {
     setVisibleWalkthrough(false);
+  };
+
+  const dismissCameraModal = async () => {
+    setVisibleCamera(false);
   };
 
   return (
@@ -77,7 +84,11 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       <SafeAreaView style={styles.container}>
         <WalkthroughModal
           visible={visibleWalkthrough}
-          dismissModal={dismissModal}
+          dismissModal={dismissWalkthroughModal}
+        />
+        <CameraModal
+          visible={visibleCamera}
+          dismissModal={dismissCameraModal}
         />
         <ImageView
           images={images}

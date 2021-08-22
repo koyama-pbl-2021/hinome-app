@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { View, Text, Modal, StyleSheet, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
 import { Camera } from 'expo-camera';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -12,35 +12,34 @@ import { UserContext } from '../contexts/UserContext';
 import { AlbumContext } from '../contexts/AlbumContext';
 /* types */
 import { Photo } from '../types/photo';
-import { RootStackParamList } from '../types/navigation';
-import { StackNavigationProp } from '@react-navigation/stack';
 /* utils */
 import { getExetention } from '../utils/file';
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParamList, 'Camera'>;
+  visible: boolean;
+  dismissModal: () => void;
 };
 
-export const CameraScreen: React.FC<Props> = ({ navigation }: Props) => {
+export const CameraModal: React.FC<Props> = ({
+  visible,
+  dismissModal,
+}: Props) => {
   const cameraRef = useRef(null);
   // Contextからalbumオブジェクトを取得
   const { album, setAlbum } = useContext(AlbumContext);
   const { user } = useContext(UserContext);
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
+
   useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
+    requestPermissionsAsync();
   }, []);
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  const requestPermissionsAsync = async () => {
+    const { status } = await Camera.requestPermissionsAsync();
+    // 許可されればPermissionにgrantedを設定
+    setHasPermission(status === 'granted');
+  };
 
   const updateAlbum = async (
     userId: string,
@@ -72,11 +71,12 @@ export const CameraScreen: React.FC<Props> = ({ navigation }: Props) => {
       // 即時更新のため
       album.imageUrl = downloadUrl;
       setAlbum(album);
-      navigation.navigate('Hinome');
+      dismissModal();
     }
   };
+
   return (
-    <View style={styles.container}>
+    <Modal visible={visible} animationType="fade" transparent={true}>
       <Camera ref={cameraRef} style={styles.camera} type={type}>
         <Timer onFinish={snap} />
         <View style={styles.shutter}>
@@ -88,7 +88,7 @@ export const CameraScreen: React.FC<Props> = ({ navigation }: Props) => {
           />
         </View>
         <TouchableOpacity
-          style={styles.button}
+          style={styles.flipButton}
           onPress={() => {
             setType(
               type === Camera.Constants.Type.back
@@ -100,28 +100,31 @@ export const CameraScreen: React.FC<Props> = ({ navigation }: Props) => {
           <Text style={styles.text}> Flip </Text>
         </TouchableOpacity>
       </Camera>
-    </View>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   camera: {
     flex: 1,
   },
   shutter: { alignItems: 'center' },
-  buttonContainer: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    flexDirection: 'row',
-    margin: 20,
+  bottomWrapper: {
+    position: 'absolute',
+    bottom: 70,
+    alignItems: 'center',
   },
   button: {
+    marginTop: 18,
+  },
+  flipButton: {
     flex: 0.1,
     alignSelf: 'flex-end',
     alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 19,
+    color: '#fff',
   },
   text: {
     fontSize: 18,
