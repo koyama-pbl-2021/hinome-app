@@ -19,16 +19,9 @@ export const FinishModal: React.FC<Props> = ({
   visible,
   dismissModal,
 }: Props) => {
-  const [viewableItemIndex, setViewableItemIndex] = useState<number>(0);
   const [buttonText] = useState<string>('OK');
 
   const flatListRef = useRef(null);
-
-  // onViewableItemsChangedで現在見えているviewを取得。
-  const onViewRef = useRef(({ viewableItems }) => {
-    // 現在の見えているItemのindexをuseStateに保存
-    setViewableItemIndex(viewableItems[0].index);
-  });
 
   // buttonを押したら次のViewへ飛ぶ
   const onBottomButton = () => {
@@ -59,9 +52,7 @@ export const FinishModal: React.FC<Props> = ({
           showsHorizontalScrollIndicator={false}
           ref={flatListRef}
           keyExtractor={keyExtractor}
-          onViewableItemsChanged={onViewRef.current}
         />
-
         <View style={styles.bottomWrapper}>
           <TouchableOpacity style={styles.button} onPress={onBottomButton}>
             <Text style={styles.buttonText}>{buttonText}</Text>

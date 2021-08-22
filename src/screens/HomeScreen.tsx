@@ -12,11 +12,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 /* components */
 import { AlbumItem } from '../components/AlbumItem';
 import { WalkthroughModal } from '../components/WalkthroughModal';
+import { CameraModal } from '../components/CameraModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
+import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* lib */
 import { getAlbum, getAlbums } from '../lib/firebase';
 /* types */
@@ -32,6 +34,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
+  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const { setAlbum } = useContext(AlbumContext);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
@@ -76,7 +79,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     }
   };
 
-  const dismissModal = async () => {
+  const dismissWalkthroughModal = async () => {
     setVisibleWalkthrough(false);
     // 初回起動はHome画面なのでAsyncStorageへ格納
     try {
@@ -84,6 +87,10 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const dismissCameraModal = async () => {
+    setVisibleCamera(false);
   };
 
   const onPressAlbum = (album: Album) => {
@@ -107,7 +114,11 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       <SafeAreaView style={styles.container}>
         <WalkthroughModal
           visible={visibleWalkthrough}
-          dismissModal={dismissModal}
+          dismissModal={dismissWalkthroughModal}
+        />
+        <CameraModal
+          visible={visibleCamera}
+          dismissModal={dismissCameraModal}
         />
         {albums.length === 0 ? (
           <Text style={styles.noAlbumText}>

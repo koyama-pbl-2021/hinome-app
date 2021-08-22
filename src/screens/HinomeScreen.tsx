@@ -14,6 +14,7 @@ import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 /* components */
+import { CameraModal } from '../components/CameraModal';
 import { HourButton } from '../components/HourButton';
 import { WalkthroughModal } from '../components/WalkthroughModal';
 import { FinishModal } from '../components/FinishModal';
@@ -21,6 +22,7 @@ import { FinishModal } from '../components/FinishModal';
 import { AlbumContext } from '../contexts/AlbumContext';
 import { CountContext } from '../contexts/CountContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
+import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* types */
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -32,6 +34,7 @@ type Props = {
 export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   // Contextからalbumオブジェクトを取得
   const { album, setAlbum } = useContext(AlbumContext);
+  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
@@ -42,10 +45,6 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 
   useEffect(() => {
     checkLeftNotificatonCountAsync();
-    if (count === 0 && album) {
-      // モーダルを表示させる
-      setVisibleFinish(true);
-    }
   }, [isFocused]);
 
   const onPressHour = (hour: string) => {
@@ -75,16 +74,27 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     setVisibleWalkthrough(false);
   };
 
+  const dismissCameraModal = async () => {
+    // この画面でカメラが開いても再レンダリングされないため、カメラモーダルクローズ時にstateを変更させる
+    const notifications =
+      await Notifications.getAllScheduledNotificationsAsync();
+    setCount(notifications.length);
+    setVisibleCamera(false);
+  };
+
   const dismissFinishModal = async () => {
     // アルバムオブジェクトはここで消させる
-    setVisibleFinish(false);
     setAlbum(null);
+    setVisibleFinish(false);
   };
 
   const checkLeftNotificatonCountAsync = async () => {
     const notifications =
       await Notifications.getAllScheduledNotificationsAsync();
     setCount(notifications.length);
+    if (notifications.length === 0 && album) {
+      setVisibleFinish(true);
+    }
   };
   // アルバムオブジェクトの有無で日の目画面を変更する
   return (
@@ -102,6 +112,10 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       style={styles.loginViewLinearGradient}
     >
       <SafeAreaView style={styles.container}>
+        <CameraModal
+          visible={visibleCamera}
+          dismissModal={dismissCameraModal}
+        />
         <WalkthroughModal
           visible={visibleWalkthrough}
           dismissModal={dismissWalkthroughModal}
