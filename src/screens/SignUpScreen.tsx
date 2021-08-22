@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
     height: 70,
     marginLeft: 20,
     marginRight: 20,
-    marginTop: 200,
+    marginTop: Platform.OS === 'android' ? 60 : 200,
   },
   logInButton: {
     backgroundColor: 'transparent',
