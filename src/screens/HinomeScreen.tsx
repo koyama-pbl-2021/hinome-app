@@ -86,6 +86,11 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     // アルバムオブジェクトはここで消させる
     setAlbum(null);
     setVisibleFinish(false);
+    try {
+      await AsyncStorage.removeItem('@albumId');
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const checkLeftNotificatonCountAsync = async () => {
