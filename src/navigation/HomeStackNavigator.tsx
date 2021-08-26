@@ -4,6 +4,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 /* components */
 import { HelpButton } from '../components/HelpButton';
 import { LogOutButton } from '../components/LogOutButton';
+import { GarbageButton } from '../components/GarbageButton';
+
 /* screens */
 import { HomeScreen } from '../screens/HomeScreen';
 import { AlbumScreen } from '../screens/AlbumScreen';
@@ -34,7 +36,16 @@ export const HomeStackNavigator: React.FC = () => {
       <Stack.Screen
         name="Album"
         component={AlbumScreen}
-        options={{ headerTitle: '写真' }}
+        options={{
+          headerTitle: '写真',
+          headerRight: () => (
+            <View style={{ flexDirection: 'row' }}>
+              <GarbageButton />
+              <HelpButton />
+              <LogOutButton />
+            </View>
+          ),
+        }}
       />
     </Stack.Navigator>
   );

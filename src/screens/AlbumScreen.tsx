@@ -11,13 +11,13 @@ import { LinearGradient } from 'expo-linear-gradient';
 /* components */
 import { PhotoItem } from '../components/PhotoItem';
 import { WalkthroughModal } from '../components/WalkthroughModal';
-import { CameraModal } from '../components/CameraModal';
+import { GarbageButton } from '../components/GarbageButton';
+
 /* contexts */
 import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
-import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* lib */
-import { getPhotos } from '../lib/firebase';
+import { getPhotos, deleteAlbum } from '../lib/firebase';
 /* types */
 import { Photo } from '../types/photo';
 import { RouteProp } from '@react-navigation/native';
@@ -38,7 +38,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
-  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const images = photos.map((photo) => {
     return {
       uri: photo.imageUrl,
@@ -54,17 +53,17 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     setPhotos(photos);
   };
 
+  const deleteFirebaseItems = async () => {
+    deleteAlbum(user.id, album.id);
+  };
+
   const onPressPhoto = (index: number) => {
     setIndex(index);
     setIsVisible(true);
   };
 
-  const dismissWalkthroughModal = async () => {
+  const dismissModal = async () => {
     setVisibleWalkthrough(false);
-  };
-
-  const dismissCameraModal = async () => {
-    setVisibleCamera(false);
   };
 
   return (
@@ -84,11 +83,7 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       <SafeAreaView style={styles.container}>
         <WalkthroughModal
           visible={visibleWalkthrough}
-          dismissModal={dismissWalkthroughModal}
-        />
-        <CameraModal
-          visible={visibleCamera}
-          dismissModal={dismissCameraModal}
+          dismissModal={dismissModal}
         />
         <ImageView
           images={images}
