@@ -21,7 +21,11 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-export const signUp = async (email: string, password: string) => {
+export const signUp = async (
+  userName: string,
+  email: string,
+  password: string
+) => {
   try {
     const userCredential = await firebase
       .auth()
@@ -29,7 +33,8 @@ export const signUp = async (email: string, password: string) => {
     const { uid } = userCredential.user;
     const user = {
       id: uid,
-      email,
+      userName: userName,
+      email: email,
     } as User;
     await firebase.firestore().collection('users').doc(uid).set(user);
     return user;
