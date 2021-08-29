@@ -45,11 +45,12 @@ export const SignUpScreen = ({ navigation }: Props) => {
     setLoading(true);
     const user = await signUp(d.userName, d.email, d.password);
     setLoading(false);
-    setUser(user);
     if (!user) {
       Alert.alert('登録失敗', 'すでに使われているメールアドレスです', [
         { text: 'OK' },
       ]);
+    } else {
+      setUser(user);
     }
   };
 
@@ -80,6 +81,7 @@ export const SignUpScreen = ({ navigation }: Props) => {
             required: true,
             minLength: 3,
             maxLength: 128,
+            pattern: /^[0-9a-zA-Z]*$/,
           }}
           render={({ field: { onChange, onBlur, value } }) => (
             <TextInput
@@ -100,6 +102,9 @@ export const SignUpScreen = ({ navigation }: Props) => {
         )}
         {errors.userName && errors.userName.type === 'minLength' && (
           <Text style={styles.errorMessage}>3文字以上にしてください</Text>
+        )}
+        {errors.userName && errors.userName.type === 'pattern' && (
+          <Text style={styles.errorMessage}>英数字のみしか使えません</Text>
         )}
         <View style={styles.separatorView} />
         <Text style={styles.label}>Email</Text>
