@@ -18,7 +18,7 @@ export default function App() {
   const [album, setAlbum] = useState<Album>();
   const [albums, setAlbums] = useState<Album[]>([]);
   const [visibleWalkthrough, setVisibleWalkthrough] = useState<boolean>();
-  const [visibleCamera, setVisibleCamera] = useState<boolean>();
+  const [visibleCamera, setVisibleCamera] = useState<boolean>(false);
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
