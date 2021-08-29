@@ -39,7 +39,6 @@ export const signUp = async (
     await firebase.firestore().collection('users').doc(uid).set(user);
     return user;
   } catch (err) {
-    console.log(err);
     return false;
   }
 };
