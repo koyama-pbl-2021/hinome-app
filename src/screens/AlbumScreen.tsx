@@ -17,7 +17,7 @@ import { GarbageButton } from '../components/GarbageButton';
 import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* lib */
-import { getPhotos, deleteAlbum } from '../lib/firebase';
+import { getPhotos, getAlbumRef } from '../lib/firebase';
 /* types */
 import { Photo } from '../types/photo';
 import { RouteProp } from '@react-navigation/native';
@@ -54,7 +54,7 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   };
 
   const deleteFirebaseItems = async () => {
-    deleteAlbum(user.id, album.id);
+    getAlbumRef(user.id, album.id);
   };
 
   const onPressPhoto = (index: number) => {
