@@ -26,6 +26,7 @@ type Props = {
 };
 
 type FormData = {
+  userName: string;
   email: string;
   password: string;
 };
@@ -42,13 +43,14 @@ export const SignUpScreen = ({ navigation }: Props) => {
 
   const onSubmit = async (d: FormData) => {
     setLoading(true);
-    const user = await signUp(d.email, d.password);
+    const user = await signUp(d.userName, d.email, d.password);
     setLoading(false);
-    setUser(user);
     if (!user) {
       Alert.alert('登録失敗', 'すでに使われているメールアドレスです', [
         { text: 'OK' },
       ]);
+    } else {
+      setUser(user);
     }
   };
 
@@ -72,6 +74,39 @@ export const SignUpScreen = ({ navigation }: Props) => {
     >
       <View style={styles.signUpView}>
         <Text style={styles.signUpText}>Sign Up</Text>
+        <Text style={styles.label}>User Name</Text>
+        <Controller
+          control={control}
+          rules={{
+            required: true,
+            minLength: 3,
+            maxLength: 128,
+            pattern: /^[0-9a-zA-Z]*$/,
+          }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              value={value}
+              onChangeText={(value) => {
+                onChange(value);
+              }}
+              onBlur={onBlur}
+              placeholder="Your user name"
+              style={styles.textInput}
+            />
+          )}
+          name="userName"
+          defaultValue=""
+        />
+        {errors.userName && errors.userName.type === 'required' && (
+          <Text style={styles.errorMessage}>必須項目です</Text>
+        )}
+        {errors.userName && errors.userName.type === 'minLength' && (
+          <Text style={styles.errorMessage}>3文字以上にしてください</Text>
+        )}
+        {errors.userName && errors.userName.type === 'pattern' && (
+          <Text style={styles.errorMessage}>英数字のみしか使えません</Text>
+        )}
+        <View style={styles.separatorView} />
         <Text style={styles.label}>Email</Text>
         <Controller
           control={control}
@@ -89,7 +124,7 @@ export const SignUpScreen = ({ navigation }: Props) => {
               }}
               onBlur={onBlur}
               placeholder="Your email"
-              style={styles.emailTextInput}
+              style={styles.textInput}
             />
           )}
           name="email"
@@ -119,7 +154,7 @@ export const SignUpScreen = ({ navigation }: Props) => {
               onBlur={onBlur}
               placeholder="Your password"
               secureTextEntry={true}
-              style={styles.passwordTextInput}
+              style={styles.textInput}
             />
           )}
           name="password"
@@ -174,7 +209,7 @@ const styles = StyleSheet.create({
     marginTop: 120,
     marginBottom: 50,
   },
-  emailTextInput: {
+  textInput: {
     backgroundColor: 'white',
     padding: 0,
     borderRadius: 10,
@@ -193,21 +228,6 @@ const styles = StyleSheet.create({
     opacity: 0.1,
     height: 10,
     marginTop: 10,
-  },
-  passwordTextInput: {
-    backgroundColor: 'white',
-    padding: 0,
-    borderRadius: 10,
-    color: 'black',
-    fontSize: 15,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    alignSelf: 'stretch',
-    height: 50,
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 20,
   },
   signUpButton: {
     backgroundColor: 'white',
