@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+
 import {
   StyleSheet,
   SafeAreaView,
@@ -6,21 +7,26 @@ import {
   Platform,
   StatusBar,
   Text,
+  Alert,
 } from 'react-native';
+import Swipeout from 'react-native-swipeout';
 import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 /* components */
 import { AlbumItem } from '../components/AlbumItem';
 import { WalkthroughModal } from '../components/WalkthroughModal';
 import { CameraModal } from '../components/CameraModal';
+
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
+import { AlbumsContext } from '../contexts/AlbumsContext';
 import { UserContext } from '../contexts/UserContext';
 import { ViewAlbumContext } from '../contexts/ViewAlbumContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* lib */
-import { getAlbum, getAlbums } from '../lib/firebase';
+import { getAlbum, getAlbums, getAlbumRef } from '../lib/firebase';
+
 /* types */
 import { Album } from '../types/album';
 import { RootStackParamList } from '../types/navigation';
@@ -36,7 +42,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   );
   const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const { setAlbum } = useContext(AlbumContext);
-  const { setViewAlbum } = useContext(ViewAlbumContext);
+  const { viewAlbum, setViewAlbum } = useContext(ViewAlbumContext);
 
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
@@ -52,6 +58,12 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   const getFirebaseItems = async () => {
     const albums = await getAlbums(user.id);
     setAlbums(albums);
+  };
+
+  const deleteAlbum = async (userId: string, albumId: string) => {
+    const albumRef = await getAlbumRef(userId, albumId);
+    await albumRef.delete();
+    getFirebaseItems();
   };
 
   const getAlbumFromLocalStorage = async () => {
@@ -97,8 +109,33 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 
   const onPressAlbum = (album: Album) => {
     navigation.navigate('Album', { album });
-    setViewAlbum(album);
+    //ß setViewAlbum();
   };
+
+  let swipeBtns = (id) => [
+    {
+      text: 'Delete',
+      backgroundColor: 'red',
+      underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
+      onPress: () => {
+        console.log(id);
+        Alert.alert('アルバム削除', '削除しますか？', [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+              console.log(user);
+              deleteAlbum(user.id, id);
+            },
+          },
+        ]);
+      },
+    },
+  ];
 
   return (
     <LinearGradient
@@ -132,7 +169,12 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
             style={styles.itemContainer}
             data={albums}
             renderItem={({ item }: { item: Album }) => (
-              <AlbumItem album={item} onPress={() => onPressAlbum(item)} />
+              <Swipeout
+                right={swipeBtns(item.id)}
+                backgroundColor="transparent"
+              >
+                <AlbumItem album={item} onPress={() => onPressAlbum(item)} />
+              </Swipeout>
             )}
             keyExtractor={(item, index) => index.toString()}
             numColumns={2}

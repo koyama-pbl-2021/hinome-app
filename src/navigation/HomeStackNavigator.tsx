@@ -22,7 +22,6 @@ export const HomeStackNavigator: React.FC = () => {
         headerTintColor: '#fff',
         headerRight: () => (
           <View style={{ flexDirection: 'row' }}>
-            <GarbageButton />
             <HelpButton />
             <LogOutButton />
           </View>

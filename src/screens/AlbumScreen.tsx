@@ -23,6 +23,7 @@ import { Photo } from '../types/photo';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
+import SwipeView from 'react-native-swipeview';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Album'>;
