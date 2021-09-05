@@ -8,7 +8,6 @@ import { AlbumsContext } from './src/contexts/AlbumsContext';
 import { CountContext } from './src/contexts/CountContext';
 import { VisibleWalkthroughContext } from './src/contexts/VisibleWalkthroughContext';
 import { VisibleCameraContext } from './src/contexts/VisibleCameraContext';
-import { ViewAlbumContext } from './src/contexts/ViewAlbumContext';
 
 /* types */
 import { User } from './src/types/user';
@@ -26,19 +25,17 @@ export default function App() {
     <UserContext.Provider value={{ user, setUser }}>
       <AlbumsContext.Provider value={{ albums, setAlbums }}>
         <AlbumContext.Provider value={{ album, setAlbum }}>
-          <ViewAlbumContext.Provider value={{ album, setAlbum }}>
-            <VisibleWalkthroughContext.Provider
-              value={{ visibleWalkthrough, setVisibleWalkthrough }}
+          <VisibleWalkthroughContext.Provider
+            value={{ visibleWalkthrough, setVisibleWalkthrough }}
+          >
+            <VisibleCameraContext.Provider
+              value={{ visibleCamera, setVisibleCamera }}
             >
-              <VisibleCameraContext.Provider
-                value={{ visibleCamera, setVisibleCamera }}
-              >
-                <CountContext.Provider value={{ count, setCount }}>
-                  <AppNavigator />
-                </CountContext.Provider>
-              </VisibleCameraContext.Provider>
-            </VisibleWalkthroughContext.Provider>
-          </ViewAlbumContext.Provider>
+              <CountContext.Provider value={{ count, setCount }}>
+                <AppNavigator />
+              </CountContext.Provider>
+            </VisibleCameraContext.Provider>
+          </VisibleWalkthroughContext.Provider>
         </AlbumContext.Provider>
       </AlbumsContext.Provider>
     </UserContext.Provider>

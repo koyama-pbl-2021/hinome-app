@@ -15,8 +15,8 @@ import { WalkthroughModal } from '../components/WalkthroughModal';
 import { CameraModal } from '../components/CameraModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
+import { AlbumsContext } from '../contexts/AlbumsContext';
 import { UserContext } from '../contexts/UserContext';
-import { ViewAlbumContext } from '../contexts/ViewAlbumContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* lib */
@@ -36,7 +36,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   );
   const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const { setAlbum } = useContext(AlbumContext);
-  const { setViewAlbum } = useContext(ViewAlbumContext);
 
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
@@ -97,7 +96,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 
   const onPressAlbum = (album: Album) => {
     navigation.navigate('Album', { album });
-    setViewAlbum(album);
   };
 
   return (

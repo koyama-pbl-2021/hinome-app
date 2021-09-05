@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useLayoutEffect } from 'react';
 import {
+  Alert,
   StyleSheet,
   SafeAreaView,
   FlatList,
@@ -10,12 +11,11 @@ import ImageView from 'react-native-image-viewing';
 import { LinearGradient } from 'expo-linear-gradient';
 /* components */
 import { PhotoItem } from '../components/PhotoItem';
-import { WalkthroughModal } from '../components/WalkthroughModal';
 import { GarbageButton } from '../components/GarbageButton';
-
+import { CameraModal } from '../components/CameraModal';
 /* contexts */
 import { UserContext } from '../contexts/UserContext';
-import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
+import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* lib */
 import { getPhotos, getAlbumRef } from '../lib/firebase';
 /* types */
@@ -35,9 +35,7 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const [visible, setIsVisible] = useState(false);
   const [index, setIndex] = useState(0);
   const { user } = useContext(UserContext);
-  const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
-    VisibleWalkthroughContext
-  );
+  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const images = photos.map((photo) => {
     return {
       uri: photo.imageUrl,
@@ -48,13 +46,21 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     getFirebaseItems();
   }, []);
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <GarbageButton onPress={onPressGarbageButton} />,
+    });
+  }, [navigation]);
+
   const getFirebaseItems = async () => {
     const photos = await getPhotos(album.id, user.id);
     setPhotos(photos);
   };
 
-  const deleteFirebaseItems = async () => {
-    getAlbumRef(user.id, album.id);
+  const deleteAlbum = async () => {
+    const albumRef = await getAlbumRef(user.id, album.id);
+    // albumRef.delete();
+    navigation.goBack();
   };
 
   const onPressPhoto = (index: number) => {
@@ -62,8 +68,22 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
     setIsVisible(true);
   };
 
-  const dismissModal = async () => {
-    setVisibleWalkthrough(false);
+  const dismissCameraModal = async () => {
+    setVisibleCamera(false);
+  };
+
+  const onPressGarbageButton = () => {
+    Alert.alert('アルバム削除', '削除しますか？', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {
+        text: 'OK',
+        onPress: () => deleteAlbum(),
+      },
+    ]);
   };
 
   return (
@@ -78,12 +98,12 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       }}
       locations={[0, 1]}
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
-      style={styles.loginViewLinearGradient}
+      style={styles.linearGradient}
     >
       <SafeAreaView style={styles.container}>
-        <WalkthroughModal
-          visible={visibleWalkthrough}
-          dismissModal={dismissModal}
+        <CameraModal
+          visible={visibleCamera}
+          dismissModal={dismissCameraModal}
         />
         <ImageView
           images={images}
@@ -106,7 +126,7 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  loginViewLinearGradient: {
+  linearGradient: {
     flex: 1,
   },
   container: {
