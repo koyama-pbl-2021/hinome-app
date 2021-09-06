@@ -14,6 +14,7 @@ import { PhotoItem } from '../components/PhotoItem';
 import { GarbageButton } from '../components/GarbageButton';
 import { CameraModal } from '../components/CameraModal';
 /* contexts */
+import { AlbumsContext } from '../contexts/AlbumsContext';
 import { UserContext } from '../contexts/UserContext';
 import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* lib */
@@ -23,7 +24,6 @@ import { Photo } from '../types/photo';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
-import SwipeView from 'react-native-swipeview';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Album'>;
@@ -35,6 +35,7 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [visible, setIsVisible] = useState(false);
   const [index, setIndex] = useState(0);
+  const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
   const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const images = photos.map((photo) => {
@@ -60,7 +61,11 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
 
   const deleteAlbum = async () => {
     const albumRef = await getAlbumRef(user.id, album.id);
-    // albumRef.delete();
+    const newAlbums = albums.filter((obj) => {
+      return obj.id !== album.id;
+    });
+    setAlbums(newAlbums);
+    albumRef.delete();
     navigation.goBack();
   };
 
