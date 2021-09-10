@@ -203,7 +203,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     marginTop: 20,
-    marginBottom: 40,
   },
   loginButton: {
     backgroundColor: 'white',
@@ -219,7 +218,7 @@ const styles = StyleSheet.create({
     height: 70,
     marginLeft: 20,
     marginRight: 20,
-    marginTop: Platform.OS === 'android' ? 60 : 200,
+    marginTop: Platform.OS === 'android' ? 100 : 200,
   },
   loginButtonImage: {
     marginRight: 10,
