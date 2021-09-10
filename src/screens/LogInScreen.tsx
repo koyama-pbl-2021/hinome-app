@@ -7,6 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Platform,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -70,95 +71,88 @@ export const LogInScreen = ({ navigation }: Props) => {
       }}
       locations={[0, 1]}
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
-      style={styles.loginViewLinearGradient}
+      style={styles.linearGradient}
     >
-      <View style={styles.loginView}>
-        <Text style={styles.logInText}>Log in</Text>
-        <Text style={styles.label}>Email</Text>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-            maxLength: 128,
-            pattern:
-              /^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              value={value}
-              onChangeText={(value) => onChange(value)}
-              onBlur={onBlur}
-              placeholder="Your email"
-              style={styles.emailTextInput}
-            />
-          )}
-          name="email"
-          defaultValue=""
-        />
-        {errors.email && errors.email.type === 'required' && (
-          <Text style={styles.errorMessage}>必須項目です</Text>
-        )}
-        {errors.email && errors.email.type === 'pattern' && (
-          <Text style={styles.errorMessage}>適切な形式で入力してください</Text>
-        )}
-        <View style={styles.separatorView} />
-        <Text style={styles.label}>Password</Text>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-            maxLength: 256,
-            minLength: 8,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              value={value}
-              onChangeText={(value) => onChange(value)}
-              onBlur={onBlur}
-              placeholder="Your password"
-              secureTextEntry={true}
-              style={styles.passwordTextInput}
-            />
-          )}
-          name="password"
-          defaultValue=""
-        />
-        {errors.password && errors.password.type === 'required' && (
-          <Text style={styles.errorMessage}>必須項目です</Text>
-        )}
-        {errors.password && errors.password.type === 'minLength' && (
-          <Text style={styles.errorMessage}>8文字以上にしてください</Text>
-        )}
-        <View
-          style={{
-            flex: 1,
-          }}
-        />
-        <TouchableOpacity
-          onPress={handleSubmit(onSubmit)}
-          style={styles.loginButton}
-        >
-          <Image
-            source={require('../../assets/icon-log-in.png')}
-            style={styles.loginButtonImage}
+      <Text style={styles.logInText}>Log in</Text>
+      <Text style={styles.label}>Email</Text>
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+          maxLength: 128,
+          pattern:
+            /^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            value={value}
+            onChangeText={(value) => onChange(value)}
+            onBlur={onBlur}
+            placeholder="Your email"
+            style={styles.emailTextInput}
           />
-          <Text style={styles.loginButtonText}>LOG IN</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onPressSignUp} style={styles.signUpButton}>
-          <Text style={styles.signUpButtonText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
+        )}
+        name="email"
+        defaultValue=""
+      />
+      {errors.email && errors.email.type === 'required' && (
+        <Text style={styles.errorMessage}>必須項目です</Text>
+      )}
+      {errors.email && errors.email.type === 'pattern' && (
+        <Text style={styles.errorMessage}>適切な形式で入力してください</Text>
+      )}
+      <View style={styles.separatorView} />
+      <Text style={styles.label}>Password</Text>
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+          maxLength: 256,
+          minLength: 8,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            value={value}
+            onChangeText={(value) => onChange(value)}
+            onBlur={onBlur}
+            placeholder="Your password"
+            secureTextEntry={true}
+            style={styles.passwordTextInput}
+          />
+        )}
+        name="password"
+        defaultValue=""
+      />
+      {errors.password && errors.password.type === 'required' && (
+        <Text style={styles.errorMessage}>必須項目です</Text>
+      )}
+      {errors.password && errors.password.type === 'minLength' && (
+        <Text style={styles.errorMessage}>8文字以上にしてください</Text>
+      )}
+      <View
+        style={{
+          flex: 1,
+        }}
+      />
+      <TouchableOpacity
+        onPress={handleSubmit(onSubmit)}
+        style={styles.loginButton}
+      >
+        <Image
+          source={require('../../assets/icon-log-in.png')}
+          style={styles.loginButtonImage}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={onPressSignUp} style={styles.signUpButton}>
+        <Text style={styles.signUpButtonText}>Sign Up</Text>
+      </TouchableOpacity>
       <Loading visible={loading} />
     </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  loginView: {
-    width: '100%',
-    height: '100%',
-  },
-  loginViewLinearGradient: {
+  linearGradient: {
     flex: 1,
   },
   label: {
@@ -209,6 +203,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     marginTop: 20,
+    marginBottom: 40,
   },
   loginButton: {
     backgroundColor: 'white',
@@ -219,22 +214,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 0,
+    paddingTop: 0,
     alignSelf: 'stretch',
-    height: 60,
+    height: 70,
     marginLeft: 20,
     marginRight: 20,
-    marginBottom: 10,
-  },
-  loginButtonText: {
-    color: 'rgb(217, 103, 110)',
-    fontSize: 15,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'center',
+    marginTop: Platform.OS === 'android' ? 60 : 200,
   },
   loginButtonImage: {
-    resizeMode: 'contain',
     marginRight: 10,
   },
   forgotYourPasswordButton: {
@@ -264,6 +251,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     height: 20,
+    marginTop: 10,
     marginBottom: 20,
   },
   signUpButtonText: {
