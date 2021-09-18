@@ -22,7 +22,6 @@ import { CameraModal } from '../components/CameraModal';
 import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { UserContext } from '../contexts/UserContext';
-import { ViewAlbumContext } from '../contexts/ViewAlbumContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* lib */
@@ -43,8 +42,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   );
   const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const { album, setAlbum } = useContext(AlbumContext);
-  const { viewAlbum, setViewAlbum } = useContext(ViewAlbumContext);
-
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
 
@@ -118,7 +115,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 
   const onPressAlbum = (album: Album) => {
     navigation.navigate('Album', { album });
-    //ß setViewAlbum();
   };
 
   let swipeBtns = (id, length) => [

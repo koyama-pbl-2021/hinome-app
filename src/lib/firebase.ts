@@ -115,16 +115,6 @@ export const getAlbums = async (userId: string) => {
   return albums;
 };
 
-export const deleteAlbum = async (userId: string, albumId: string) => {
-  const snapshot = await firebase
-    .firestore()
-    .collection('users')
-    .doc(userId)
-    .collection('albums')
-    .doc(albumId)
-    .delete();
-};
-
 export const upLoadImg = async (uri: string, path: string) => {
   const ImageUrl = await fetch(uri);
   const blob = await ImageUrl.blob();

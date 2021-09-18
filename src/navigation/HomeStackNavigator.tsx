@@ -4,7 +4,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 /* components */
 import { HelpButton } from '../components/HelpButton';
 import { LogOutButton } from '../components/LogOutButton';
-import { GarbageButton } from '../components/GarbageButton';
 
 /* screens */
 import { HomeScreen } from '../screens/HomeScreen';
@@ -20,31 +19,26 @@ export const HomeStackNavigator: React.FC = () => {
       screenOptions={{
         headerTransparent: true,
         headerTintColor: '#fff',
-        headerRight: () => (
-          <View style={{ flexDirection: 'row' }}>
-            <HelpButton />
-            <LogOutButton />
-          </View>
-        ),
       }}
     >
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ headerTitle: 'アルバム' }}
+        options={{
+          headerTitle: 'アルバム',
+          headerRight: () => (
+            <View style={{ flexDirection: 'row' }}>
+              <HelpButton />
+              <LogOutButton />
+            </View>
+          ),
+        }}
       />
       <Stack.Screen
         name="Album"
         component={AlbumScreen}
         options={{
           headerTitle: '写真',
-          headerRight: () => (
-            <View style={{ flexDirection: 'row' }}>
-              <GarbageButton />
-              <HelpButton />
-              <LogOutButton />
-            </View>
-          ),
         }}
       />
     </Stack.Navigator>
