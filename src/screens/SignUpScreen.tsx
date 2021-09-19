@@ -26,6 +26,7 @@ type Props = {
 };
 
 type FormData = {
+  userName: string;
   email: string;
   password: string;
 };
@@ -42,13 +43,14 @@ export const SignUpScreen = ({ navigation }: Props) => {
 
   const onSubmit = async (d: FormData) => {
     setLoading(true);
-    const user = await signUp(d.email, d.password);
+    const user = await signUp(d.userName, d.email, d.password);
     setLoading(false);
-    setUser(user);
     if (!user) {
       Alert.alert('登録失敗', 'すでに使われているメールアドレスです', [
         { text: 'OK' },
       ]);
+    } else {
+      setUser(user);
     }
   };
 
@@ -68,96 +70,123 @@ export const SignUpScreen = ({ navigation }: Props) => {
       }}
       locations={[0, 1]}
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
-      style={styles.signUpViewLinearGradient}
+      style={styles.linearGradient}
     >
-      <View style={styles.signUpView}>
-        <Text style={styles.signUpText}>Sign Up</Text>
-        <Text style={styles.label}>Email</Text>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-            maxLength: 128,
-            pattern:
-              /^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              value={value}
-              onChangeText={(value) => {
-                onChange(value);
-              }}
-              onBlur={onBlur}
-              placeholder="Your email"
-              style={styles.emailTextInput}
-            />
-          )}
-          name="email"
-          defaultValue=""
-        />
-        {errors.email && errors.email.type === 'required' && (
-          <Text style={styles.errorMessage}>必須項目です</Text>
-        )}
-        {errors.email && errors.email.type === 'pattern' && (
-          <Text style={styles.errorMessage}>適切な形式で入力してください</Text>
-        )}
-        <View style={styles.separatorView} />
-        <Text style={styles.label}>Password</Text>
-        <Controller
-          control={control}
-          rules={{
-            required: true,
-            maxLength: 256,
-            minLength: 8,
-          }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              value={value}
-              onChangeText={(value) => {
-                onChange(value);
-              }}
-              onBlur={onBlur}
-              placeholder="Your password"
-              secureTextEntry={true}
-              style={styles.passwordTextInput}
-            />
-          )}
-          name="password"
-          defaultValue=""
-        />
-        {errors.password && errors.password.type === 'required' && (
-          <Text style={styles.errorMessage}>必須項目です</Text>
-        )}
-        {errors.password && errors.password.type === 'minLength' && (
-          <Text style={styles.errorMessage}>8文字以上にしてください</Text>
-        )}
-
-        <TouchableOpacity
-          onPress={handleSubmit(onSubmit)}
-          style={styles.signUpButton}
-        >
-          <AntDesign
-            name="adduser"
-            style={styles.signUpButtonImage}
-            size={30}
-            color="black"
+      <Text style={styles.signUpText}>Sign Up</Text>
+      <Text style={styles.label}>User Name</Text>
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+          minLength: 3,
+          maxLength: 128,
+          pattern: /^[0-9a-zA-Z]*$/,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            value={value}
+            onChangeText={(value) => {
+              onChange(value);
+            }}
+            onBlur={onBlur}
+            placeholder="Your user name"
+            style={styles.textInput}
           />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onPressLogIn} style={styles.logInButton}>
-          <Text style={styles.logInButtonText}>Log In</Text>
-        </TouchableOpacity>
-      </View>
+        )}
+        name="userName"
+        defaultValue=""
+      />
+      {errors.userName && errors.userName.type === 'required' && (
+        <Text style={styles.errorMessage}>必須項目です</Text>
+      )}
+      {errors.userName && errors.userName.type === 'minLength' && (
+        <Text style={styles.errorMessage}>3文字以上にしてください</Text>
+      )}
+      {errors.userName && errors.userName.type === 'pattern' && (
+        <Text style={styles.errorMessage}>英数字のみしか使えません</Text>
+      )}
+      <View style={styles.separatorView} />
+      <Text style={styles.label}>Email</Text>
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+          maxLength: 128,
+          pattern:
+            /^[a-zA-Z0-9_+-]+(.[a-zA-Z0-9_+-]+)*@([a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9]*\.)+[a-zA-Z]{2,}$/,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            value={value}
+            onChangeText={(value) => {
+              onChange(value);
+            }}
+            onBlur={onBlur}
+            placeholder="Your email"
+            style={styles.textInput}
+          />
+        )}
+        name="email"
+        defaultValue=""
+      />
+      {errors.email && errors.email.type === 'required' && (
+        <Text style={styles.errorMessage}>必須項目です</Text>
+      )}
+      {errors.email && errors.email.type === 'pattern' && (
+        <Text style={styles.errorMessage}>適切な形式で入力してください</Text>
+      )}
+      <View style={styles.separatorView} />
+      <Text style={styles.label}>Password</Text>
+      <Controller
+        control={control}
+        rules={{
+          required: true,
+          maxLength: 256,
+          minLength: 8,
+        }}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            value={value}
+            onChangeText={(value) => {
+              onChange(value);
+            }}
+            onBlur={onBlur}
+            placeholder="Your password"
+            secureTextEntry={true}
+            style={styles.textInput}
+          />
+        )}
+        name="password"
+        defaultValue=""
+      />
+      {errors.password && errors.password.type === 'required' && (
+        <Text style={styles.errorMessage}>必須項目です</Text>
+      )}
+      {errors.password && errors.password.type === 'minLength' && (
+        <Text style={styles.errorMessage}>8文字以上にしてください</Text>
+      )}
+
+      <TouchableOpacity
+        onPress={handleSubmit(onSubmit)}
+        style={styles.signUpButton}
+      >
+        <AntDesign
+          name="adduser"
+          style={styles.signUpButtonImage}
+          size={30}
+          color="black"
+        />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={onPressLogIn} style={styles.logInButton}>
+        <Text style={styles.logInButtonText}>Log In</Text>
+      </TouchableOpacity>
       <Loading visible={loading} />
     </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  signUpView: {
-    width: '100%',
-    height: '100%',
-  },
-  signUpViewLinearGradient: {
+  linearGradient: {
     flex: 1,
   },
   label: {
@@ -174,7 +203,7 @@ const styles = StyleSheet.create({
     marginTop: 120,
     marginBottom: 50,
   },
-  emailTextInput: {
+  textInput: {
     backgroundColor: 'white',
     padding: 0,
     borderRadius: 10,
@@ -193,21 +222,6 @@ const styles = StyleSheet.create({
     opacity: 0.1,
     height: 10,
     marginTop: 10,
-  },
-  passwordTextInput: {
-    backgroundColor: 'white',
-    padding: 0,
-    borderRadius: 10,
-    color: 'black',
-    fontSize: 15,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    textAlign: 'left',
-    alignSelf: 'stretch',
-    height: 50,
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 20,
   },
   signUpButton: {
     backgroundColor: 'white',
@@ -232,7 +246,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     height: 20,
-    marginTop: 10,
+    marginTop: 20,
     marginBottom: 20,
   },
   logInButtonText: {
