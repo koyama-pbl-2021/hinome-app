@@ -8,6 +8,7 @@ import { AlbumsContext } from './src/contexts/AlbumsContext';
 import { CountContext } from './src/contexts/CountContext';
 import { VisibleWalkthroughContext } from './src/contexts/VisibleWalkthroughContext';
 import { VisibleCameraContext } from './src/contexts/VisibleCameraContext';
+
 /* types */
 import { User } from './src/types/user';
 import { Album } from './src/types/album';
