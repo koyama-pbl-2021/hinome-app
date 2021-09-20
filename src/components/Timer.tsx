@@ -3,7 +3,7 @@ import { StyleSheet, View, GestureResponderEvent } from 'react-native';
 import CountDown from 'react-native-countdown-component';
 
 type Props = {
-  onFinish: (event: GestureResponderEvent) => void;
+  onFinish: () => void;
 };
 export const Timer: React.FC<Props> = ({ onFinish }: Props) => {
   return (
