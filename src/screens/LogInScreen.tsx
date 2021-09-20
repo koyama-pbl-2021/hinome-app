@@ -30,7 +30,7 @@ type FormData = {
   password: string;
 };
 
-export const LogInScreen = ({ navigation }: Props) => {
+export const LogInScreen: React.FC<Props> = ({ navigation }: Props) => {
   const { setUser } = useContext(UserContext);
   const [loading, setLoading] = useState<boolean>(false);
   // for validation
