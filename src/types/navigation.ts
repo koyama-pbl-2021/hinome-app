@@ -3,7 +3,7 @@ import { Album } from './album';
 export type RootStackParamList = {
   Main: undefined;
   Home: undefined;
-  Album: { album: Album };
+  Album: { currentAlbum: Album };
   Hinome: undefined;
   HinomeStart: { hour: string };
   LogIn: undefined;
