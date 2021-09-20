@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Alert } from 'react-native';
 import { SimpleLineIcons } from '@expo/vector-icons';
 import * as Notifications from 'expo-notifications';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 /* lib */
 import { logOut } from '../lib/firebase';
 /* context*/
@@ -29,6 +30,11 @@ export const LogOutButton: React.FC = () => {
             onPress: async () => {
               await Notifications.cancelAllScheduledNotificationsAsync();
               await logOut();
+              try {
+                await AsyncStorage.removeItem('@albumId');
+              } catch (e) {
+                console.log(e);
+              }
               setAlbum(null);
               setUser(null);
             },
