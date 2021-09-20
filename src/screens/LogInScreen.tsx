@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     marginTop: 120,
-    marginBottom: 50,
+    marginBottom: 30,
   },
   emailTextInput: {
     backgroundColor: 'white',
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginLeft: 20,
     marginRight: 20,
-    marginTop: 20,
+    marginTop: 10,
   },
   loginButton: {
     backgroundColor: 'white',
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     height: 70,
     marginLeft: 20,
     marginRight: 20,
-    marginTop: Platform.OS === 'android' ? 100 : 200,
+    marginTop: Platform.OS === 'android' ? 100 : 0,
   },
   loginButtonImage: {
     marginRight: 10,

@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
     textAlign: 'center',
     marginTop: 120,
-    marginBottom: 50,
+    marginBottom: 30,
   },
   textInput: {
     backgroundColor: 'white',
@@ -216,12 +216,12 @@ const styles = StyleSheet.create({
     height: 50,
     marginLeft: 20,
     marginRight: 20,
-    marginTop: 20,
+    marginTop: 10,
   },
   separatorView: {
     opacity: 0.1,
-    height: 10,
-    marginTop: 10,
+    height: 5,
+    marginTop: 5,
   },
   signUpButton: {
     backgroundColor: 'white',
@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     height: 70,
     marginLeft: 20,
     marginRight: 20,
-    marginTop: Platform.OS === 'android' ? 60 : 200,
+    marginTop: Platform.OS === 'android' ? 60 : 20,
   },
   logInButton: {
     backgroundColor: 'transparent',
