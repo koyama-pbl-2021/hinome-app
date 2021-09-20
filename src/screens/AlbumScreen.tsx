@@ -9,11 +9,14 @@ import {
 } from 'react-native';
 import ImageView from 'react-native-image-viewing';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as Notifications from 'expo-notifications';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 /* components */
 import { PhotoItem } from '../components/PhotoItem';
 import { GarbageButton } from '../components/GarbageButton';
 import { CameraModal } from '../components/CameraModal';
 /* contexts */
+import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { UserContext } from '../contexts/UserContext';
 import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
@@ -31,7 +34,8 @@ type Props = {
 };
 
 export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
-  const { album } = route.params;
+  const { currentAlbum } = route.params;
+  const { album, setAlbum } = useContext(AlbumContext);
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [visible, setIsVisible] = useState(false);
   const [index, setIndex] = useState(0);
@@ -55,14 +59,24 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   }, [navigation]);
 
   const getFirebaseItems = async () => {
-    const photos = await getPhotos(album.id, user.id);
+    const photos = await getPhotos(currentAlbum.id, user.id);
     setPhotos(photos);
   };
 
+  const cancelNotify = async () => {
+    try {
+      await AsyncStorage.removeItem('@albumId');
+    } catch (e) {
+      console.log(e);
+    }
+    await Notifications.cancelAllScheduledNotificationsAsync();
+  };
+
   const deleteAlbum = async () => {
-    const albumRef = await getAlbumRef(user.id, album.id);
+    const albumRef = await getAlbumRef(user.id, currentAlbum.id);
+    // albums contextを更新するための処理
     const newAlbums = albums.filter((obj) => {
-      return obj.id !== album.id;
+      return obj.id !== currentAlbum.id;
     });
     setAlbums(newAlbums);
     albumRef.delete();
@@ -79,17 +93,43 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   };
 
   const onPressGarbageButton = () => {
-    Alert.alert('アルバム削除', '削除しますか？', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {
-        text: 'OK',
-        onPress: () => deleteAlbum(),
-      },
-    ]);
+    if (currentAlbum.id == album?.id) {
+      Alert.alert(
+        'アルバム削除',
+        '削除するとアルバム作成も中断しますが良いですが？',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+              console.log(user);
+              setAlbum(null);
+              deleteAlbum();
+              cancelNotify();
+            },
+          },
+        ]
+      );
+    } else {
+      Alert.alert('アルバム削除', '削除しますか？', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: async () => {
+            console.log(user);
+            deleteAlbum();
+          },
+        },
+      ]);
+    }
   };
 
   return (

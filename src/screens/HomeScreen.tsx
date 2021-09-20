@@ -6,9 +6,11 @@ import {
   Platform,
   StatusBar,
   Text,
+  TouchableOpacity,
   Alert,
+  View,
 } from 'react-native';
-import Swipeout from 'react-native-swipeout';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -59,11 +61,15 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 
   const deleteAlbum = async (userId: string, albumId: string) => {
     const albumRef = await getAlbumRef(userId, albumId);
+    // albums contextを更新するための処理
+    const newAlbums = albums.filter((obj) => {
+      return obj.id !== albumId;
+    });
+    setAlbums(newAlbums);
     await albumRef.delete();
-    getFirebaseItems();
   };
+
   const cancelNotify = async () => {
-    //setAlbum(null);
     try {
       await AsyncStorage.removeItem('@albumId');
     } catch (e) {
@@ -71,6 +77,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     }
     await Notifications.cancelAllScheduledNotificationsAsync();
   };
+
   const getAlbumFromLocalStorage = async () => {
     try {
       const albumId = await AsyncStorage.getItem('@albumId');
@@ -116,53 +123,77 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     navigation.navigate('Album', { album });
   };
 
-  let swipeBtns = (id, length) => [
-    {
-      text: 'Delete',
-      backgroundColor: 'red',
-      underlayColor: 'rgba(0, 0, 0, 1, 0.6)',
-      onPress: () => {
-        console.log(id);
-        console.log(album?.id);
-        if (id == album?.id) {
-          Alert.alert(
-            'アルバム削除',
-            '削除するとアルバム作成も中断しますが良いですが？',
-            [
-              {
-                text: 'Cancel',
-                onPress: () => console.log('Cancel Pressed'),
-                style: 'cancel',
-              },
-              {
-                text: 'OK',
-                onPress: async () => {
-                  console.log(user);
-                  deleteAlbum(user.id, id);
-                  cancelNotify();
-                },
-              },
-            ]
-          );
-        } else {
-          Alert.alert('アルバム削除', '削除しますか？', [
-            {
-              text: 'Cancel',
-              onPress: () => console.log('Cancel Pressed'),
-              style: 'cancel',
+  const rightButton = (albumId: string) => {
+    return (
+      <TouchableOpacity
+        style={{
+          backgroundColor: 'red',
+          justifyContent: 'center',
+          alignItems: 'flex-end',
+        }}
+        onPress={() => onPressSwipeButton(albumId)}
+      >
+        <View
+          style={{
+            backgroundColor: 'red',
+            justifyContent: 'center',
+            alignItems: 'flex-end',
+          }}
+        >
+          <Text
+            style={{
+              color: '#1b1a17',
+              paddingHorizontal: 10,
+              fontWeight: '600',
+              paddingVertical: 20,
+            }}
+          >
+            Delete
+          </Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const onPressSwipeButton = (albumId: string) => {
+    if (albumId == album?.id) {
+      Alert.alert(
+        'アルバム削除',
+        '削除するとアルバム作成も中断しますが良いですが？',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+              console.log(user);
+              setAlbum(null);
+              deleteAlbum(user.id, albumId);
+              cancelNotify();
             },
-            {
-              text: 'OK',
-              onPress: async () => {
-                console.log(user);
-                deleteAlbum(user.id, id);
-              },
-            },
-          ]);
-        }
-      },
-    },
-  ];
+          },
+        ]
+      );
+    } else {
+      Alert.alert('アルバム削除', '削除しますか？', [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: async () => {
+            console.log(user);
+            deleteAlbum(user.id, albumId);
+          },
+        },
+      ]);
+    }
+  };
 
   return (
     <LinearGradient
@@ -196,12 +227,9 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
             style={styles.itemContainer}
             data={albums}
             renderItem={({ item }: { item: Album }) => (
-              <Swipeout
-                right={swipeBtns(item.id, albums.length)}
-                backgroundColor="transparent"
-              >
+              <Swipeable renderRightActions={() => rightButton(item.id)}>
                 <AlbumItem album={item} onPress={() => onPressAlbum(item)} />
-              </Swipeout>
+              </Swipeable>
             )}
             keyExtractor={(item, index) => index.toString()}
             numColumns={2}
