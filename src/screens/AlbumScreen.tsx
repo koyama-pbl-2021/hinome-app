@@ -49,6 +49,7 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   });
 
   useEffect(() => {
+    console.log(currentAlbum);
     getFirebaseItems();
   }, []);
 

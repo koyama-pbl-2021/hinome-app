@@ -119,8 +119,8 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     setVisibleCamera(false);
   };
 
-  const onPressAlbum = (album: Album) => {
-    navigation.navigate('Album', { album });
+  const onPressAlbum = (currentAlbum: Album) => {
+    navigation.navigate('Album', { currentAlbum });
   };
 
   const rightButton = (albumId: string) => {
