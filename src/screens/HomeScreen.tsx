@@ -133,13 +133,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
         }}
         onPress={() => onPressSwipeButton(albumId)}
       >
-        <View
-          style={{
-            backgroundColor: 'red',
-            justifyContent: 'center',
-            alignItems: 'flex-end',
-          }}
-        >
+        <View>
           <Text
             style={{
               color: '#1b1a17',
