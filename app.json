@@ -20,7 +20,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "koyama-pbl-2021.HinomeCamera",
-      "buildNumber": "0.0.1"
+      "buildNumber": "0.0.1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "写真をアップロードするためにカメラを使用します",
+        "NSPhotoLibraryUsageDescription": "普段カメラを使用しない時間を分析するためにフォトライブラリを使用します"
+      }
     },
     "android": {
       "adaptiveIcon": {
