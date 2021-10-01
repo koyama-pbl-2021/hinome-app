@@ -1,9 +1,11 @@
 {
   "expo": {
-    "name": "hinome-app",
+    "name": "HinomeCamera",
+    "description": "Album App for travel",
     "owner": "koyama-pbl-2021",
-    "slug": "hinome-app",
-    "version": "0.0.1",
+    "slug": "HinomeCamera",
+    "privacy": "unlisted",
+    "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "splash": {
@@ -16,17 +18,15 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "koyama-pbl-2021.HinomeCamera",
+      "buildNumber": "0.0.1"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       }
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "description": ""
+    }
   }
 }
