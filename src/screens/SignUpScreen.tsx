@@ -14,8 +14,10 @@ import { useForm, Controller } from 'react-hook-form';
 import { AntDesign } from '@expo/vector-icons';
 /* components */
 import { Loading } from '../components/Loading';
+import { WalkthroughModal } from '../components/WalkthroughModal';
 /* contexts */
 import { UserContext } from '../contexts/UserContext';
+import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* lib */
 import { signUp } from '../lib/firebase';
 /* types */
@@ -33,6 +35,9 @@ type FormData = {
 
 export const SignUpScreen = ({ navigation }: Props) => {
   const { setUser } = useContext(UserContext);
+  const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
+    VisibleWalkthroughContext
+  );
   const [loading, setLoading] = useState<boolean>(false);
   // for validation
   const {
@@ -58,6 +63,10 @@ export const SignUpScreen = ({ navigation }: Props) => {
     navigation.pop();
   };
 
+  const dismissWalkthroughModal = async () => {
+    setVisibleWalkthrough(false);
+  };
+
   return (
     <LinearGradient
       start={{
@@ -72,6 +81,10 @@ export const SignUpScreen = ({ navigation }: Props) => {
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
       style={styles.linearGradient}
     >
+      <WalkthroughModal
+        visible={visibleWalkthrough}
+        dismissModal={dismissWalkthroughModal}
+      />
       <Text style={styles.signUpText}>Sign Up</Text>
       <Text style={styles.label}>User Name</Text>
       <Controller
