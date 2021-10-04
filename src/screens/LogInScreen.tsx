@@ -14,8 +14,10 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useForm, Controller } from 'react-hook-form';
 /* components */
 import { Loading } from '../components/Loading';
+import { WalkthroughModal } from '../components/WalkthroughModal';
 /* contexts */
 import { UserContext } from '../contexts/UserContext';
+import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* lib */
 import { logIn } from '../lib/firebase';
 /* types */
@@ -32,6 +34,9 @@ type FormData = {
 
 export const LogInScreen: React.FC<Props> = ({ navigation }: Props) => {
   const { setUser } = useContext(UserContext);
+  const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
+    VisibleWalkthroughContext
+  );
   const [loading, setLoading] = useState<boolean>(false);
   // for validation
   const {
@@ -59,6 +64,10 @@ export const LogInScreen: React.FC<Props> = ({ navigation }: Props) => {
     navigation.navigate('SignUp');
   };
 
+  const dismissWalkthroughModal = async () => {
+    setVisibleWalkthrough(false);
+  };
+
   return (
     <LinearGradient
       start={{
@@ -73,6 +82,10 @@ export const LogInScreen: React.FC<Props> = ({ navigation }: Props) => {
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
       style={styles.linearGradient}
     >
+      <WalkthroughModal
+        visible={visibleWalkthrough}
+        dismissModal={dismissWalkthroughModal}
+      />
       <Text style={styles.logInText}>Log in</Text>
       <Text style={styles.label}>Email</Text>
       <Controller
