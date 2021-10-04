@@ -1,5 +1,8 @@
 import React from 'react';
+import { View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+/* components */
+import { HelpButton } from '../components/HelpButton';
 /* screens */
 import { LogInScreen } from '../screens/LogInScreen';
 import { SignUpScreen } from '../screens/SignUpScreen';
@@ -12,18 +15,24 @@ export const AuthStackNavigator: React.FC = () => {
   return (
     <Stack.Navigator
       screenOptions={{
-        headerTintColor: '#000',
+        headerTransparent: true,
+        headerTintColor: '#fff',
+        headerRight: () => (
+          <View style={{ flexDirection: 'row' }}>
+            <HelpButton />
+          </View>
+        ),
       }}
     >
       <Stack.Screen
         name="LogIn"
         component={LogInScreen}
-        options={{ headerShown: false }}
+        options={{ headerTitle: '' }}
       />
       <Stack.Screen
         name="SignUp"
         component={SignUpScreen}
-        options={{ headerShown: false }}
+        options={{ headerTitle: '' }}
       />
     </Stack.Navigator>
   );
