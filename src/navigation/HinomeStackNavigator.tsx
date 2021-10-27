@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 /* components */
 import { HelpButton } from '../components/HelpButton';
-import { LogOutButton } from '../components/LogOutButton';
 /* screens */
 import { HinomeScreen } from '../screens/HinomeScreen';
 import { HinomeStartScreen } from '../screens/HinomeStartScreen';
@@ -21,7 +20,6 @@ export const HinomeStackNavigator: React.FC = () => {
         headerRight: () => (
           <View style={{ flexDirection: 'row' }}>
             <HelpButton />
-            <LogOutButton />
           </View>
         ),
       }}
