@@ -8,5 +8,7 @@ type UserContextValue = {
 
 export const UserContext = createContext<UserContextValue>({
   user: null,
-  setUser: () => {},
+  setUser: () => {
+    // 何もしない
+  },
 });
