@@ -2,7 +2,7 @@ import firebase from 'firebase';
 /* env */
 import env from '../../env.json';
 /* types */
-import { User } from '../types/user';
+import { initialUser, User } from '../types/user';
 import { Album } from '../types/album';
 import { Notification } from '../types/notification';
 
@@ -21,25 +21,43 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-export const signUp = async (
-  userName: string,
-  email: string,
-  password: string
-) => {
-  try {
-    const userCredential = await firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password);
-    const { uid } = userCredential.user;
-    const user = {
+// export const signUp = async (
+//   userName: string,
+//   email: string,
+//   password: string
+// ) => {
+//   try {
+//     const userCredential = await firebase
+//       .auth()
+//       .createUserWithEmailAndPassword(email, password);
+//     const { uid } = userCredential.user;
+//     const user = {
+//       id: uid,
+//       userName: userName,
+//       email: email,
+//     } as User;
+//     await firebase.firestore().collection('users').doc(uid).set(user);
+//     return user;
+//   } catch (err) {
+//     return false;
+//   }
+// };
+
+export const signIn = async () => {
+  const userCredintial = await firebase.auth().signInAnonymously();
+  const { uid } = userCredintial.user;
+  const userDoc = await firebase.firestore().collection('users').doc(uid).get();
+  if (!userDoc.exists) {
+    await firebase.firestore().collection('users').doc(uid).set(initialUser);
+    return {
+      ...initialUser,
       id: uid,
-      userName: userName,
-      email: email,
     } as User;
-    await firebase.firestore().collection('users').doc(uid).set(user);
-    return user;
-  } catch (err) {
-    return false;
+  } else {
+    return {
+      id: uid,
+      ...userDoc.data(),
+    } as User;
   }
 };
 
@@ -67,18 +85,18 @@ export const logIn = async (email: string, password: string) => {
   }
 };
 
-export const logInCheck = () => {
-  firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      return {
-        userId: user.uid,
-        email: user.email,
-      } as User;
-    } else {
-      return null;
-    }
-  });
-};
+// export const logInCheck = () => {
+//   firebase.auth().onAuthStateChanged((user) => {
+//     if (user) {
+//       return {
+//         userId: user.uid,
+//         email: user.email,
+//       } as User;
+//     } else {
+//       return null;
+//     }
+//   });
+// };
 
 export const logOut = async () => {
   try {

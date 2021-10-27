@@ -1,7 +1,5 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-/* components */
-import { LogOutButton } from '../components/LogOutButton';
 /* screens */
 import { AnalysisScreen } from '../screens/AnalysisScreen';
 /* types */
@@ -15,7 +13,6 @@ export const AnalysisStackNavigator: React.FC = () => {
       screenOptions={{
         headerTransparent: true,
         headerTintColor: '#fff',
-        headerRight: () => <LogOutButton />,
       }}
     >
       <Stack.Screen

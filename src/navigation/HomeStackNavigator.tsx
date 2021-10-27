@@ -3,8 +3,6 @@ import { View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 /* components */
 import { HelpButton } from '../components/HelpButton';
-import { LogOutButton } from '../components/LogOutButton';
-
 /* screens */
 import { HomeScreen } from '../screens/HomeScreen';
 import { AlbumScreen } from '../screens/AlbumScreen';
@@ -29,7 +27,6 @@ export const HomeStackNavigator: React.FC = () => {
           headerRight: () => (
             <View style={{ flexDirection: 'row' }}>
               <HelpButton />
-              <LogOutButton />
             </View>
           ),
         }}
