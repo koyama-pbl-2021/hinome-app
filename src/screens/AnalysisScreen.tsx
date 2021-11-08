@@ -116,7 +116,6 @@ export const AnalysisScreen: React.FC<Props> = () => {
       }
 
       const hour = Number(moment.unix(metadata.creationTime).format('HH'));
-      console.log(hour);
 
       total += 1;
       if (hour > earlymorningbar && hour <= morningbar) {

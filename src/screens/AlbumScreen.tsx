@@ -49,7 +49,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   });
 
   useEffect(() => {
-    console.log(currentAlbum);
     getFirebaseItems();
   }, []);
 
@@ -107,7 +106,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
           {
             text: 'OK',
             onPress: async () => {
-              console.log(user);
               setAlbum(null);
               deleteAlbum();
               cancelNotify();
@@ -125,7 +123,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
         {
           text: 'OK',
           onPress: async () => {
-            console.log(user);
             deleteAlbum();
           },
         },
