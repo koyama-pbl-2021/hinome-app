@@ -163,7 +163,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
           {
             text: 'OK',
             onPress: async () => {
-              console.log(user);
               setAlbum(null);
               deleteAlbum(user.id, albumId);
               cancelNotify();
@@ -181,7 +180,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
         {
           text: 'OK',
           onPress: async () => {
-            console.log(user);
             deleteAlbum(user.id, albumId);
           },
         },
