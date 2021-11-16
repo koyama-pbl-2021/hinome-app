@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import firebase from 'firebase';
+
 /* lib */
 import { createAlbumRef } from '../lib/firebase';
 /* components */
@@ -31,6 +32,8 @@ import { Album } from '../types/album';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
+/* ts */
+import { getHinomeTime } from '../utils/analysis';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'HinomeStart'>;
@@ -126,18 +129,11 @@ export const HinomeStartScreen: React.FC<Props> = ({
     notifyCount: number,
     offset: number
   ) => {
-    const notifyAts = [];
     const nanoSeconds = startAt.nanoseconds;
     // 乱数生成の範囲
     const range = endAt.seconds - startAt.seconds;
-    for (let i = 0; i < notifyCount; i++) {
-      const seconds = getRandomInt(range) + startAt.seconds;
-      const notifyAt = new firebase.firestore.Timestamp(
-        offset + seconds,
-        nanoSeconds
-      );
-      notifyAts.push(notifyAt);
-    }
+    const notifyAts = getHinomeTime(startAt, endAt);
+
     return notifyAts;
   };
 
