@@ -1,6 +1,5 @@
 import React, { useEffect, useContext } from 'react';
 import {
-  Button,
   StyleSheet,
   SafeAreaView,
   FlatList,

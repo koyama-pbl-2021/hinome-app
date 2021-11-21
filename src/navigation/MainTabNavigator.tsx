@@ -1,11 +1,9 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Feather, Entypo, MaterialIcons } from '@expo/vector-icons';
+import { Feather, Entypo } from '@expo/vector-icons';
 /* navigators */
 import { HomeStackNavigator } from './HomeStackNavigator';
 import { HinomeStackNavigator } from './HinomeStackNavigator';
-/* screens */
-import { CameraScreen } from '../screens/CameraScreen';
 
 const Tab = createBottomTabNavigator();
 
