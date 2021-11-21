@@ -25,7 +25,6 @@ import { AlbumsContext } from '../contexts/AlbumsContext';
 import { CountContext } from '../contexts/CountContext';
 import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
-import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* types */
 import { Album } from '../types/album';
 import { RouteProp } from '@react-navigation/native';
@@ -60,14 +59,10 @@ export const HinomeStartScreen: React.FC<Props> = ({
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
-  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
 
   // get permission
   useEffect(() => {
     requestPermissionsAsync();
-    Notifications.addNotificationResponseReceivedListener(() => {
-      setVisibleCamera(true);
-    });
   }, []);
 
   const requestPermissionsAsync = async () => {
@@ -167,10 +162,6 @@ export const HinomeStartScreen: React.FC<Props> = ({
     setVisibleWalkthrough(false);
   };
 
-  const dismissCameraModal = async () => {
-    setVisibleCamera(false);
-  };
-
   const dismissStartModal = async () => {
     await checkLeftNotificatonCountAsync();
     setVisibleStart(false);
@@ -201,10 +192,6 @@ export const HinomeStartScreen: React.FC<Props> = ({
         <WalkthroughModal
           visible={visibleWalkthrough}
           dismissModal={dismissWalkthroughModal}
-        />
-        <CameraModal
-          visible={visibleCamera}
-          dismissModal={dismissCameraModal}
         />
         <StartModal visible={visibleStart} dismissModal={dismissStartModal} />
         <View style={styles.startContainer}>

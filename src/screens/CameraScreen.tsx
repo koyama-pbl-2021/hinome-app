@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { View, Text, Modal, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
 import { Camera } from 'expo-camera';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -15,15 +15,7 @@ import { Photo } from '../types/photo';
 /* utils */
 import { getExetention } from '../utils/file';
 
-type Props = {
-  visible: boolean;
-  dismissModal: () => void;
-};
-
-export const CameraModal: React.FC<Props> = ({
-  visible,
-  dismissModal,
-}: Props) => {
+export const CameraScreen: React.FC = () => {
   const cameraRef = useRef(null);
   // Contextからalbumオブジェクトを取得
   const { album, setAlbum } = useContext(AlbumContext);
@@ -71,36 +63,34 @@ export const CameraModal: React.FC<Props> = ({
       // 即時更新のため
       album.imageUrl = downloadUrl;
       setAlbum(album);
-      dismissModal();
+      // homeScreenへの遷移を追加
     }
   };
 
   return (
-    <Modal visible={visible} animationType="fade" transparent={true}>
-      <Camera ref={cameraRef} style={styles.camera} type={type}>
-        <Timer onFinish={snap} />
-        <View style={styles.shutter}>
-          <MaterialCommunityIcons
-            name="circle-slice-8"
-            size={80}
-            color="white"
-            onPress={snap}
-          />
-        </View>
-        <TouchableOpacity
-          style={styles.flipButton}
-          onPress={() => {
-            setType(
-              type === Camera.Constants.Type.back
-                ? Camera.Constants.Type.front
-                : Camera.Constants.Type.back
-            );
-          }}
-        >
-          <Text style={styles.text}> Flip </Text>
-        </TouchableOpacity>
-      </Camera>
-    </Modal>
+    <Camera ref={cameraRef} style={styles.camera} type={type}>
+      <Timer onFinish={snap} />
+      <View style={styles.shutter}>
+        <MaterialCommunityIcons
+          name="circle-slice-8"
+          size={80}
+          color="white"
+          onPress={snap}
+        />
+      </View>
+      <TouchableOpacity
+        style={styles.flipButton}
+        onPress={() => {
+          setType(
+            type === Camera.Constants.Type.back
+              ? Camera.Constants.Type.front
+              : Camera.Constants.Type.back
+          );
+        }}
+      >
+        <Text style={styles.text}> Flip </Text>
+      </TouchableOpacity>
+    </Camera>
   );
 };
 

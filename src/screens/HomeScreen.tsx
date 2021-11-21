@@ -1,5 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import {
+  Button,
   StyleSheet,
   SafeAreaView,
   FlatList,
@@ -18,16 +19,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AlbumItem } from '../components/AlbumItem';
 import { WalkthroughModal } from '../components/WalkthroughModal';
 import { CameraModal } from '../components/CameraModal';
-
+import { MaterialIcons } from '@expo/vector-icons';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
-import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* lib */
 import { getAlbum, getAlbums, getAlbumRef } from '../lib/firebase';
-
 /* types */
 import { Album } from '../types/album';
 import { RootStackParamList } from '../types/navigation';
@@ -41,7 +40,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
-  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const { album, setAlbum } = useContext(AlbumContext);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
@@ -52,6 +50,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     getAlbumFromLocalStorage();
     // Walkthroughモーダル
     getWalkthroughFromLocalStorage();
+    // 通知時間情報の取得
   }, []);
 
   const getFirebaseItems = async () => {
@@ -115,12 +114,12 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     }
   };
 
-  const dismissCameraModal = async () => {
-    setVisibleCamera(false);
-  };
-
   const onPressAlbum = (currentAlbum: Album) => {
     navigation.navigate('Album', { currentAlbum });
+  };
+
+  const onPressCamera = () => {
+    navigation.navigate('Camera');
   };
 
   const rightButton = (albumId: string) => {
@@ -206,10 +205,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
           visible={visibleWalkthrough}
           dismissModal={dismissWalkthroughModal}
         />
-        <CameraModal
-          visible={visibleCamera}
-          dismissModal={dismissCameraModal}
-        />
         {albums.length === 0 ? (
           <Text style={styles.noAlbumText}>
             中央のタブから開始すると{'\n'}アルバムが表示されます
@@ -228,6 +223,14 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
           />
         )}
       </SafeAreaView>
+      <View style={styles.footer}>
+        <MaterialIcons
+          name="camera-alt"
+          size={50}
+          color={'black'}
+          onPress={() => onPressCamera()}
+        />
+      </View>
     </LinearGradient>
   );
 };
@@ -253,5 +256,12 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     marginRight: 20,
     marginLeft: 20,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    //left: 0,
   },
 });
