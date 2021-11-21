@@ -14,7 +14,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 /* components */
 import { PhotoItem } from '../components/PhotoItem';
 import { GarbageButton } from '../components/GarbageButton';
-import { CameraModal } from '../components/CameraModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';

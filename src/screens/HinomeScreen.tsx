@@ -14,7 +14,6 @@ import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 /* components */
-import { CameraModal } from '../components/CameraModal';
 import { HourButton } from '../components/HourButton';
 import { WalkthroughModal } from '../components/WalkthroughModal';
 import { FinishModal } from '../components/FinishModal';

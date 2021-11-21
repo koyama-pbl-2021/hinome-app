@@ -17,7 +17,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 /* components */
 import { AlbumItem } from '../components/AlbumItem';
 import { WalkthroughModal } from '../components/WalkthroughModal';
-import { CameraModal } from '../components/CameraModal';
 import { MaterialIcons } from '@expo/vector-icons';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';

@@ -18,7 +18,6 @@ import { createAlbumRef } from '../lib/firebase';
 import { Loading } from '../components/Loading';
 import { WalkthroughModal } from '../components/WalkthroughModal';
 import { StartModal } from '../components/StartModal';
-import { CameraModal } from '../components/CameraModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
