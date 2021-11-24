@@ -49,6 +49,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     // Walkthroughモーダル
     getWalkthroughFromLocalStorage();
     // 通知時間情報の取得
+    getLatestNotificationTime();
   }, []);
 
   const getFirebaseItems = async () => {
@@ -100,6 +101,12 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const getLatestNotificationTime = async () => {
+    const notifications =
+      await Notifications.getAllScheduledNotificationsAsync();
+    console.log(notifications.length);
   };
 
   const dismissWalkthroughModal = async () => {
