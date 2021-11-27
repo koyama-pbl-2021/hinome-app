@@ -14,6 +14,7 @@ import * as Notifications from 'expo-notifications';
 import firebase from 'firebase';
 /* lib */
 import { createAlbumRef } from '../lib/firebase';
+import { saveNotifications } from '../lib/firebase';
 /* components */
 import { Loading } from '../components/Loading';
 import { WalkthroughModal } from '../components/WalkthroughModal';
@@ -146,6 +147,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     const notifyCount = 10;
     const offset = 120;
     const notifyAts = createNotifyAts(startAt, endAt, notifyCount, offset);
+    await saveNotifications(id, user.id, notifyAts);
     for (const notifyAt of notifyAts) {
       scheduleNotificationAsync(notifyAt);
     }

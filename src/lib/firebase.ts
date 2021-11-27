@@ -182,6 +182,39 @@ export const createPhotoRef = async (albumId: string, userId: string) => {
     .doc();
 };
 
+export const createNotificationRef = async (
+  albumId: string,
+  userId: string
+) => {
+  return await firebase
+    .firestore()
+    .collection('users')
+    .doc(userId)
+    .collection('albums')
+    .doc(albumId)
+    .collection('notifications')
+    .doc();
+};
+
+export const saveNotifications = async (
+  albumId: string,
+  userId: string,
+  notifyAts: firebase.firestore.Timestamp[]
+) => {
+  const batch = firebase.firestore().batch();
+  for (const notifyAt of notifyAts) {
+    const notificationRef = await createNotificationRef(albumId, userId);
+    const notification = {
+      id: notificationRef.id,
+      // group機能実装時に追記
+      groupId: '',
+      notifyAt: notifyAt,
+    } as Notification;
+    batch.set(notificationRef, notification);
+  }
+  await batch.commit();
+};
+
 // albumIdで引っ張ってくる
 export const getPhotos = async (albumId: string, userId: string) => {
   const snapshot = await firebase
@@ -205,8 +238,9 @@ export const getNotifications = async (albumId: string, userId: string) => {
     .firestore()
     .collection('users')
     .doc(userId)
+    .collection('albums')
+    .doc(albumId)
     .collection('notifications')
-    .where('albumId', '==', albumId)
     .orderBy('notifyAt', 'desc')
     .get();
   if (snapshot.empty) {
