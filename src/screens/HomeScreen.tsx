@@ -15,7 +15,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
-import firebase from 'firebase';
 /* components */
 import { AlbumItem } from '../components/AlbumItem';
 import { WalkthroughModal } from '../components/WalkthroughModal';
@@ -60,8 +59,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     getAlbumFromLocalStorage();
     // Walkthroughモーダル
     getWalkthroughFromLocalStorage();
-    // 通知時間情報の取得
-    getLatestNotificationTime();
   }, []);
 
   useEffect(() => {
@@ -127,11 +124,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     } catch (e) {
       console.log(e);
     }
-  };
-
-  const getLatestNotificationTime = async () => {
-    const notifications =
-      await Notifications.getAllScheduledNotificationsAsync();
   };
 
   const dismissWalkthroughModal = async () => {
@@ -264,12 +256,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
         </View>
       ) : (
         <View style={styles.footer}>
-          <MaterialCommunityIcons
-            name="camera-off"
-            size={50}
-            color={'black'}
-            onPress={() => {}}
-          />
+          <MaterialCommunityIcons name="camera-off" size={50} color={'black'} />
         </View>
       )}
     </LinearGradient>
