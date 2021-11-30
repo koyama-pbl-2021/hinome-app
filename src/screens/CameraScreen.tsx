@@ -7,20 +7,30 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { upLoadImg, createPhotoRef, getAlbumRef } from '../lib/firebase';
 /* components */
 import { Timer } from '../components/Timer';
+import { Loading } from '../components/Loading';
 /* contexts */
 import { UserContext } from '../contexts/UserContext';
 import { AlbumContext } from '../contexts/AlbumContext';
+import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* types */
 import { Photo } from '../types/photo';
+import { RootStackParamList } from '../types/navigation';
+import { StackNavigationProp } from '@react-navigation/stack';
 /* utils */
 import { getExetention } from '../utils/file';
 
-export const CameraScreen: React.FC = () => {
+type Props = {
+  navigation: StackNavigationProp<RootStackParamList, 'Camera'>;
+};
+
+export const CameraScreen: React.FC<Props> = ({ navigation }: Props) => {
   const cameraRef = useRef(null);
   // Contextからalbumオブジェクトを取得
   const { album, setAlbum } = useContext(AlbumContext);
+  const { setVisibleCamera } = useContext(VisibleCameraContext);
   const { user } = useContext(UserContext);
   const [hasPermission, setHasPermission] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
 
   useEffect(() => {
@@ -46,6 +56,7 @@ export const CameraScreen: React.FC = () => {
 
   const snap = async () => {
     if (cameraRef) {
+      setLoading(true);
       // 現状albumがnullになる場合がある。通知からであればnullになることない
       const photoDocRef = await createPhotoRef(album.id, user.id);
       const { uri } = await cameraRef.current.takePictureAsync();
@@ -63,7 +74,10 @@ export const CameraScreen: React.FC = () => {
       // 即時更新のため
       album.imageUrl = downloadUrl;
       setAlbum(album);
-      // homeScreenへの遷移を追加
+      setVisibleCamera(false);
+      setLoading(false);
+      navigation.pop();
+      // [TODO] delete notigicationの処理を追加
     }
   };
 
@@ -90,6 +104,7 @@ export const CameraScreen: React.FC = () => {
       >
         <Text style={styles.text}> Flip </Text>
       </TouchableOpacity>
+      <Loading visible={loading} />
     </Camera>
   );
 };

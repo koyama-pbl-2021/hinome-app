@@ -14,33 +14,45 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
+import firebase from 'firebase';
 /* components */
 import { AlbumItem } from '../components/AlbumItem';
 import { WalkthroughModal } from '../components/WalkthroughModal';
-import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
+import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* lib */
-import { getAlbum, getAlbums, getAlbumRef } from '../lib/firebase';
+import {
+  getAlbum,
+  getAlbums,
+  getAlbumRef,
+  getNotifications,
+} from '../lib/firebase';
 /* types */
 import { Album } from '../types/album';
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
+/* utils */
+import { isRecent } from '../utils/notification';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;
 };
 
 export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
+  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
   const { album, setAlbum } = useContext(AlbumContext);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     getFirebaseItems();
@@ -51,6 +63,20 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     // 通知時間情報の取得
     getLatestNotificationTime();
   }, []);
+
+  useEffect(() => {
+    // 日の目が開始状態であれば通知情報をpull
+    if (album) {
+      const f = async () => {
+        const notifications = await getNotifications(album.id, user.id);
+        setVisibleCamera(isRecent(notifications, 3));
+        console.log(isRecent(notifications, 3));
+      };
+      f();
+    } else {
+      setVisibleCamera(false);
+    }
+  }, [isFocused]);
 
   const getFirebaseItems = async () => {
     const albums = await getAlbums(user.id);
@@ -106,7 +132,6 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   const getLatestNotificationTime = async () => {
     const notifications =
       await Notifications.getAllScheduledNotificationsAsync();
-    console.log(notifications.length);
   };
 
   const dismissWalkthroughModal = async () => {
@@ -212,7 +237,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
         />
         {albums.length === 0 ? (
           <Text style={styles.noAlbumText}>
-            中央のタブから開始すると{'\n'}アルバムが表示されます
+            Hinomeタブから開始すると{'\n'}アルバムが表示されます
           </Text>
         ) : (
           <FlatList
@@ -228,14 +253,25 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
           />
         )}
       </SafeAreaView>
-      <View style={styles.footer}>
-        <MaterialIcons
-          name="camera-alt"
-          size={50}
-          color={'black'}
-          onPress={() => onPressCamera()}
-        />
-      </View>
+      {visibleCamera ? (
+        <View style={styles.footer}>
+          <MaterialIcons
+            name="photo-camera"
+            size={50}
+            color={'black'}
+            onPress={() => onPressCamera()}
+          />
+        </View>
+      ) : (
+        <View style={styles.footer}>
+          <MaterialCommunityIcons
+            name="camera-off"
+            size={50}
+            color={'black'}
+            onPress={() => {}}
+          />
+        </View>
+      )}
     </LinearGradient>
   );
 };
@@ -265,8 +301,10 @@ const styles = StyleSheet.create({
   footer: {
     position: 'absolute',
     bottom: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    //left: 0,
+    backgroundColor: 'white',
+    borderRadius: 50,
+    margin: 10,
+    padding: 10,
+    right: 0,
   },
 });

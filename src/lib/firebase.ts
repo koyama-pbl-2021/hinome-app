@@ -232,7 +232,6 @@ export const getPhotos = async (albumId: string, userId: string) => {
   return photos;
 };
 
-// イテレーション1は出番なし
 export const getNotifications = async (albumId: string, userId: string) => {
   const snapshot = await firebase
     .firestore()
@@ -241,7 +240,7 @@ export const getNotifications = async (albumId: string, userId: string) => {
     .collection('albums')
     .doc(albumId)
     .collection('notifications')
-    .orderBy('notifyAt', 'desc')
+    .orderBy('notifyAt', 'asc')
     .get();
   if (snapshot.empty) {
     return false;
