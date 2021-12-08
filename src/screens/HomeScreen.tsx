@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -34,10 +34,11 @@ import {
 } from '../lib/firebase';
 /* types */
 import { Album } from '../types/album';
+import { Notification } from '../types/notification';
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
 /* utils */
-import { isRecent } from '../utils/notification';
+import { getCurrentNotification } from '../utils/notification';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;
@@ -51,6 +52,8 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   const { album, setAlbum } = useContext(AlbumContext);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
+  const [currentNotification, setCurrentNotification] =
+    useState<Notification | null>();
   const isFocused = useIsFocused();
 
   useEffect(() => {
@@ -66,8 +69,11 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     if (album) {
       const f = async () => {
         const notifications = await getNotifications(album.id, user.id);
-        setVisibleCamera(isRecent(notifications, 3));
-        console.log(isRecent(notifications, 3));
+        const notification = getCurrentNotification(notifications, 3);
+        if (notification) {
+          setVisibleCamera(true);
+          setCurrentNotification(notification);
+        }
       };
       f();
     } else {
@@ -140,8 +146,8 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     navigation.navigate('Album', { currentAlbum });
   };
 
-  const onPressCamera = () => {
-    navigation.navigate('Camera');
+  const onPressCamera = (currentNotification: Notification) => {
+    navigation.navigate('Camera', { currentNotification });
   };
 
   const rightButton = (albumId: string) => {
@@ -251,7 +257,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
             name="photo-camera"
             size={50}
             color={'black'}
-            onPress={() => onPressCamera()}
+            onPress={() => onPressCamera(currentNotification)}
           />
         </View>
       ) : (

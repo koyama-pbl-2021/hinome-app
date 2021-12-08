@@ -208,6 +208,7 @@ export const saveNotifications = async (
       id: notificationRef.id,
       // group機能実装時に追記
       groupId: '',
+      isTaken: false,
       notifyAt: notifyAt,
     } as Notification;
     batch.set(notificationRef, notification);
@@ -249,4 +250,19 @@ export const getNotifications = async (albumId: string, userId: string) => {
     (doc) => ({ ...doc.data(), id: doc.id } as Notification)
   );
   return notifications;
+};
+
+export const getNotification = async (
+  albumId: string,
+  userId: string,
+  notificationId: string
+) => {
+  return await firebase
+    .firestore()
+    .collection('users')
+    .doc(userId)
+    .collection('albums')
+    .doc(albumId)
+    .collection('notifications')
+    .doc(notificationId);
 };

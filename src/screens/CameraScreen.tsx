@@ -4,7 +4,12 @@ import firebase from 'firebase';
 import { Camera } from 'expo-camera';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 /* lib */
-import { upLoadImg, createPhotoRef, getAlbumRef } from '../lib/firebase';
+import {
+  upLoadImg,
+  createPhotoRef,
+  getAlbumRef,
+  getNotification,
+} from '../lib/firebase';
 /* components */
 import { Timer } from '../components/Timer';
 import { Loading } from '../components/Loading';
@@ -14,6 +19,7 @@ import { AlbumContext } from '../contexts/AlbumContext';
 import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* types */
 import { Photo } from '../types/photo';
+import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
 /* utils */
@@ -21,10 +27,12 @@ import { getExetention } from '../utils/file';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Camera'>;
+  route: RouteProp<RootStackParamList, 'Camera'>;
 };
 
-export const CameraScreen: React.FC<Props> = ({ navigation }: Props) => {
+export const CameraScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const cameraRef = useRef(null);
+  const { currentNotification } = route.params;
   // Contextからalbumオブジェクトを取得
   const { album, setAlbum } = useContext(AlbumContext);
   const { setVisibleCamera } = useContext(VisibleCameraContext);
@@ -59,6 +67,11 @@ export const CameraScreen: React.FC<Props> = ({ navigation }: Props) => {
       setLoading(true);
       // 現状albumがnullになる場合がある。通知からであればnullになることない
       const photoDocRef = await createPhotoRef(album.id, user.id);
+      const notificationRef = await getNotification(
+        album.id,
+        user.id,
+        currentNotification.id
+      );
       const { uri } = await cameraRef.current.takePictureAsync();
       const ext = getExetention(uri);
       const storagePath = `users/${user.id}/${album.id}/${photoDocRef.id}.${ext}`;
@@ -74,10 +87,11 @@ export const CameraScreen: React.FC<Props> = ({ navigation }: Props) => {
       // 即時更新のため
       album.imageUrl = downloadUrl;
       setAlbum(album);
+      // 撮影済みにupdate
+      notificationRef.update({ isTaken: true });
       setVisibleCamera(false);
       setLoading(false);
       navigation.pop();
-      // [TODO] delete notigicationの処理を追加
     }
   };
 
