@@ -101,7 +101,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
       groupId: '', // 未実装なのでとりあえず空
       // ベタがき・将来的になくす
       imageUrl:
-        'https://firebasestorage.googleapis.com/v0/b/hinome-app-dev.appspot.com/o/public%2Falbum-init.png?alt=media&token=5175414d-84dc-43bc-b846-b75aa783c3fb',
+        'https://firebasestorage.googleapis.com/v0/b/hinome-app-dev.appspot.com/o/public%2Fphoto.png?alt=media&token=76cbb9d2-dd1a-438b-8006-d76c5da1d186',
       createdAt: firebase.firestore.Timestamp.now(),
       startAt: firebase.firestore.Timestamp.now(),
       endAt: firebase.firestore.Timestamp.fromDate(dt),
@@ -202,9 +202,6 @@ export const HinomeStartScreen: React.FC<Props> = ({
           <TouchableOpacity onPress={onStart} style={styles.startButton}>
             <Text style={styles.startButtonText}>開始</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={onBack} style={styles.startButton}>
-            <Text style={styles.startButtonText}>戻る</Text>
-          </TouchableOpacity>
         </View>
       </SafeAreaView>
       <Loading visible={loading} />
@@ -238,8 +235,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     height: 60,
-    marginLeft: 20,
-    marginRight: 20,
+    marginLeft: 50,
+    marginRight: 50,
     marginBottom: 20,
   },
   startButtonText: {
