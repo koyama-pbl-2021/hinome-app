@@ -115,6 +115,6 @@ const slides = [
     key: '1',
     title: 'アルバムができました',
     text: 'ホーム画面に移動して早速確認してみましょう！',
-    image: require('../../assets/party-popper.png'),
+    image: require('../../assets/present.png'),
   },
 ];

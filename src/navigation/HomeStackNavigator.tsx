@@ -6,6 +6,7 @@ import { HelpButton } from '../components/HelpButton';
 /* screens */
 import { HomeScreen } from '../screens/HomeScreen';
 import { AlbumScreen } from '../screens/AlbumScreen';
+import { CameraScreen } from '../screens/CameraScreen';
 /* types */
 import { RootStackParamList } from '../types/navigation';
 
@@ -36,6 +37,13 @@ export const HomeStackNavigator: React.FC = () => {
         component={AlbumScreen}
         options={{
           headerTitle: '写真',
+        }}
+      />
+      <Stack.Screen
+        name="Camera"
+        component={CameraScreen}
+        options={{
+          headerTitle: 'カメラ',
         }}
       />
     </Stack.Navigator>

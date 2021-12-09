@@ -14,18 +14,17 @@ import * as Notifications from 'expo-notifications';
 import firebase from 'firebase';
 /* lib */
 import { createAlbumRef } from '../lib/firebase';
+import { saveNotifications } from '../lib/firebase';
 /* components */
 import { Loading } from '../components/Loading';
 import { WalkthroughModal } from '../components/WalkthroughModal';
 import { StartModal } from '../components/StartModal';
-import { CameraModal } from '../components/CameraModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { CountContext } from '../contexts/CountContext';
 import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
-import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* types */
 import { Album } from '../types/album';
 import { RouteProp } from '@react-navigation/native';
@@ -41,8 +40,8 @@ type Props = {
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
   }),
 });
 
@@ -60,14 +59,10 @@ export const HinomeStartScreen: React.FC<Props> = ({
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
-  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
 
   // get permission
   useEffect(() => {
     requestPermissionsAsync();
-    Notifications.addNotificationResponseReceivedListener(() => {
-      setVisibleCamera(true);
-    });
   }, []);
 
   const requestPermissionsAsync = async () => {
@@ -106,7 +101,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
       groupId: '', // 未実装なのでとりあえず空
       // ベタがき・将来的になくす
       imageUrl:
-        'https://firebasestorage.googleapis.com/v0/b/hinome-app-dev.appspot.com/o/public%2Falbum-init.png?alt=media&token=5175414d-84dc-43bc-b846-b75aa783c3fb',
+        'https://firebasestorage.googleapis.com/v0/b/hinome-app-dev.appspot.com/o/public%2Fphoto.png?alt=media&token=76cbb9d2-dd1a-438b-8006-d76c5da1d186',
       createdAt: firebase.firestore.Timestamp.now(),
       startAt: firebase.firestore.Timestamp.now(),
       endAt: firebase.firestore.Timestamp.fromDate(dt),
@@ -152,6 +147,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     const notifyCount = 10;
     const offset = 120;
     const notifyAts = createNotifyAts(startAt, endAt, notifyCount, offset);
+    await saveNotifications(id, user.id, notifyAts);
     for (const notifyAt of notifyAts) {
       scheduleNotificationAsync(notifyAt);
     }
@@ -165,10 +161,6 @@ export const HinomeStartScreen: React.FC<Props> = ({
 
   const dismissWalkthroughModal = async () => {
     setVisibleWalkthrough(false);
-  };
-
-  const dismissCameraModal = async () => {
-    setVisibleCamera(false);
   };
 
   const dismissStartModal = async () => {
@@ -202,10 +194,6 @@ export const HinomeStartScreen: React.FC<Props> = ({
           visible={visibleWalkthrough}
           dismissModal={dismissWalkthroughModal}
         />
-        <CameraModal
-          visible={visibleCamera}
-          dismissModal={dismissCameraModal}
-        />
         <StartModal visible={visibleStart} dismissModal={dismissStartModal} />
         <View style={styles.startContainer}>
           <Text style={styles.startText}>
@@ -213,9 +201,6 @@ export const HinomeStartScreen: React.FC<Props> = ({
           </Text>
           <TouchableOpacity onPress={onStart} style={styles.startButton}>
             <Text style={styles.startButtonText}>開始</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onBack} style={styles.startButton}>
-            <Text style={styles.startButtonText}>戻る</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -250,8 +235,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     height: 60,
-    marginLeft: 20,
-    marginRight: 20,
+    marginLeft: 50,
+    marginRight: 50,
     marginBottom: 20,
   },
   startButtonText: {

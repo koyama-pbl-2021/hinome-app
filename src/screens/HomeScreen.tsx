@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -14,11 +14,11 @@ import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
 /* components */
 import { AlbumItem } from '../components/AlbumItem';
 import { WalkthroughModal } from '../components/WalkthroughModal';
-import { CameraModal } from '../components/CameraModal';
-
+import { MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
@@ -26,25 +26,35 @@ import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* lib */
-import { getAlbum, getAlbums, getAlbumRef } from '../lib/firebase';
-
+import {
+  getAlbum,
+  getAlbums,
+  getAlbumRef,
+  getNotifications,
+} from '../lib/firebase';
 /* types */
 import { Album } from '../types/album';
+import { Notification } from '../types/notification';
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
+/* utils */
+import { getCurrentNotification } from '../utils/notification';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'Home'>;
 };
 
 export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
+  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
-  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const { album, setAlbum } = useContext(AlbumContext);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
+  const [currentNotification, setCurrentNotification] =
+    useState<Notification | null>();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     getFirebaseItems();
@@ -53,6 +63,23 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     // Walkthroughモーダル
     getWalkthroughFromLocalStorage();
   }, []);
+
+  useEffect(() => {
+    // 日の目が開始状態であれば通知情報をpull
+    if (album) {
+      const f = async () => {
+        const notifications = await getNotifications(album.id, user.id);
+        const notification = getCurrentNotification(notifications, 3);
+        if (notification) {
+          setVisibleCamera(true);
+          setCurrentNotification(notification);
+        }
+      };
+      f();
+    } else {
+      setVisibleCamera(false);
+    }
+  }, [isFocused]);
 
   const getFirebaseItems = async () => {
     const albums = await getAlbums(user.id);
@@ -115,12 +142,12 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     }
   };
 
-  const dismissCameraModal = async () => {
-    setVisibleCamera(false);
-  };
-
   const onPressAlbum = (currentAlbum: Album) => {
     navigation.navigate('Album', { currentAlbum });
+  };
+
+  const onPressCamera = (currentNotification: Notification) => {
+    navigation.navigate('Camera', { currentNotification });
   };
 
   const rightButton = (albumId: string) => {
@@ -206,13 +233,9 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
           visible={visibleWalkthrough}
           dismissModal={dismissWalkthroughModal}
         />
-        <CameraModal
-          visible={visibleCamera}
-          dismissModal={dismissCameraModal}
-        />
         {albums.length === 0 ? (
           <Text style={styles.noAlbumText}>
-            中央のタブから開始すると{'\n'}アルバムが表示されます
+            Hinomeタブから開始すると{'\n'}アルバムが表示されます
           </Text>
         ) : (
           <FlatList
@@ -228,6 +251,20 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
           />
         )}
       </SafeAreaView>
+      {visibleCamera ? (
+        <View style={styles.footer}>
+          <MaterialIcons
+            name="photo-camera"
+            size={50}
+            color={'black'}
+            onPress={() => onPressCamera(currentNotification)}
+          />
+        </View>
+      ) : (
+        <View style={styles.footer}>
+          <MaterialCommunityIcons name="camera-off" size={50} color={'black'} />
+        </View>
+      )}
     </LinearGradient>
   );
 };
@@ -253,5 +290,14 @@ const styles = StyleSheet.create({
     marginBottom: 0,
     marginRight: 20,
     marginLeft: 20,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 10,
+    backgroundColor: 'white',
+    borderRadius: 50,
+    margin: 10,
+    padding: 10,
+    right: 0,
   },
 });

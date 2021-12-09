@@ -14,7 +14,6 @@ import * as Notifications from 'expo-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 /* components */
-import { CameraModal } from '../components/CameraModal';
 import { HourButton } from '../components/HourButton';
 import { WalkthroughModal } from '../components/WalkthroughModal';
 import { FinishModal } from '../components/FinishModal';
@@ -22,7 +21,6 @@ import { FinishModal } from '../components/FinishModal';
 import { AlbumContext } from '../contexts/AlbumContext';
 import { CountContext } from '../contexts/CountContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
-import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* types */
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -34,7 +32,6 @@ type Props = {
 export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   // Contextからalbumオブジェクトを取得
   const { album, setAlbum } = useContext(AlbumContext);
-  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
@@ -74,14 +71,6 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     setVisibleWalkthrough(false);
   };
 
-  const dismissCameraModal = async () => {
-    // この画面でカメラが開いても再レンダリングされないため、カメラモーダルクローズ時にstateを変更させる
-    const notifications =
-      await Notifications.getAllScheduledNotificationsAsync();
-    setCount(notifications.length);
-    setVisibleCamera(false);
-  };
-
   const dismissFinishModal = async () => {
     // アルバムオブジェクトはここで消させる
     setAlbum(null);
@@ -117,10 +106,6 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       style={styles.loginViewLinearGradient}
     >
       <SafeAreaView style={styles.container}>
-        <CameraModal
-          visible={visibleCamera}
-          dismissModal={dismissCameraModal}
-        />
         <WalkthroughModal
           visible={visibleWalkthrough}
           dismissModal={dismissWalkthroughModal}
@@ -179,10 +164,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     justifyContent: 'center',
     padding: 0,
-    alignSelf: 'stretch',
     height: 60,
-    marginLeft: 20,
-    marginRight: 20,
+    marginLeft: 50,
+    marginRight: 50,
     marginBottom: 20,
     marginTop: 200,
   },

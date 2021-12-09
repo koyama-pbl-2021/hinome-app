@@ -14,12 +14,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 /* components */
 import { PhotoItem } from '../components/PhotoItem';
 import { GarbageButton } from '../components/GarbageButton';
-import { CameraModal } from '../components/CameraModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { UserContext } from '../contexts/UserContext';
-import { VisibleCameraContext } from '../contexts/VisibleCameraContext';
 /* lib */
 import { getPhotos, getAlbumRef } from '../lib/firebase';
 /* types */
@@ -41,7 +39,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const [index, setIndex] = useState(0);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { user } = useContext(UserContext);
-  const { visibleCamera, setVisibleCamera } = useContext(VisibleCameraContext);
   const images = photos.map((photo) => {
     return {
       uri: photo.imageUrl,
@@ -86,10 +83,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   const onPressPhoto = (index: number) => {
     setIndex(index);
     setIsVisible(true);
-  };
-
-  const dismissCameraModal = async () => {
-    setVisibleCamera(false);
   };
 
   const onPressGarbageButton = () => {
@@ -145,10 +138,6 @@ export const AlbumScreen: React.FC<Props> = ({ navigation, route }: Props) => {
       style={styles.linearGradient}
     >
       <SafeAreaView style={styles.container}>
-        <CameraModal
-          visible={visibleCamera}
-          dismissModal={dismissCameraModal}
-        />
         <ImageView
           images={images}
           imageIndex={index}
