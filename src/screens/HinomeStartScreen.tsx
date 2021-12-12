@@ -123,7 +123,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     return album;
   };
 
-  const createNotifyAts = (
+  const createNotifyAts = async (
     startAt: firebase.firestore.Timestamp,
     endAt: firebase.firestore.Timestamp,
     notifyCount: number,
@@ -132,8 +132,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     const nanoSeconds = startAt.nanoseconds;
     // 乱数生成の範囲
     const range = endAt.seconds - startAt.seconds;
-    const notifyAts = getHinomeTime(startAt, endAt);
-
+    const notifyAts = await getHinomeTime(startAt, endAt);
     return notifyAts;
   };
 
@@ -147,7 +146,12 @@ export const HinomeStartScreen: React.FC<Props> = ({
     }
     const notifyCount = 10;
     const offset = 120;
-    const notifyAts = createNotifyAts(startAt, endAt, notifyCount, offset);
+    const notifyAts = await createNotifyAts(
+      startAt,
+      endAt,
+      notifyCount,
+      offset
+    );
     for (const notifyAt of notifyAts) {
       scheduleNotificationAsync(notifyAt);
     }
