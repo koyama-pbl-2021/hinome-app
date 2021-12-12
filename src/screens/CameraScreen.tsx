@@ -128,22 +128,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   shutter: { alignItems: 'center' },
-  bottomWrapper: {
-    position: 'absolute',
-    bottom: 70,
-    alignItems: 'center',
-  },
-  button: {
-    marginTop: 18,
-  },
   flipButton: {
     flex: 0.1,
     alignSelf: 'flex-end',
     alignItems: 'center',
-  },
-  buttonText: {
-    fontSize: 19,
-    color: '#fff',
+    marginRight: 20,
   },
   text: {
     fontSize: 18,
