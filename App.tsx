@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AppLoading from 'expo-app-loading';
 /* navigators */
 import { AppNavigator } from './src/navigation/AppNavigator';
 /* contexts */
@@ -11,6 +12,8 @@ import { VisibleCameraContext } from './src/contexts/VisibleCameraContext';
 /* types */
 import { User } from './src/types/user';
 import { Album } from './src/types/album';
+/* font */
+import { useFonts, MPLUS1p_400Regular } from '@expo-google-fonts/m-plus-1p';
 
 export default function App() {
   const [user, setUser] = useState<User>();
@@ -19,6 +22,9 @@ export default function App() {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [visibleWalkthrough, setVisibleWalkthrough] = useState<boolean>();
   const [visibleCamera, setVisibleCamera] = useState<boolean>();
+  let [fontsLoaded] = useFonts({
+    MPLUS1p_400Regular,
+  });
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
@@ -31,7 +37,7 @@ export default function App() {
               value={{ visibleCamera, setVisibleCamera }}
             >
               <CountContext.Provider value={{ count, setCount }}>
-                <AppNavigator />
+                {!fontsLoaded ? <AppLoading /> : <AppNavigator />}
               </CountContext.Provider>
             </VisibleCameraContext.Provider>
           </VisibleWalkthroughContext.Provider>
