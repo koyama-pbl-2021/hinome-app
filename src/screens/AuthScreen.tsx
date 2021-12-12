@@ -20,7 +20,6 @@ export const AuthScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ActivityIndicator size="large" />
-      <Text style={styles.text}>ログイン中...</Text>
     </SafeAreaView>
   );
 };
