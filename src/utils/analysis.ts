@@ -5,79 +5,66 @@ export const getHinomeTime = async (
   startAt: firebase.firestore.Timestamp,
   endAt: firebase.firestore.Timestamp
 ): Promise<firebase.firestore.Timestamp[]> => {
+  function getArrayMax(array: []) {
+    return Math.max.apply(null, array);
+  }
+
   await MediaLibrary.requestPermissionsAsync();
   const media = await MediaLibrary.getAssetsAsync({
     mediaType: [MediaLibrary.MediaType.photo],
   });
   //firestore timpestampをunix時間に変換
-  const startTime = new Date(startAt.seconds * 1000);
-  const endTime = new Date(endAt.seconds * 1000);
-
-  let hinomeTime = [];
-  function getArrayMax(array) {
-    return Math.max.apply(null, array);
-  }
-  //各時間帯、GPSを取得
-  for (const metadata of media.assets) {
-    let exif;
-    let mediainfo = await MediaLibrary.getAssetInfoAsync(metadata);
-    try {
-      exif = mediainfo.exif['{GPS}'];
-    } catch {
-      console.log('no gps');
-    }
-    // metadataからtimestampを取る
-    const createTime = metadata.creationTime;
-    hinomeTime.push(createTime);
-  }
-  const hinomeDate = hinomeTime.sort().map((x) => new Date(x));
-  const HOURS = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
-    8: 0,
-    9: 0,
-    10: 0,
-    11: 0,
-    12: 0,
-    13: 0,
-    14: 0,
-    15: 0,
-    16: 0,
-    17: 0,
-    18: 0,
-    19: 0,
-    20: 0,
-    21: 0,
-    22: 0,
-    23: 0,
-    24: 0,
-  };
-
-  const MINUTES = {
-    0: 0, // 1~10
-    1: 0, // 11~20
-    2: 0, // 21~30
-    3: 0, // 31~40
-    4: 0, // 41~50
-    5: 0, //51~60
+  const startTime = startAt.toDate();
+  const endTime = endAt.toDate();
+  //各時間帯を取得
+  const hinomeDate = media.assets.map(
+    (metadata) => new Date(metadata.creationTime)
+  );
+  // GPSを利用する場合
+  // for (const metadata of media.assets) {
+  //   const mediainfo = await MediaLibrary.getAssetInfoAsync(metadata);
+  //   try {
+  //     const exif = mediainfo.exif['{GPS}'];
+  //   } catch {
+  //     console.log('no gps');
+  //   }
+  // }
+  const hinomePoint = {
+    1: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    2: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    3: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    4: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    5: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    6: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    7: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    8: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    9: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    10: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    11: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    12: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    13: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    14: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    15: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    16: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    17: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    18: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    19: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    20: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    21: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    22: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    23: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    24: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
   };
 
   //　時間単位で区間ごとの和をとった
-  for (let h of hinomeDate) {
-    HOURS[h.getHours()] += 1;
+  for (const h of hinomeDate) {
+    const hour = h.getHours();
+    const minute = h.getMinutes();
+    // 一桁なら0、それ以外は10の位を取る
+    const minuteTensPlace = minute < 10 ? 0 : Math.floor((minute / 10) % 10);
+    hinomePoint[hour][minuteTensPlace] += 1;
   }
-  for (let h of hinomeDate) {
-    if (h.getMinutes().toString().length > 1) {
-      MINUTES[Number(h.getMinutes().toString().substr(0, 1))] += 1;
-    } else {
-      MINUTES[0] += 1;
-    }
-  }
+
   let maxCountHour = 0;
   let maxCountMinute = 0;
 
@@ -165,56 +152,56 @@ export const getHinomeTime = async (
   let n = 0;
   let tmph = endH;
   let tmpm = 0;
-  while (pushTime.length <= 9) {
-    for (let [key, value] of Object.entries(hinomePointHour)) {
-      if (Number(key) >= startH || Number(key) <= endH) {
-        if (hinomePointHour[key] > hinomePointHour[tmph]) reth = Number(key);
-        else {
-          reth = tmph;
-          value = value/2
-        }
-        tmph = Number(key);
-      }
-    }
-    hinomePointHour[reth]-
-    for (let [key, value] of Object.entries(hinomePointMinute)) {
-      if (Number(key) >= startM || Number(key) <= endM) {
-        if (hinomePointMinute[key] > hinomePointMinute[tmpm])
-          retm = Number(key);
-          value = value/2
-      }
-        else {
-          retm = tmpm;
-          
-        }
-          tmph = Number(key);
-      }
-  
-    console.log(
-      curYear.toString() +
-        '-' +
-        curMonth.toString() +
-        '-' +
-        curDate.toString() +
-        'T' +
-        reth.toString() +
-        ':' +
-        retm.toString() +
-        ':' +
-        curs
-    );
+  // while (pushTime.length <= 9) {
+  //   for (let [key, value] of Object.entries(hinomePointHour)) {
+  //     if (Number(key) >= startH || Number(key) <= endH) {
+  //       if (hinomePointHour[key] > hinomePointHour[tmph]) reth = Number(key);
+  //       else {
+  //         reth = tmph;
+  //         value = value/2
+  //       }
+  //       tmph = Number(key);
+  //     }
+  //   }
+  //   hinomePointHour[reth]-
+  //   for (let [key, value] of Object.entries(hinomePointMinute)) {
+  //     if (Number(key) >= startM || Number(key) <= endM) {
+  //       if (hinomePointMinute[key] > hinomePointMinute[tmpm])
+  //         retm = Number(key);
+  //         value = value/2
+  //     }
+  //       else {
+  //         retm = tmpm;
 
-    pushTime.push(
-      firebase.firestore.Timestamp.fromDate(
-        new Date(curYear, curMonth, curDate, reth, retm, curs, curMs)
-      )
-    );
-  }
-  for (let i of pushTime) {
-    i = i;
-  }
+  //       }
+  //         tmph = Number(key);
+  //     }
 
-  pushTime.forEach((element) => console.log(element.toDate()));
+  //   console.log(
+  //     curYear.toString() +
+  //       '-' +
+  //       curMonth.toString() +
+  //       '-' +
+  //       curDate.toString() +
+  //       'T' +
+  //       reth.toString() +
+  //       ':' +
+  //       retm.toString() +
+  //       ':' +
+  //       curs
+  //   );
+
+  //   pushTime.push(
+  //     firebase.firestore.Timestamp.fromDate(
+  //       new Date(curYear, curMonth, curDate, reth, retm, curs, curMs)
+  //     )
+  //   );
+  // }
+  // for (let i of pushTime) {
+  //   i = i;
+  // }
+
+  // pushTime.forEach((element) => console.log(element.toDate()));
 
   //return pushTime;
 };
