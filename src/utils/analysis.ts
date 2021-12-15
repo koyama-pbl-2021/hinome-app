@@ -14,8 +14,8 @@ export const getHinomeTime = async (
     mediaType: [MediaLibrary.MediaType.photo],
   });
   //firestore timpestampをunix時間に変換
-  const startTime = new Date(startAt.seconds * 1000);
-  const endTime = new Date(endAt.seconds * 1000);
+  const startTime = startAt.toDate();
+  const endTime = endAt.toDate();
   //各時間帯を取得
   const hinomeDate = media.assets.map(
     (metadata) => new Date(metadata.creationTime)
