@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Image,
-  Text,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, Text, Dimensions, TouchableOpacity } from 'react-native';
+import { Image } from 'react-native-expo-image-cache';
 /* components */
 /* types */
 import { Album } from '../types/album';
@@ -25,7 +20,7 @@ export const AlbumItem: React.FC<Props> = ({ album, onPress }: Props) => {
   // [TODO] dateの追加
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Image source={{ uri: imageUrl }} style={styles.image} />
+      <Image style={styles.image} uri={imageUrl} />
       <Text style={styles.dateText}>{createdAt.toDate().toDateString()}</Text>
     </TouchableOpacity>
   );
