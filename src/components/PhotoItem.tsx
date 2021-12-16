@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Image,
-  Text,
-  Dimensions,
-  TouchableOpacity,
-} from 'react-native';
+import { StyleSheet, Text, Dimensions, TouchableOpacity } from 'react-native';
+import { Image } from 'react-native-expo-image-cache';
 /* components */
 /* types */
 import { Photo } from '../types/photo';
@@ -25,7 +20,7 @@ export const PhotoItem: React.FC<Props> = ({ photo, onPress }: Props) => {
   // [TODO] dateの追加
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
-      <Image source={{ uri: imageUrl }} style={styles.image} />
+      <Image uri={imageUrl} style={styles.image} />
       <Text style={styles.placeText}>{createdAt.toDate().toDateString()}</Text>
     </TouchableOpacity>
   );
