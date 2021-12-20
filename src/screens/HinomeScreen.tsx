@@ -175,6 +175,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontStyle: 'normal',
     fontWeight: 'normal',
+    fontFamily: 'MPLUS1p_400Regular',
     textAlign: 'center',
   },
   timeText: {
@@ -182,6 +183,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontStyle: 'normal',
     fontWeight: 'normal',
+    fontFamily: 'MPLUS1p_400Regular',
     textAlign: 'center',
     marginBottom: 10,
   },

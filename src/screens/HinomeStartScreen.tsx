@@ -200,7 +200,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
             {hour}時間の間に撮影タイミングを{'\n'}10回通知します
           </Text>
           <TouchableOpacity onPress={onStart} style={styles.startButton}>
-            <Text style={styles.startButtonText}>開始</Text>
+            <Text style={styles.startButtonText}>スタート</Text>
           </TouchableOpacity>
         </View>
       </SafeAreaView>
@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontStyle: 'normal',
     fontWeight: 'normal',
+    fontFamily: 'MPLUS1p_400Regular',
     textAlign: 'center',
     backgroundColor: 'transparent',
     marginTop: 50,
@@ -242,6 +243,7 @@ const styles = StyleSheet.create({
   startButtonText: {
     color: 'rgb(217, 103, 110)',
     fontSize: 30,
+    fontFamily: 'MPLUS1p_400Regular',
     fontStyle: 'normal',
     fontWeight: 'normal',
     textAlign: 'center',

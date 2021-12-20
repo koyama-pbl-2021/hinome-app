@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 34,
     fontWeight: 'bold',
+    fontFamily: 'MPLUS1p_400Regular',
     textAlign: 'center',
     color: '#fff',
     marginTop: 8,
@@ -92,6 +93,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 17,
+    fontFamily: 'MPLUS1p_400Regular',
     color: '#fff',
     textAlign: 'center',
     lineHeight: 30,
