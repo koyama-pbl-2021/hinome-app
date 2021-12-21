@@ -10,13 +10,16 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@expo-google-fonts/m-plus-1p": "^0.2.0",
     "@react-native-async-storage/async-storage": "^1.13.0",
     "@react-navigation/bottom-tabs": "^5.11.11",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.5",
     "expo": "~41.0.1",
+    "expo-app-loading": "^1.2.1",
     "expo-av": "~9.1.2",
     "expo-camera": "~11.0.2",
+    "expo-font": "~9.1.0",
     "expo-linear-gradient": "~9.1.0",
     "expo-media-library": "^12.1.2",
     "expo-notifications": "~0.11.6",
