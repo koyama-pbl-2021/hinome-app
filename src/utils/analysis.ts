@@ -202,6 +202,7 @@ export const getHinomeTime = async (
   }
   let pushHour = {};
   if (end_index < start_index) {
+    //日またぎの回避のため、HOURSにDATEプロパティを追加で修正できる見込み
     end_index = 144;
   }
   pushHour = HOURS.slice(start_index, end_index);
