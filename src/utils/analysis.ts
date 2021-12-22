@@ -31,190 +31,245 @@ export const getHinomeTime = async (
     hinomeTime.push(createTime);
   }
   const hinomeDate = hinomeTime.sort().map((x) => new Date(x));
-  const HOURS = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 0,
-    5: 0,
-    6: 0,
-    7: 0,
-    8: 0,
-    9: 0,
-    10: 0,
-    11: 0,
-    12: 0,
-    13: 0,
-    14: 0,
-    15: 0,
-    16: 0,
-    17: 0,
-    18: 0,
-    19: 0,
-    20: 0,
-    21: 0,
-    22: 0,
-    23: 0,
-    24: 0,
-  };
+  const HOURS = [
+    { hour: 1, minute: 1, weight: 0 },
+    { hour: 1, minute: 2, weight: 0 },
+    { hour: 1, minute: 3, weight: 0 },
+    { hour: 1, minute: 4, weight: 0 },
+    { hour: 1, minute: 5, weight: 0 },
+    { hour: 1, minute: 6, weight: 0 },
+    { hour: 2, minute: 1, weight: 0 },
+    { hour: 2, minute: 2, weight: 0 },
+    { hour: 2, minute: 3, weight: 0 },
+    { hour: 2, minute: 4, weight: 0 },
+    { hour: 2, minute: 5, weight: 0 },
+    { hour: 2, minute: 6, weight: 0 },
+    { hour: 3, minute: 1, weight: 0 },
+    { hour: 3, minute: 2, weight: 0 },
+    { hour: 3, minute: 3, weight: 0 },
+    { hour: 3, minute: 4, weight: 0 },
+    { hour: 3, minute: 5, weight: 0 },
+    { hour: 3, minute: 6, weight: 0 },
+    { hour: 4, minute: 1, weight: 0 },
+    { hour: 4, minute: 2, weight: 0 },
+    { hour: 4, minute: 3, weight: 0 },
+    { hour: 4, minute: 4, weight: 0 },
+    { hour: 4, minute: 5, weight: 0 },
+    { hour: 4, minute: 6, weight: 0 },
+    { hour: 5, minute: 1, weight: 0 },
+    { hour: 5, minute: 2, weight: 0 },
+    { hour: 5, minute: 3, weight: 0 },
+    { hour: 5, minute: 4, weight: 0 },
+    { hour: 5, minute: 5, weight: 0 },
+    { hour: 5, minute: 6, weight: 0 },
+    { hour: 6, minute: 1, weight: 0 },
+    { hour: 6, minute: 2, weight: 0 },
+    { hour: 6, minute: 3, weight: 0 },
+    { hour: 6, minute: 4, weight: 0 },
+    { hour: 6, minute: 5, weight: 0 },
+    { hour: 6, minute: 6, weight: 0 },
+    { hour: 6, minute: 1, weight: 0 },
+    { hour: 6, minute: 2, weight: 0 },
+    { hour: 6, minute: 3, weight: 0 },
+    { hour: 6, minute: 4, weight: 0 },
+    { hour: 6, minute: 5, weight: 0 },
+    { hour: 6, minute: 6, weight: 0 },
+    { hour: 7, minute: 1, weight: 0 },
+    { hour: 7, minute: 2, weight: 0 },
+    { hour: 7, minute: 3, weight: 0 },
+    { hour: 7, minute: 4, weight: 0 },
+    { hour: 7, minute: 5, weight: 0 },
+    { hour: 7, minute: 6, weight: 0 },
+    { hour: 8, minute: 1, weight: 0 },
+    { hour: 8, minute: 2, weight: 0 },
+    { hour: 8, minute: 3, weight: 0 },
+    { hour: 8, minute: 4, weight: 0 },
+    { hour: 8, minute: 5, weight: 0 },
+    { hour: 8, minute: 6, weight: 0 },
+    { hour: 9, minute: 1, weight: 0 },
+    { hour: 9, minute: 2, weight: 0 },
+    { hour: 9, minute: 3, weight: 0 },
+    { hour: 9, minute: 4, weight: 0 },
+    { hour: 9, minute: 5, weight: 0 },
+    { hour: 9, minute: 6, weight: 0 },
+    { hour: 10, minute: 1, weight: 0 },
+    { hour: 10, minute: 2, weight: 0 },
+    { hour: 10, minute: 3, weight: 0 },
+    { hour: 10, minute: 4, weight: 0 },
+    { hour: 10, minute: 5, weight: 0 },
+    { hour: 10, minute: 6, weight: 0 },
+    { hour: 11, minute: 1, weight: 0 },
+    { hour: 11, minute: 2, weight: 0 },
+    { hour: 11, minute: 3, weight: 0 },
+    { hour: 11, minute: 4, weight: 0 },
+    { hour: 11, minute: 5, weight: 0 },
+    { hour: 11, minute: 6, weight: 0 },
+    { hour: 13, minute: 1, weight: 0 },
+    { hour: 13, minute: 2, weight: 0 },
+    { hour: 13, minute: 3, weight: 0 },
+    { hour: 13, minute: 4, weight: 0 },
+    { hour: 13, minute: 5, weight: 0 },
+    { hour: 12, minute: 6, weight: 0 },
+    { hour: 14, minute: 1, weight: 0 },
+    { hour: 14, minute: 2, weight: 0 },
+    { hour: 14, minute: 3, weight: 0 },
+    { hour: 14, minute: 4, weight: 0 },
+    { hour: 14, minute: 5, weight: 0 },
+    { hour: 14, minute: 6, weight: 0 },
+    { hour: 15, minute: 1, weight: 0 },
+    { hour: 15, minute: 2, weight: 0 },
+    { hour: 15, minute: 3, weight: 0 },
+    { hour: 15, minute: 4, weight: 0 },
+    { hour: 15, minute: 5, weight: 0 },
+    { hour: 15, minute: 6, weight: 0 },
+    { hour: 16, minute: 1, weight: 0 },
+    { hour: 16, minute: 2, weight: 0 },
+    { hour: 16, minute: 3, weight: 0 },
+    { hour: 16, minute: 4, weight: 0 },
+    { hour: 16, minute: 5, weight: 0 },
+    { hour: 16, minute: 6, weight: 0 },
+    { hour: 17, minute: 1, weight: 0 },
+    { hour: 17, minute: 2, weight: 0 },
+    { hour: 17, minute: 3, weight: 0 },
+    { hour: 17, minute: 4, weight: 0 },
+    { hour: 17, minute: 5, weight: 0 },
+    { hour: 17, minute: 6, weight: 0 },
+    { hour: 18, minute: 1, weight: 0 },
+    { hour: 18, minute: 2, weight: 0 },
+    { hour: 18, minute: 3, weight: 0 },
+    { hour: 18, minute: 4, weight: 0 },
+    { hour: 18, minute: 5, weight: 0 },
+    { hour: 18, minute: 6, weight: 0 },
+    { hour: 19, minute: 1, weight: 0 },
+    { hour: 19, minute: 2, weight: 0 },
+    { hour: 19, minute: 3, weight: 0 },
+    { hour: 19, minute: 4, weight: 0 },
+    { hour: 19, minute: 5, weight: 0 },
+    { hour: 19, minute: 6, weight: 0 },
+    { hour: 20, minute: 1, weight: 0 },
+    { hour: 20, minute: 2, weight: 0 },
+    { hour: 20, minute: 3, weight: 0 },
+    { hour: 20, minute: 4, weight: 0 },
+    { hour: 20, minute: 5, weight: 0 },
+    { hour: 20, minute: 6, weight: 0 },
+    { hour: 21, minute: 1, weight: 0 },
+    { hour: 21, minute: 2, weight: 0 },
+    { hour: 21, minute: 3, weight: 0 },
+    { hour: 21, minute: 4, weight: 0 },
+    { hour: 21, minute: 5, weight: 0 },
+    { hour: 21, minute: 6, weight: 0 },
+    { hour: 22, minute: 1, weight: 0 },
+    { hour: 22, minute: 2, weight: 0 },
+    { hour: 22, minute: 3, weight: 0 },
+    { hour: 22, minute: 4, weight: 0 },
+    { hour: 22, minute: 5, weight: 0 },
+    { hour: 22, minute: 6, weight: 0 },
+    { hour: 23, minute: 1, weight: 0 },
+    { hour: 23, minute: 2, weight: 0 },
+    { hour: 23, minute: 3, weight: 0 },
+    { hour: 23, minute: 4, weight: 0 },
+    { hour: 23, minute: 5, weight: 0 },
+    { hour: 23, minute: 6, weight: 0 },
+    { hour: 24, minute: 1, weight: 0 },
+    { hour: 24, minute: 2, weight: 0 },
+    { hour: 24, minute: 3, weight: 0 },
+    { hour: 24, minute: 4, weight: 0 },
+    { hour: 24, minute: 5, weight: 0 },
+    { hour: 24, minute: 6, weight: 0 },
+  ];
 
-  const MINUTES = {
-    0: 0, // 1~10
-    1: 0, // 11~20
-    2: 0, // 21~30
-    3: 0, // 31~40
-    4: 0, // 41~50
-    5: 0, //51~60
-  };
-
-  //　時間単位で区間ごとの和をとった
-  for (let h of hinomeDate) {
-    HOURS[h.getHours()] += 1;
-  }
-  for (let h of hinomeDate) {
-    if (h.getMinutes().toString().length > 1) {
-      MINUTES[Number(h.getMinutes().toString().substr(0, 1))] += 1;
-    } else {
-      MINUTES[0] += 1;
+  //日の目時間の配列を切り出す
+  let start_index = 0;
+  let end_index = 0;
+  for (let i = 1; i < HOURS.length; i++) {
+    let tmp = HOURS[i];
+    let hour = tmp.hour;
+    let min = tmp.minute;
+    if (startTime.getHours() == hour) {
+      if (
+        startTime.getMinutes() < min * 10 &&
+        startTime.getMinutes() >= HOURS[i - 1].minute * 10
+      )
+        start_index = i;
+    }
+    if (endTime.getHours() == hour) {
+      if (
+        endTime.getMinutes() < min * 10 &&
+        startTime.getMinutes() >= HOURS[i - 1].minute * 10
+      )
+        end_index = i;
     }
   }
-  let maxCountHour = 0;
-  let maxCountMinute = 0;
+  let pushHour = {};
+  if (end_index < start_index) {
+    end_index = 144;
+  }
+  pushHour = HOURS.slice(start_index, end_index);
 
-  // 日の目ポイントを算出する
-  for (let [key, value] of Object.entries(HOURS)) {
-    maxCountHour = Math.max(maxCountHour, value);
-  }
-  for (let [key, value] of Object.entries(MINUTES)) {
-    maxCountMinute = Math.max(maxCountMinute, value);
-  }
-  let hinomePointHour = {};
-  let hinomePointMinute = {};
-  for (let [key, value] of Object.entries(HOURS)) {
-    hinomePointHour[key] = Math.abs(HOURS[key] - maxCountHour);
-  }
-  for (let [key, value] of Object.entries(MINUTES)) {
-    hinomePointMinute[key] = Math.abs(MINUTES[key] - maxCountHour);
+  //　時間単位で区間ごとの和をとった
+  let totalweight = 0;
+  for (let [key, value] of Object.entries(pushHour)) {
+    totalweight += pushHour[key].weight;
   }
 
-  // //プッシュ日時を生成
-  // let pushHour = [];
-  // let pushMinute = [];
-  // let h = 1;
-  // let curH = 0;
-  // let nextH = 0;
-  // let i = 0;
-  // while (i++) {
-  //   curH = hinomePointHour[h];
-  //   nextH = hinomePointHour[h + 1];
-  //   if (curH - nextH) {
-  //     if (curH) pushHour.push(curH);
-  //   } else {
-  //     if (nextH) pushHour.push(nextH);
-  //     h = h + 1;
-  //   }
-  //   curH = curH - nextH;
-  // }
-  // console.log(pushHour);
+  for (let h of hinomeDate) {
+    for (let p in pushHour) {
+      if (h.getHours() + 12 == pushHour[p].hour) {
+        if (
+          h.getMinutes() < pushHour[p].minute * 10 &&
+          h.getMinutes() >= pushHour[p].minute * 10 - 10
+        )
+          pushHour[p].weight++;
+      }
+    }
+  }
 
-  // let m = 0;
-  // let curM = 0;
-  // let nextM = 0;
-  // for (let i = 0; i < 10; i++) {
-  //   curM = hinomePointMinute[m];
-  //   nextM = hinomePointMinute[m + 1];
-  //   if (curM - nextM) {
-  //     if (curM) pushMinute.push(curM);
-  //   } else {
-  //     if (nextM) pushMinute.push(nextM);
-  //     m = m + 1;
-  //   }
-  //   curM = curM - hinomePointMinute.length;
-  // }
+  //開始時間と終了時間を考慮した時間配列を生成
+  let maxCountTime = 0;
+  for (let [key, value] of Object.entries(pushHour)) {
+    maxCountTime = Math.max(maxCountTime, pushHour[key].weight);
+  }
+  pushHour.map((x) => (x.weight = Math.abs(x.weight - maxCountTime)));
 
-  // valueで並び替え
-  hinomePointHour = Object.keys(hinomePointHour).map((e) => ({
-    key: e,
-    value: hinomePointHour[e],
-  }));
-  hinomePointMinute = Object.keys(hinomePointMinute).map((e) => ({
-    key: e,
-    value: hinomePointMinute[e],
-  }));
-
-  // 通知日時を生成
-  const startH = startTime.getHours();
-  const startM = startTime.getMinutes();
-  const endH = startTime.getHours();
-  const endM = startTime.getMinutes();
-  let idxm = 0;
-  let idxh = 0;
-  let keym = startM;
-  let keyh = startH;
-  let pushTime = [];
-  let reth = 0;
-  let retm = 0;
-  //年月日は本日を取得
+  //年月日は本日を取得 (TODO 日またぎ、月またぎはプロパティを追加)
   const d = new Date();
   const curMonth = d.getMonth();
   const curDate = d.getDate();
   const curYear = d.getFullYear();
-  const curs = d.getSeconds();
-  const curMs = d.getMilliseconds();
 
-  let n = 0;
-  let tmph = endH;
-  let tmpm = 0;
-  while (pushTime.length <= 9) {
-    for (let [key, value] of Object.entries(hinomePointHour)) {
-      if (Number(key) >= startH || Number(key) <= endH) {
-        if (hinomePointHour[key] > hinomePointHour[tmph]) reth = Number(key);
-        else {
-          reth = tmph;
-          value = value/2
-        }
-        tmph = Number(key);
+  let NotifyHour = [];
+  let NotifyMinute = [];
+  let cnt = 0;
+
+  //重み付け乱択アルゴリズム
+  while (NotifyHour.length < 9) {
+    const pickedItem = Math.random() * totalweight;
+    let searchPosition = 0;
+    for (let [key, value] of Object.entries(pushHour)) {
+      searchPosition += pushHour[key].weight;
+      if (pickedItem < searchPosition) {
+        NotifyHour.push(value.hour);
+        NotifyMinute.push(value.minute);
       }
+      if (NotifyHour.length > 9) break;
     }
-    hinomePointHour[reth]-
-    for (let [key, value] of Object.entries(hinomePointMinute)) {
-      if (Number(key) >= startM || Number(key) <= endM) {
-        if (hinomePointMinute[key] > hinomePointMinute[tmpm])
-          retm = Number(key);
-          value = value/2
-      }
-        else {
-          retm = tmpm;
-          
-        }
-          tmph = Number(key);
-      }
-  
-    console.log(
-      curYear.toString() +
-        '-' +
-        curMonth.toString() +
-        '-' +
-        curDate.toString() +
-        'T' +
-        reth.toString() +
-        ':' +
-        retm.toString() +
-        ':' +
-        curs
-    );
-
-    pushTime.push(
-      firebase.firestore.Timestamp.fromDate(
-        new Date(curYear, curMonth, curDate, reth, retm, curs, curMs)
-      )
-    );
-  }
-  for (let i of pushTime) {
-    i = i;
+    cnt++;
   }
 
-  pushTime.forEach((element) => console.log(element.toDate()));
-
-  //return pushTime;
+  //日付生成し、firestampに変換
+  let NotifyDate = [];
+  for (let j = 0; j < 10; j++) {
+    let s = new Date(
+      curYear,
+      curMonth,
+      curDate,
+      NotifyHour[j],
+      NotifyMinute[j]
+    ).toLocaleString('ja-JP', {
+      timeZone: 'Asia/Tokyo',
+    });
+    let da = firebase.firestore.Timestamp.fromDate(new Date(s));
+    NotifyDate.push(da);
+  }
+  return NotifyDate;
 };
