@@ -246,7 +246,7 @@ export const getHinomeTime = async (
 
   //重み付け乱択アルゴリズム
   while (NotifyHour.length < 9) {
-    const pickedItem = Math.random() * totalweight;
+    let pickedItem = Math.random() * totalweight;
     let searchPosition = 0;
     for (let [key, value] of Object.entries(pushHour)) {
       searchPosition += pushHour[key].weight;
