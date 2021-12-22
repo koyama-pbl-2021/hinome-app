@@ -13,11 +13,8 @@ export const getHinomeTime = async (
   const startTime = new Date(startAt.seconds * 1000);
   const endTime = new Date(endAt.seconds * 1000);
 
-  let hinomeTime = [];
-  function getArrayMax(array) {
-    return Math.max.apply(null, array);
-  }
   //各時間帯、GPSを取得
+  let hinomeTime = [];
   for (const metadata of media.assets) {
     let exif;
     let mediainfo = await MediaLibrary.getAssetInfoAsync(metadata);
@@ -244,7 +241,7 @@ export const getHinomeTime = async (
   let NotifyMinute = [];
   let cnt = 0;
 
-  //重み付け乱択アルゴリズム
+  //重み付き乱択アルゴリズム
   while (NotifyHour.length < 9) {
     let pickedItem = Math.random() * totalweight;
     let searchPosition = 0;
