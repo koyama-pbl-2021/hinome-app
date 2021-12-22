@@ -237,6 +237,8 @@ export const getHinomeTime = async (
   const curMonth = d.getMonth();
   const curDate = d.getDate();
   const curYear = d.getFullYear();
+  const curSecond = d.getSeconds();
+  const curMSecond = d.getMilliseconds();
 
   let NotifyHour = [];
   let NotifyMinute = [];
@@ -259,18 +261,21 @@ export const getHinomeTime = async (
 
   //日付生成し、firestampに変換
   let NotifyDate = [];
+  const timeoffset = 9;
   for (let j = 0; j < 10; j++) {
     let s = new Date(
       curYear,
       curMonth,
       curDate,
-      NotifyHour[j],
-      NotifyMinute[j]
-    ).toLocaleString('ja-JP', {
-      timeZone: 'Asia/Tokyo',
-    });
-    let da = firebase.firestore.Timestamp.fromDate(new Date(s));
+      NotifyHour[j] + timeoffset,
+      NotifyMinute[j],
+      curSecond,
+      curMSecond
+    );
+
+    let da = firebase.firestore.Timestamp.fromDate(s);
     NotifyDate.push(da);
   }
+
   return NotifyDate;
 };
