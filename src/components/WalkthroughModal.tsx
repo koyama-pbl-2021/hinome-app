@@ -82,6 +82,9 @@ export const WalkthroughModal: React.FC<Props> = ({
           ref={flatListRef}
           keyExtractor={keyExtractor}
           onViewableItemsChanged={onViewRef.current}
+          viewabilityConfig={{
+            itemVisiblePercentThreshold: 50,
+          }}
         />
 
         <View style={styles.bottomWrapper}>
@@ -187,14 +190,14 @@ const slides = [
   },
   {
     key: '3',
-    title: 'アルバムを見よう',
-    text: 'アルバムはホーム画面で確認できます！',
-    image: require('../../assets/home-tab.png'),
+    title: '写真を撮ろう',
+    text: '通知が来るとカメラボタンが有効になります！',
+    image: require('../../assets/camera-button.png'),
   },
   {
     key: '4',
-    title: '分析機能を使おう',
-    text: '分析画面ではよくカメラを使う時間帯を確認できます！',
-    image: require('../../assets/analytics-tab.png'),
+    title: 'アルバムを見よう',
+    text: 'アルバムはホーム画面で確認できます！',
+    image: require('../../assets/home-tab.png'),
   },
 ];

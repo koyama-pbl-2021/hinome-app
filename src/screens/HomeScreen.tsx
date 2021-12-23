@@ -77,7 +77,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       };
       f();
     } else {
-      setVisibleCamera(true);
+      setVisibleCamera(false);
     }
   }, [isFocused]);
 
