@@ -176,33 +176,32 @@ export const getHinomeTime = async (
   ];
 
   //日の目時間の配列を切り出す
-  let start_index = 0;
-  let end_index = 0;
+  let startIndex = 0;
+  let endIndex = 0;
+  const startHour = startTime.getHours();
+  const startMinute = startTime.getMinutes();
+  const endHour = endTime.getHours();
+  const endMinute = endTime.getMinutes();
+
   for (let i = 1; i < HOURS.length; i++) {
-    let tmp = HOURS[i];
-    let hour = tmp.hour;
-    let min = tmp.minute;
-    if (startTime.getHours() == hour) {
-      if (
-        startTime.getMinutes() < min * 10 &&
-        startTime.getMinutes() >= HOURS[i - 1].minute * 10
-      )
-        start_index = i;
+    const tmp = HOURS[i];
+    const hour = tmp.hour;
+    const min = tmp.minute;
+    if (startHour == hour) {
+      if (startMinute < min * 10 && startMinute >= HOURS[i - 1].minute * 10)
+        startIndex = i;
     }
-    if (endTime.getHours() == hour) {
-      if (
-        endTime.getMinutes() < min * 10 &&
-        startTime.getMinutes() >= HOURS[i - 1].minute * 10
-      )
-        end_index = i;
+    if (endHour == hour) {
+      if (endMinute < min * 10 && endMinute >= HOURS[i - 1].minute * 10)
+        endIndex = i;
     }
   }
   let pushHour = {};
-  if (end_index < start_index) {
+  if (endIndex < startIndex) {
     //日またぎの回避のため、HOURSにDATEプロパティを追加で修正できる見込み
-    end_index = 144;
+    endIndex = 144;
   }
-  pushHour = HOURS.slice(start_index, end_index);
+  pushHour = HOURS.slice(startIndex, endIndex);
 
   //　時間単位で区間ごとの和をとった
   let totalweight = 0;
