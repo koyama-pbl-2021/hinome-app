@@ -187,11 +187,11 @@ export const getHinomeTime = async (
     const tmp = HOURS[i];
     const hour = tmp.hour;
     const min = tmp.minute;
-    if (startHour == hour) {
+    if (startHour ==＝ hour) {
       if (startMinute < min * 10 && startMinute >= HOURS[i - 1].minute * 10)
         startIndex = i;
     }
-    if (endHour == hour) {
+    if (endHour ==＝ hour) {
       if (endMinute < min * 10 && endMinute >= HOURS[i - 1].minute * 10)
         endIndex = i;
     }
@@ -204,9 +204,9 @@ export const getHinomeTime = async (
   pushHour = HOURS.slice(startIndex, endIndex);
 
   //　時間単位で区間ごとの和をとった
-  let totalweight = 0;
+  let totalWeight = 0;
   for (let [key, value] of Object.entries(pushHour)) {
-    totalweight += pushHour[key].weight;
+    totalWeight += pushHour[key].weight;
   }
 
   for (let h of hinomeDate) {
@@ -242,7 +242,7 @@ export const getHinomeTime = async (
 
   //重み付き乱択アルゴリズム
   while (NotifyHour.length < 9) {
-    let pickedItem = Math.random() * totalweight;
+    let pickedItem = Math.random() * totalWeight;
     let searchPosition = 0;
     for (let [key, value] of Object.entries(pushHour)) {
       searchPosition += pushHour[key].weight;
