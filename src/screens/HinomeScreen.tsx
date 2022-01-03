@@ -1,25 +1,18 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import {
   StyleSheet,
-  StatusBar,
-  FlatList,
-  SafeAreaView,
-  TouchableOpacity,
   Text,
+  TouchableOpacity,
+  SafeAreaView,
   Platform,
+  StatusBar,
   View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import * as Notifications from 'expo-notifications';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused } from '@react-navigation/native';
 /* components */
-import { HourButton } from '../components/HourButton';
 import { WalkthroughModal } from '../components/WalkthroughModal';
-import { FinishModal } from '../components/FinishModal';
 /* contexts */
-import { AlbumContext } from '../contexts/AlbumContext';
-import { CountContext } from '../contexts/CountContext';
+import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* types */
 import { RootStackParamList } from '../types/navigation';
@@ -30,67 +23,21 @@ type Props = {
 };
 
 export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
-  // Contextからalbumオブジェクトを取得
-  const { album, setAlbum } = useContext(AlbumContext);
+  const { user } = useContext(UserContext);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
-  const [hours] = useState<string[]>(['1', '2', '4', '8', '12', '24']);
-  const { count, setCount } = useContext(CountContext);
-  const [visibleFinish, setVisibleFinish] = useState<boolean>(false);
-  const isFocused = useIsFocused();
 
-  useEffect(() => {
-    checkLeftNotificatonCountAsync();
-  }, [isFocused]);
-
-  const onPressHour = (hour: string) => {
-    navigation.navigate('HinomeStart', { hour });
+  const onSingleStart = async () => {
+    navigation.navigate('TimeSelect');
   };
 
-  const onStop = async () => {
-    setAlbum(null);
-    setVisibleFinish(false);
-    try {
-      await AsyncStorage.removeItem('@albumId');
-    } catch (e) {
-      console.log(e);
-    }
-    await Notifications.cancelAllScheduledNotificationsAsync();
-  };
-
-  const timeFormat = (date: Date) => {
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-    return `${month}月${day}日${hours}時${minutes}分`;
-  };
+  const onMultipleStart = async () => {};
 
   const dismissWalkthroughModal = async () => {
     setVisibleWalkthrough(false);
   };
 
-  const dismissFinishModal = async () => {
-    // アルバムオブジェクトはここで消させる
-    setAlbum(null);
-    setVisibleFinish(false);
-    try {
-      await AsyncStorage.removeItem('@albumId');
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const checkLeftNotificatonCountAsync = async () => {
-    const notifications =
-      await Notifications.getAllScheduledNotificationsAsync();
-    setCount(notifications.length);
-    if (notifications.length === 0 && album) {
-      setVisibleFinish(true);
-    }
-  };
-  // アルバムオブジェクトの有無で日の目画面を変更する
   return (
     <LinearGradient
       start={{
@@ -103,60 +50,37 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
       }}
       locations={[0, 1]}
       colors={['rgb(247, 132, 98)', 'rgb(139, 27, 140)']}
-      style={styles.loginViewLinearGradient}
+      style={styles.viewLinearGradient}
     >
       <SafeAreaView style={styles.container}>
         <WalkthroughModal
           visible={visibleWalkthrough}
           dismissModal={dismissWalkthroughModal}
         />
-        <FinishModal
-          visible={visibleFinish}
-          dismissModal={dismissFinishModal}
-        />
-        {!album ? (
-          <FlatList
-            style={styles.itemContainer}
-            data={hours}
-            renderItem={({ item }: { item: string }) => (
-              <HourButton hour={item} onPress={() => onPressHour(item)} />
-            )}
-            keyExtractor={(item, index) => index.toString()}
-            numColumns={2}
-          />
-        ) : (
-          <View style={styles.settingContainer}>
-            <Text style={styles.timeText}>
-              開始：{timeFormat(album.startAt.toDate())}
-            </Text>
-            <Text style={styles.timeText}>
-              終了：{timeFormat(album.endAt.toDate())}
-            </Text>
-            <Text style={styles.timeText}>通知は残り{count}回</Text>
-            <TouchableOpacity onPress={onStop} style={styles.stopButton}>
-              <Text style={styles.stopButtonText}>中止</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+        <View style={styles.startContainer}>
+          <TouchableOpacity onPress={onSingleStart} style={styles.startButton}>
+            <Text style={styles.startButtonText}>ひとりで</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={onMultipleStart}
+            style={styles.startButton}
+          >
+            <Text style={styles.startButtonText}>みんなで</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-  },
-  itemContainer: {
-    marginTop: 40,
-  },
-  settingContainer: {
-    top: '50%',
-  },
-  loginViewLinearGradient: {
+  viewLinearGradient: {
     flex: 1,
   },
-  stopButton: {
+  startContainer: {
+    marginTop: 40,
+  },
+  startButton: {
     backgroundColor: 'white',
     borderRadius: 20,
     shadowColor: 'rgba(0, 0, 0, 00.20)',
@@ -168,23 +92,16 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     marginRight: 50,
     marginBottom: 20,
-    marginTop: 200,
   },
-  stopButtonText: {
+  startButtonText: {
     color: 'rgb(217, 103, 110)',
     fontSize: 30,
+    fontFamily: 'MPLUS1p_400Regular',
     fontStyle: 'normal',
     fontWeight: 'normal',
-    fontFamily: 'MPLUS1p_400Regular',
     textAlign: 'center',
   },
-  timeText: {
-    color: '#fff',
-    fontSize: 24,
-    fontStyle: 'normal',
-    fontWeight: 'normal',
-    fontFamily: 'MPLUS1p_400Regular',
-    textAlign: 'center',
-    marginBottom: 10,
+  container: {
+    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
 });
