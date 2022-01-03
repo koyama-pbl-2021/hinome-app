@@ -25,6 +25,7 @@ import { AlbumsContext } from '../contexts/AlbumsContext';
 import { CountContext } from '../contexts/CountContext';
 import { UserContext } from '../contexts/UserContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
+import { IsSingleContext } from '../contexts/IsSingleContext';
 /* types */
 import { Album } from '../types/album';
 import { RouteProp } from '@react-navigation/native';
@@ -59,6 +60,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
+  const { isSingle } = useContext(IsSingleContext);
 
   // get permission
   useEffect(() => {
@@ -195,14 +197,25 @@ export const HinomeStartScreen: React.FC<Props> = ({
           dismissModal={dismissWalkthroughModal}
         />
         <StartModal visible={visibleStart} dismissModal={dismissStartModal} />
-        <View style={styles.startContainer}>
-          <Text style={styles.startText}>
-            {hour}時間の間に撮影タイミングを{'\n'}10回通知します
-          </Text>
-          <TouchableOpacity onPress={onStart} style={styles.startButton}>
-            <Text style={styles.startButtonText}>スタート</Text>
-          </TouchableOpacity>
-        </View>
+        {isSingle ? (
+          <View style={styles.startContainer}>
+            <Text style={styles.startText}>
+              {hour}時間の間に撮影タイミングを{'\n'}10回通知します
+            </Text>
+            <TouchableOpacity onPress={onStart} style={styles.startButton}>
+              <Text style={styles.startButtonText}>スタート</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.startContainer}>
+            <Text style={styles.startText}>
+              {hour}時間の間に撮影タイミングを{'\n'}10回通知します
+            </Text>
+            <TouchableOpacity onPress={onStart} style={styles.startButton}>
+              <Text style={styles.startButtonText}>アルバム作成</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </SafeAreaView>
       <Loading visible={loading} />
     </LinearGradient>
