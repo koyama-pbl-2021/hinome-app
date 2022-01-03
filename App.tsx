@@ -9,6 +9,7 @@ import { AlbumsContext } from './src/contexts/AlbumsContext';
 import { CountContext } from './src/contexts/CountContext';
 import { VisibleWalkthroughContext } from './src/contexts/VisibleWalkthroughContext';
 import { VisibleCameraContext } from './src/contexts/VisibleCameraContext';
+import { IsSingleContext } from './src/contexts/IsSingleContext';
 /* types */
 import { User } from './src/types/user';
 import { Album } from './src/types/album';
@@ -22,6 +23,7 @@ export default function App() {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [visibleWalkthrough, setVisibleWalkthrough] = useState<boolean>();
   const [visibleCamera, setVisibleCamera] = useState<boolean>();
+  const [isSingle, setIsSingle] = useState<boolean>();
   let [fontsLoaded] = useFonts({
     MPLUS1p_400Regular,
   });
@@ -37,7 +39,9 @@ export default function App() {
               value={{ visibleCamera, setVisibleCamera }}
             >
               <CountContext.Provider value={{ count, setCount }}>
-                {!fontsLoaded ? <AppLoading /> : <AppNavigator />}
+                <IsSingleContext.Provider value={{ isSingle, setIsSingle }}>
+                  {!fontsLoaded ? <AppLoading /> : <AppNavigator />}
+                </IsSingleContext.Provider>
               </CountContext.Provider>
             </VisibleCameraContext.Provider>
           </VisibleWalkthroughContext.Provider>

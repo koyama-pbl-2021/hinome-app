@@ -8,6 +8,9 @@ import { HinomeScreen } from '../screens/HinomeScreen';
 import { TimeSelectScreen } from '../screens/TimeSelectScreen';
 import { HinomeStartScreen } from '../screens/HinomeStartScreen';
 import { MultipleStartScreen } from '../screens/MultipleStartScreen';
+import { HostInputScreen } from '../screens/HostInputScreen';
+import { JoinInputScreen } from '../screens/JoinInputScreen';
+import { WaitHostScreen } from '../screens/WaitHostScreen';
 /* types */
 import { RootStackParamList } from '../types/navigation';
 
@@ -44,6 +47,21 @@ export const HinomeStackNavigator: React.FC = () => {
       <Stack.Screen
         name="HinomeStart"
         component={HinomeStartScreen}
+        options={{ headerTitle: '' }}
+      />
+      <Stack.Screen
+        name="HostInput"
+        component={HostInputScreen}
+        options={{ headerTitle: '' }}
+      />
+      <Stack.Screen
+        name="JoinInput"
+        component={JoinInputScreen}
+        options={{ headerTitle: '' }}
+      />
+      <Stack.Screen
+        name="WaitHost"
+        component={WaitHostScreen}
         options={{ headerTitle: '' }}
       />
     </Stack.Navigator>

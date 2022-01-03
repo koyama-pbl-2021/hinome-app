@@ -18,7 +18,7 @@ import { WalkthroughModal } from '../components/WalkthroughModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
 import { CountContext } from '../contexts/CountContext';
-import { UserContext } from '../contexts/UserContext';
+import { IsSingleContext } from '../contexts/IsSingleContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* types */
 import { RootStackParamList } from '../types/navigation';
@@ -31,7 +31,7 @@ type Props = {
 };
 
 export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
-  const { user } = useContext(UserContext);
+  const { setIsSingle } = useContext(IsSingleContext);
   const { album, setAlbum } = useContext(AlbumContext);
   const { count, setCount } = useContext(CountContext);
   const [visibleFinish, setVisibleFinish] = useState<boolean>(false);
@@ -45,10 +45,12 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   }, [isFocused]);
 
   const onSingleStart = async () => {
+    setIsSingle(true);
     navigation.navigate('TimeSelect');
   };
 
   const onMultipleStart = async () => {
+    setIsSingle(false);
     navigation.navigate('MultipleStart');
   };
 
