@@ -9,4 +9,5 @@ export type RootStackParamList = {
   Hinome: undefined;
   TimeSelect: undefined;
   HinomeStart: { hour: string };
+  MultipleStart: undefined;
 };

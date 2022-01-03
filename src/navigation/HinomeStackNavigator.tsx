@@ -7,6 +7,7 @@ import { HelpButton } from '../components/HelpButton';
 import { HinomeScreen } from '../screens/HinomeScreen';
 import { TimeSelectScreen } from '../screens/TimeSelectScreen';
 import { HinomeStartScreen } from '../screens/HinomeStartScreen';
+import { MultipleStartScreen } from '../screens/MultipleStartScreen';
 /* types */
 import { RootStackParamList } from '../types/navigation';
 
@@ -28,6 +29,11 @@ export const HinomeStackNavigator: React.FC = () => {
       <Stack.Screen
         name="Hinome"
         component={HinomeScreen}
+        options={{ headerTitle: '' }}
+      />
+      <Stack.Screen
+        name="MultipleStart"
+        component={MultipleStartScreen}
         options={{ headerTitle: '' }}
       />
       <Stack.Screen

@@ -48,7 +48,9 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     navigation.navigate('TimeSelect');
   };
 
-  const onMultipleStart = async () => {};
+  const onMultipleStart = async () => {
+    navigation.navigate('MultipleStart');
+  };
 
   const onStop = async () => {
     setAlbum(null);
