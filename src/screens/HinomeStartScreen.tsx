@@ -166,7 +166,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
   const dismissStartModal = async () => {
     await checkLeftNotificatonCountAsync();
     setVisibleStart(false);
-    navigation.goBack();
+    navigation.popToTop();
   };
 
   const checkLeftNotificatonCountAsync = async () => {
