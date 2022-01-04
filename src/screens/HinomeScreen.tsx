@@ -44,14 +44,14 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     checkLeftNotificatonCountAsync();
   }, [isFocused]);
 
-  const onSingleStart = async () => {
+  const onSingle = async () => {
     setIsSingle(true);
     navigation.navigate('TimeSelect');
   };
 
-  const onMultipleStart = async () => {
+  const onMultiple = async () => {
     setIsSingle(false);
-    navigation.navigate('MultipleStart');
+    navigation.navigate('Multiple');
   };
 
   const onStop = async () => {
@@ -115,16 +115,10 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
         />
         {!album ? (
           <View style={styles.startContainer}>
-            <TouchableOpacity
-              onPress={onSingleStart}
-              style={styles.startButton}
-            >
+            <TouchableOpacity onPress={onSingle} style={styles.startButton}>
               <Text style={styles.startButtonText}>ひとりで</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              onPress={onMultipleStart}
-              style={styles.startButton}
-            >
+            <TouchableOpacity onPress={onMultiple} style={styles.startButton}>
               <Text style={styles.startButtonText}>みんなで</Text>
             </TouchableOpacity>
           </View>

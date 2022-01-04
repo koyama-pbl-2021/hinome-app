@@ -157,8 +157,9 @@ export const HinomeStartScreen: React.FC<Props> = ({
     setVisibleStart(true);
   };
 
-  const onBack = () => {
-    navigation.pop();
+  const onMultipleStart = async () => {
+    // グループアルバム作成処理の追加
+    navigation.navigate('MultipleStart', { hour });
   };
 
   const dismissWalkthroughModal = async () => {
@@ -211,7 +212,10 @@ export const HinomeStartScreen: React.FC<Props> = ({
             <Text style={styles.startText}>
               {hour}時間の間に撮影タイミングを{'\n'}10回通知します
             </Text>
-            <TouchableOpacity onPress={onStart} style={styles.startButton}>
+            <TouchableOpacity
+              onPress={onMultipleStart}
+              style={styles.startButton}
+            >
               <Text style={styles.startButtonText}>アルバム作成</Text>
             </TouchableOpacity>
           </View>

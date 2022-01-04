@@ -9,7 +9,8 @@ export type RootStackParamList = {
   Hinome: undefined;
   TimeSelect: undefined;
   HinomeStart: { hour: string };
-  MultipleStart: undefined;
+  Multiple: undefined;
+  MultipleStart: { hour: string };
   HostInput: undefined;
   JoinInput: undefined;
   WaitHost: undefined;
