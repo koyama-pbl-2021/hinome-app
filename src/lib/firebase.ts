@@ -182,6 +182,10 @@ export const createPhotoRef = async (albumId: string, userId: string) => {
     .doc();
 };
 
+export const createGroupRef = async () => {
+  return await firebase.firestore().collection('groups').doc();
+};
+
 export const createNotificationRef = async (
   albumId: string,
   userId: string

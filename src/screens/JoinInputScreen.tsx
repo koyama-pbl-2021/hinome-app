@@ -58,8 +58,14 @@ export const JoinInputScreen: React.FC<Props> = ({ navigation }: Props) => {
           dismissModal={dismissWalkthroughModal}
         />
         <View style={styles.startContainer}>
-          <TextInput style={styles.nameInput}></TextInput>
-          <TextInput style={styles.idInput}></TextInput>
+          <TextInput
+            style={styles.nameInput}
+            placeholder="名前を入力してください"
+          ></TextInput>
+          <TextInput
+            style={styles.idInput}
+            placeholder="アルバムIDを入力してください"
+          ></TextInput>
           <TouchableOpacity onPress={onNext} style={styles.nextButton}>
             <Text style={styles.nextButtonText}>参加</Text>
           </TouchableOpacity>
@@ -82,12 +88,10 @@ const styles = StyleSheet.create({
   nameInput: {
     backgroundColor: 'white',
     borderRadius: 0,
-    shadowColor: 'rgba(0, 0, 0, 00.20)',
-    shadowRadius: 25,
-    shadowOpacity: 1,
     justifyContent: 'center',
-    padding: 0,
+    padding: 20,
     height: 60,
+    marginTop: 50,
     marginLeft: 50,
     marginRight: 50,
     marginBottom: 20,
@@ -95,11 +99,8 @@ const styles = StyleSheet.create({
   idInput: {
     backgroundColor: 'white',
     borderRadius: 0,
-    shadowColor: 'rgba(0, 0, 0, 00.20)',
-    shadowRadius: 25,
-    shadowOpacity: 1,
     justifyContent: 'center',
-    padding: 0,
+    padding: 20,
     height: 60,
     marginLeft: 50,
     marginRight: 50,
