@@ -80,6 +80,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     await Notifications.scheduleNotificationAsync({
       content: {
         body: 'さあ撮りましょう！タッチしてください',
+        sound: true,
       },
       trigger: date,
     });
@@ -144,7 +145,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     } catch (e) {
       console.log(e);
     }
-    const notifyCount = 6;
+    const notifyCount = 10;
     const offset = 120;
     const notifyAts = createNotifyAts(startAt, endAt, notifyCount, offset);
     await saveNotifications(id, user.id, notifyAts);
