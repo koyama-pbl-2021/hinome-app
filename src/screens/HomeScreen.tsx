@@ -101,6 +101,8 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     if (notification) {
       setVisibleCamera(true);
       setCurrentNotification(notification);
+    } else {
+      setVisibleCamera(false);
     }
   };
 
