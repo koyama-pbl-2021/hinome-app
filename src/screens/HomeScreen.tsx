@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import {
+  AppState,
   StyleSheet,
   SafeAreaView,
   FlatList,
@@ -65,21 +66,45 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   }, []);
 
   useEffect(() => {
+    AppState.addEventListener('change', handleAppStateChange);
+
+    return () => {
+      AppState.removeEventListener('change', handleAppStateChange);
+    };
+  }, []);
+
+  useEffect(() => {
     // 日の目が開始状態であれば通知情報をpull
     if (album) {
-      const f = async () => {
-        const notifications = await getNotifications(album.id, user.id);
-        const notification = getCurrentNotification(notifications, 3);
-        if (notification) {
-          setVisibleCamera(true);
-          setCurrentNotification(notification);
-        }
-      };
-      f();
+      activeCameraButton(album);
     } else {
       setVisibleCamera(false);
     }
   }, [isFocused]);
+
+  const handleAppStateChange = (nextAppState: any) => {
+    // foregroundになったとき
+    if (nextAppState === 'active') {
+      if (album) {
+        activeCameraButton(album);
+      } else {
+        setVisibleCamera(false);
+      }
+    }
+  };
+
+  const activeCameraButton = async (album: Album) => {
+    const notifications = await getNotifications(album.id, user.id);
+    // 直近3分の通知があった場合notificationに値が入る
+    const notification = getCurrentNotification(notifications, 3);
+    // 直近3分の通知があった場合、カメラボタンを有効化する
+    if (notification) {
+      setVisibleCamera(true);
+      setCurrentNotification(notification);
+    } else {
+      setVisibleCamera(false);
+    }
+  };
 
   const getFirebaseItems = async () => {
     const albums = await getAlbums(user.id);
