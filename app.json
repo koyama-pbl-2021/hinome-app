@@ -5,7 +5,7 @@
     "owner": "koyama-pbl-2021",
     "slug": "HinomeCamera",
     "privacy": "unlisted",
-    "version": "0.1.11",
+    "version": "0.1.12",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "splash": {
@@ -20,7 +20,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "koyama-pbl-2021.HinomeCamera",
-      "buildNumber": "0.1.11",
+      "buildNumber": "0.1.12",
       "infoPlist": {
         "NSCameraUsageDescription": "写真をアップロードするためにカメラを使用します",
         "NSPhotoLibraryUsageDescription": "普段カメラを使用しない時間を分析するためにフォトライブラリを使用します"
@@ -28,7 +28,7 @@
     },
     "android": {
       "package": "koyama_pbl_2021.HinomeCamera",
-      "versionCode": 3,
+      "versionCode": 4,
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
