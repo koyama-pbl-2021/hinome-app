@@ -32,6 +32,7 @@ import {
   getAlbums,
   getAlbumRef,
   getNotifications,
+  getUserRef,
 } from '../lib/firebase';
 /* types */
 import { Album } from '../types/album';
@@ -62,7 +63,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     // 日の目開始情報
     getAlbumFromLocalStorage();
     // Walkthroughモーダル
-    getWalkthroughFromLocalStorage();
+    setWalkthroughModal();
   }, []);
 
   useEffect(() => {
@@ -145,26 +146,18 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   };
 
   // Home画面のみ実装
-  const getWalkthroughFromLocalStorage = async () => {
-    try {
-      const invisible = await AsyncStorage.getItem('@invisibleWalkthrough');
-      // AsyncStorageはstringのみしか入れられない
-      if (!invisible) {
-        setVisibleWalkthrough(true);
-      }
-    } catch (e) {
-      console.log(e);
+  const setWalkthroughModal = async () => {
+    if (user.isFirst) {
+      setVisibleWalkthrough(true);
     }
   };
 
   const dismissWalkthroughModal = async () => {
     setVisibleWalkthrough(false);
-    // 初回起動はHome画面なのでAsyncStorageへ格納
-    try {
-      await AsyncStorage.setItem('@invisibleWalkthrough', 'true');
-    } catch (e) {
-      console.log(e);
-    }
+    const userRef = await getUserRef(user.id);
+    await userRef.update({
+      isFirst: false,
+    });
   };
 
   const onPressAlbum = (currentAlbum: Album) => {
