@@ -63,35 +63,37 @@ export const CameraScreen: React.FC<Props> = ({ navigation, route }: Props) => {
   };
 
   const snap = async () => {
-    if (cameraRef) {
-      setLoading(true);
-      // 現状albumがnullになる場合がある。通知からであればnullになることない
-      const photoDocRef = await createPhotoRef(album.id, user.id);
-      const notificationRef = await getNotification(
-        album.id,
-        user.id,
-        currentNotification.id
-      );
-      const { uri } = await cameraRef.current.takePictureAsync();
-      const ext = getExetention(uri);
-      const storagePath = `users/${user.id}/${album.id}/${photoDocRef.id}.${ext}`;
-      const downloadUrl = await upLoadImg(uri, storagePath);
-      const photo = {
-        id: photoDocRef.id,
-        place: '',
-        imageUrl: downloadUrl,
-        createdAt: firebase.firestore.Timestamp.now(),
-      } as Photo;
-      await photoDocRef.set(photo);
-      await updateAlbum(user.id, album.id, downloadUrl);
-      // 即時更新のため
-      album.imageUrl = downloadUrl;
-      setAlbum(album);
-      // 撮影済みにupdate
-      notificationRef.update({ isTaken: true });
-      setVisibleCamera(false);
-      setLoading(false);
-      navigation.pop();
+    if (!loading) {
+      if (cameraRef) {
+        setLoading(true);
+        // 現状albumがnullになる場合がある。通知からであればnullになることない
+        const photoDocRef = await createPhotoRef(album.id, user.id);
+        const notificationRef = await getNotification(
+          album.id,
+          user.id,
+          currentNotification.id
+        );
+        const { uri } = await cameraRef.current.takePictureAsync();
+        const ext = getExetention(uri);
+        const storagePath = `users/${user.id}/${album.id}/${photoDocRef.id}.${ext}`;
+        const downloadUrl = await upLoadImg(uri, storagePath);
+        const photo = {
+          id: photoDocRef.id,
+          place: '',
+          imageUrl: downloadUrl,
+          createdAt: firebase.firestore.Timestamp.now(),
+        } as Photo;
+        await photoDocRef.set(photo);
+        await updateAlbum(user.id, album.id, downloadUrl);
+        // 即時更新のため
+        album.imageUrl = downloadUrl;
+        setAlbum(album);
+        // 撮影済みにupdate
+        notificationRef.update({ isTaken: true });
+        setVisibleCamera(false);
+        setLoading(false);
+        navigation.pop();
+      }
     }
   };
 
