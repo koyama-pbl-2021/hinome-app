@@ -1,5 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import {
+  AppState,
   StyleSheet,
   SafeAreaView,
   FlatList,
@@ -31,6 +32,7 @@ import {
   getAlbums,
   getAlbumRef,
   getNotifications,
+  getUserRef,
 } from '../lib/firebase';
 /* types */
 import { Album } from '../types/album';
@@ -61,25 +63,49 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
     // 日の目開始情報
     getAlbumFromLocalStorage();
     // Walkthroughモーダル
-    getWalkthroughFromLocalStorage();
+    setWalkthroughModal();
+  }, []);
+
+  useEffect(() => {
+    AppState.addEventListener('change', handleAppStateChange);
+
+    return () => {
+      AppState.removeEventListener('change', handleAppStateChange);
+    };
   }, []);
 
   useEffect(() => {
     // 日の目が開始状態であれば通知情報をpull
     if (album) {
-      const f = async () => {
-        const notifications = await getNotifications(album.id, user.id);
-        const notification = getCurrentNotification(notifications, 3);
-        if (notification) {
-          setVisibleCamera(true);
-          setCurrentNotification(notification);
-        }
-      };
-      f();
+      activeCameraButton(album);
     } else {
       setVisibleCamera(false);
     }
   }, [isFocused]);
+
+  const handleAppStateChange = (nextAppState: any) => {
+    // foregroundになったとき
+    if (nextAppState === 'active') {
+      if (album) {
+        activeCameraButton(album);
+      } else {
+        setVisibleCamera(false);
+      }
+    }
+  };
+
+  const activeCameraButton = async (album: Album) => {
+    const notifications = await getNotifications(album.id, user.id);
+    // 直近3分の通知があった場合notificationに値が入る
+    const notification = getCurrentNotification(notifications, 3);
+    // 直近3分の通知があった場合、カメラボタンを有効化する
+    if (notification) {
+      setVisibleCamera(true);
+      setCurrentNotification(notification);
+    } else {
+      setVisibleCamera(false);
+    }
+  };
 
   const getFirebaseItems = async () => {
     const albums = await getAlbums(user.id);
@@ -120,26 +146,18 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   };
 
   // Home画面のみ実装
-  const getWalkthroughFromLocalStorage = async () => {
-    try {
-      const invisible = await AsyncStorage.getItem('@invisibleWalkthrough');
-      // AsyncStorageはstringのみしか入れられない
-      if (!invisible) {
-        setVisibleWalkthrough(true);
-      }
-    } catch (e) {
-      console.log(e);
+  const setWalkthroughModal = async () => {
+    if (user.isFirst) {
+      setVisibleWalkthrough(true);
     }
   };
 
   const dismissWalkthroughModal = async () => {
     setVisibleWalkthrough(false);
-    // 初回起動はHome画面なのでAsyncStorageへ格納
-    try {
-      await AsyncStorage.setItem('@invisibleWalkthrough', 'true');
-    } catch (e) {
-      console.log(e);
-    }
+    const userRef = await getUserRef(user.id);
+    await userRef.update({
+      isFirst: false,
+    });
   };
 
   const onPressAlbum = (currentAlbum: Album) => {

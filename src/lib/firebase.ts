@@ -61,6 +61,10 @@ export const signIn = async () => {
   }
 };
 
+export const getUserRef = async (userId: string) => {
+  return await firebase.firestore().collection('users').doc(userId);
+};
+
 export const logIn = async (email: string, password: string) => {
   try {
     const userCredential = await firebase
