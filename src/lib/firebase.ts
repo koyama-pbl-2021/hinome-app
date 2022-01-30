@@ -187,16 +187,19 @@ export const createPhotoRef = async (albumId: string, userId: string) => {
     .doc();
 };
 
-export const createGroup = async (userId: string, groupName: string) => {
+export const createGroup = async (
+  userId: string,
+  groupName: string,
+  groupCode: string
+) => {
   const collection = await firebase.firestore().collection('groups');
   // idを取得するため
   const id = collection.doc().id;
-  console.log(id);
   await firebase
     .firestore()
     .collection('groups')
     .doc(id)
-    .set({ name: groupName });
+    .set({ name: groupName, code: groupCode });
   // groupをusers/user/groupsにも格納
   await firebase
     .firestore()
@@ -204,11 +207,12 @@ export const createGroup = async (userId: string, groupName: string) => {
     .doc(userId)
     .collection('groups')
     .doc(id)
-    .set({ name: groupName });
+    .set({ name: groupName, code: groupCode });
   // Group型のgroupを返却
   const group = {
     id: id,
     name: groupName,
+    code: groupCode,
   } as Group;
   return group;
 };

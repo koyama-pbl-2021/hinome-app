@@ -13,7 +13,6 @@ export const getCurrentNotification = (
   for (const notification of notifications) {
     const diff = now.seconds - notification.notifyAt.seconds;
     if (0 < diff && diff < recent) {
-      console.log(notification);
       // かつ写真がまだ撮られていなければnotificationを返す
       if (notification.isTaken === false) return notification;
       // 写真が撮られていれば、nullを返す

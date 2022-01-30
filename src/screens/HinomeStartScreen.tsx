@@ -35,6 +35,8 @@ import { Album } from '../types/album';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
+/* utils */
+import { genarateGroupCode } from '../utils/groupCode';
 
 type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'HinomeStart'>;
@@ -165,9 +167,10 @@ export const HinomeStartScreen: React.FC<Props> = ({
 
   const onMultipleStart = async () => {
     // グループアルバム作成処理の追加
-    const group = await createGroup(user.id, groupName);
+    const groupCode = genarateGroupCode(6);
+    const group = await createGroup(user.id, groupName, groupCode);
     setGroup(group);
-    navigation.navigate('MultipleStart', { hour });
+    navigation.navigate('MultipleStart', { hour, groupCode });
   };
 
   const dismissWalkthroughModal = async () => {
@@ -218,7 +221,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
         ) : (
           <View style={styles.startContainer}>
             <Text style={styles.startText}>
-              {hour}a時間の間に撮影タイミングを{'\n'}10回通知します
+              {hour}時間の間に撮影タイミングを{'\n'}10回通知します
             </Text>
             <TouchableOpacity
               onPress={onMultipleStart}

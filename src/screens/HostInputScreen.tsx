@@ -44,7 +44,6 @@ export const HostInputScreen: React.FC<Props> = ({ navigation }: Props) => {
   const onNext = async (d: FormData) => {
     // constでgroupNameを定義しないと型エラーになる
     const groupName = d.groupName;
-    console.log(groupName);
     navigation.navigate('TimeSelect', { groupName });
   };
 

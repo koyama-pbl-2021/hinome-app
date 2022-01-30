@@ -10,7 +10,7 @@ export type RootStackParamList = {
   TimeSelect: { groupName: string };
   HinomeStart: { hour: string; groupName: string };
   Multiple: undefined;
-  MultipleStart: { hour: string };
+  MultipleStart: { hour: string; groupCode: string };
   HostInput: undefined;
   JoinInput: undefined;
   WaitHost: undefined;
