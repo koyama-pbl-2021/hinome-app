@@ -45,8 +45,9 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   }, [isFocused]);
 
   const onSingle = async () => {
+    const groupName = '';
     setIsSingle(true);
-    navigation.navigate('TimeSelect');
+    navigation.navigate('TimeSelect', { groupName });
   };
 
   const onMultiple = async () => {

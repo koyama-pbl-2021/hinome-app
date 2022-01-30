@@ -5,6 +5,7 @@ import env from '../../env.json';
 import { initialUser, User } from '../types/user';
 import { Album } from '../types/album';
 import { Notification } from '../types/notification';
+import { Group } from '../types/group';
 
 const firebaseConfig = {
   apiKey: env.FIREBASE_API_KEY,
@@ -186,8 +187,30 @@ export const createPhotoRef = async (albumId: string, userId: string) => {
     .doc();
 };
 
-export const createGroupRef = async () => {
-  return await firebase.firestore().collection('groups').doc();
+export const createGroup = async (userId: string, groupName: string) => {
+  const collection = await firebase.firestore().collection('groups');
+  // idを取得するため
+  const id = collection.doc().id;
+  console.log(id);
+  await firebase
+    .firestore()
+    .collection('groups')
+    .doc(id)
+    .set({ name: groupName });
+  // groupをusers/user/groupsにも格納
+  await firebase
+    .firestore()
+    .collection('users')
+    .doc(userId)
+    .collection('groups')
+    .doc(id)
+    .set({ name: groupName });
+  // Group型のgroupを返却
+  const group = {
+    id: id,
+    name: groupName,
+  } as Group;
+  return group;
 };
 
 export const createNotificationRef = async (

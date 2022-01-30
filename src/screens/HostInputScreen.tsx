@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useForm, Controller } from 'react-hook-form';
 /* components */
 import { WalkthroughModal } from '../components/WalkthroughModal';
 /* contexts */
@@ -23,14 +24,28 @@ type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'HostInput'>;
 };
 
+type FormData = {
+  groupName: string;
+};
+
 export const HostInputScreen: React.FC<Props> = ({ navigation }: Props) => {
   const { user } = useContext(UserContext);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
+  const [groupName, setGroupName] = useState<string>('');
+  // for validation
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
-  const onNext = async () => {
-    navigation.navigate('TimeSelect');
+  const onNext = async (d: FormData) => {
+    // constでgroupNameを定義しないと型エラーになる
+    const groupName = d.groupName;
+    console.log(groupName);
+    navigation.navigate('TimeSelect', { groupName });
   };
 
   const dismissWalkthroughModal = async () => {
@@ -58,11 +73,37 @@ export const HostInputScreen: React.FC<Props> = ({ navigation }: Props) => {
           dismissModal={dismissWalkthroughModal}
         />
         <View style={styles.startContainer}>
-          <TextInput
-            style={styles.nameInput}
-            placeholder="名前を入力してください"
-          ></TextInput>
-          <TouchableOpacity onPress={onNext} style={styles.nextButton}>
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+              minLength: 3,
+              maxLength: 128,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.groupNameInput}
+                value={value}
+                onChangeText={(value) => {
+                  onChange(value);
+                }}
+                onBlur={onBlur}
+                placeholder="アルバム名を入力してください"
+              />
+            )}
+            name="groupName"
+            defaultValue=""
+          />
+          {errors.groupName && errors.groupName.type === 'required' && (
+            <Text style={styles.errorMessage}>必須項目です</Text>
+          )}
+          {errors.groupName && errors.groupName.type === 'minLength' && (
+            <Text style={styles.errorMessage}>3文字以上にしてください</Text>
+          )}
+          <TouchableOpacity
+            onPress={handleSubmit(onNext)}
+            style={styles.nextButton}
+          >
             <Text style={styles.nextButtonText}>次へ</Text>
           </TouchableOpacity>
         </View>
@@ -81,7 +122,7 @@ const styles = StyleSheet.create({
   settingContainer: {
     top: '50%',
   },
-  nameInput: {
+  groupNameInput: {
     backgroundColor: 'white',
     borderRadius: 0,
     justifyContent: 'center',
@@ -115,5 +156,11 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  errorMessage: {
+    fontSize: 15,
+    color: 'white',
+    textAlign: 'center',
+    marginTop: 5,
   },
 });

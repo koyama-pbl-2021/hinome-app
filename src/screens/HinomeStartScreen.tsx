@@ -13,8 +13,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import firebase from 'firebase';
 /* lib */
-import { createAlbumRef } from '../lib/firebase';
-import { saveNotifications } from '../lib/firebase';
+import {
+  createAlbumRef,
+  saveNotifications,
+  createGroup,
+} from '../lib/firebase';
 /* components */
 import { Loading } from '../components/Loading';
 import { WalkthroughModal } from '../components/WalkthroughModal';
@@ -24,6 +27,7 @@ import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { CountContext } from '../contexts/CountContext';
 import { UserContext } from '../contexts/UserContext';
+import { GroupContext } from '../contexts/GroupContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 import { IsSingleContext } from '../contexts/IsSingleContext';
 /* types */
@@ -50,12 +54,13 @@ export const HinomeStartScreen: React.FC<Props> = ({
   navigation,
   route,
 }: Props) => {
-  const { hour } = route.params;
+  const { hour, groupName } = route.params;
   const [loading, setLoading] = useState<boolean>(false);
   const [visibleStart, setVisibleStart] = useState<boolean>(false);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { setAlbum } = useContext(AlbumContext);
   const { user } = useContext(UserContext);
+  const { setGroup } = useContext(GroupContext);
   const { setCount } = useContext(CountContext);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
@@ -160,6 +165,8 @@ export const HinomeStartScreen: React.FC<Props> = ({
 
   const onMultipleStart = async () => {
     // グループアルバム作成処理の追加
+    const group = await createGroup(user.id, groupName);
+    setGroup(group);
     navigation.navigate('MultipleStart', { hour });
   };
 
@@ -211,7 +218,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
         ) : (
           <View style={styles.startContainer}>
             <Text style={styles.startText}>
-              {hour}時間の間に撮影タイミングを{'\n'}10回通知します
+              {hour}a時間の間に撮影タイミングを{'\n'}10回通知します
             </Text>
             <TouchableOpacity
               onPress={onMultipleStart}

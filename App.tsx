@@ -5,6 +5,7 @@ import { AppNavigator } from './src/navigation/AppNavigator';
 /* contexts */
 import { AlbumContext } from './src/contexts/AlbumContext';
 import { UserContext } from './src/contexts/UserContext';
+import { GroupContext } from './src/contexts/GroupContext';
 import { AlbumsContext } from './src/contexts/AlbumsContext';
 import { CountContext } from './src/contexts/CountContext';
 import { VisibleWalkthroughContext } from './src/contexts/VisibleWalkthroughContext';

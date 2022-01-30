@@ -76,6 +76,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 
   useEffect(() => {
     // 日の目が開始状態であれば通知情報をpull
+    console.log(user.id);
     if (album) {
       activeCameraButton(album);
     } else {
