@@ -25,6 +25,7 @@ type Props = {
 };
 
 type FormData = {
+  userName: string;
   groupName: string;
 };
 
@@ -44,7 +45,8 @@ export const HostInputScreen: React.FC<Props> = ({ navigation }: Props) => {
   const onNext = async (d: FormData) => {
     // constでgroupNameを定義しないと型エラーになる
     const groupName = d.groupName;
-    navigation.navigate('TimeSelect', { groupName });
+    const userName = d.userName;
+    navigation.navigate('TimeSelect', { userName, groupName });
   };
 
   const dismissWalkthroughModal = async () => {
@@ -72,6 +74,33 @@ export const HostInputScreen: React.FC<Props> = ({ navigation }: Props) => {
           dismissModal={dismissWalkthroughModal}
         />
         <View style={styles.startContainer}>
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+              minLength: 3,
+              maxLength: 128,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.userNameInput}
+                value={value}
+                onChangeText={(value) => {
+                  onChange(value);
+                }}
+                onBlur={onBlur}
+                placeholder="ユーザ名を入力してください"
+              />
+            )}
+            name="userName"
+            defaultValue=""
+          />
+          {errors.userName && errors.userName.type === 'required' && (
+            <Text style={styles.errorMessage}>必須項目です</Text>
+          )}
+          {errors.userName && errors.userName.type === 'minLength' && (
+            <Text style={styles.errorMessage}>3文字以上にしてください</Text>
+          )}
           <Controller
             control={control}
             rules={{
@@ -121,13 +150,24 @@ const styles = StyleSheet.create({
   settingContainer: {
     top: '50%',
   },
-  groupNameInput: {
+  userNameInput: {
     backgroundColor: 'white',
-    borderRadius: 0,
+    borderRadius: 20,
     justifyContent: 'center',
     padding: 20,
     height: 60,
     marginTop: 50,
+    marginLeft: 50,
+    marginRight: 50,
+    marginBottom: 20,
+  },
+  groupNameInput: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    justifyContent: 'center',
+    padding: 20,
+    height: 60,
+    marginTop: 20,
     marginLeft: 50,
     marginRight: 50,
     marginBottom: 20,
@@ -141,6 +181,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0,
     height: 60,
+    marginTop: 20,
     marginLeft: 50,
     marginRight: 50,
     marginBottom: 20,
@@ -160,6 +201,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: 'white',
     textAlign: 'center',
-    marginTop: 5,
+    marginTop: 0,
+    marginBottom: 20,
   },
 });

@@ -26,14 +26,14 @@ export const TimeSelectScreen: React.FC<Props> = ({
   navigation,
   route,
 }: Props) => {
-  const { groupName } = route.params;
+  const { userName, groupName } = route.params;
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
   const [hours] = useState<string[]>(['1', '2', '4', '8', '12', '24']);
 
   const onPressHour = (hour: string) => {
-    navigation.navigate('HinomeStart', { hour, groupName });
+    navigation.navigate('HinomeStart', { hour, userName, groupName });
   };
 
   const dismissWalkthroughModal = async () => {

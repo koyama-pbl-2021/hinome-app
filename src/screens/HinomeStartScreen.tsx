@@ -17,6 +17,7 @@ import {
   createAlbumRef,
   saveNotifications,
   createGroup,
+  addGroupUser,
 } from '../lib/firebase';
 /* components */
 import { Loading } from '../components/Loading';
@@ -56,7 +57,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
   navigation,
   route,
 }: Props) => {
-  const { hour, groupName } = route.params;
+  const { hour, userName, groupName } = route.params;
   const [loading, setLoading] = useState<boolean>(false);
   const [visibleStart, setVisibleStart] = useState<boolean>(false);
   const { albums, setAlbums } = useContext(AlbumsContext);
@@ -170,6 +171,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     const groupCode = genarateGroupCode(6);
     const group = await createGroup(user.id, groupName, groupCode);
     setGroup(group);
+    addGroupUser(group.id, userName);
     navigation.navigate('MultipleStart', { hour, groupCode });
   };
 

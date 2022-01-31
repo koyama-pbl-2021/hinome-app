@@ -217,6 +217,16 @@ export const createGroup = async (
   return group;
 };
 
+export const addGroupUser = async (groupId: string, userName: string) => {
+  await firebase
+    .firestore()
+    .collection('groups')
+    .doc(groupId)
+    .collection('users')
+    .doc()
+    .set({ name: userName });
+};
+
 export const createNotificationRef = async (
   albumId: string,
   userId: string

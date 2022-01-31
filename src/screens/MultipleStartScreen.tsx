@@ -49,7 +49,7 @@ export const MultipleStartScreen: React.FC<Props> = ({
   navigation,
   route,
 }: Props) => {
-  const { hour } = route.params;
+  const { hour, groupCode } = route.params;
   const [loading, setLoading] = useState<boolean>(false);
   const [visibleStart, setVisibleStart] = useState<boolean>(false);
   const { albums, setAlbums } = useContext(AlbumsContext);
@@ -192,9 +192,12 @@ export const MultipleStartScreen: React.FC<Props> = ({
         />
         <StartModal visible={visibleStart} dismissModal={dismissStartModal} />
         <View style={styles.startContainer}>
-          <Text style={styles.startText}>
-            {hour}時間の間に撮影タイミングを{'\n'}10回通知します
-          </Text>
+          <Text style={styles.codeText}>{groupCode}</Text>
+          <Text style={styles.startText}>コードをシェアしてください</Text>
+          <Text style={styles.startText}>メンバー</Text>
+          <Text style={styles.startText}>hoge</Text>
+          <Text style={styles.startText}>○○</Text>
+          <Text style={styles.startText}>■■</Text>
           <TouchableOpacity onPress={onStart} style={styles.startButton}>
             <Text style={styles.startButtonText}>スタート</Text>
           </TouchableOpacity>
@@ -212,16 +215,27 @@ const styles = StyleSheet.create({
   startContainer: {
     marginTop: 40,
   },
+  codeText: {
+    color: 'black',
+    fontSize: 40,
+    fontStyle: 'normal',
+    fontWeight: '900',
+    fontFamily: 'MPLUS1p_400Regular',
+    textAlign: 'center',
+    backgroundColor: 'transparent',
+    marginTop: 50,
+    marginBottom: 20,
+  },
   startText: {
     color: 'white',
-    fontSize: 30,
+    fontSize: 25,
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontFamily: 'MPLUS1p_400Regular',
     textAlign: 'center',
     backgroundColor: 'transparent',
-    marginTop: 50,
-    marginBottom: 50,
+    marginTop: 20,
+    marginBottom: 20,
   },
   startButton: {
     backgroundColor: 'white',

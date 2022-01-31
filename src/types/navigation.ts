@@ -7,8 +7,8 @@ export type RootStackParamList = {
   Album: { currentAlbum: Album };
   Camera: { currentNotification: Notification };
   Hinome: undefined;
-  TimeSelect: { groupName: string };
-  HinomeStart: { hour: string; groupName: string };
+  TimeSelect: { userName: string; groupName: string };
+  HinomeStart: { hour: string; userName: string; groupName: string };
   Multiple: undefined;
   MultipleStart: { hour: string; groupCode: string };
   HostInput: undefined;
