@@ -1,5 +1,6 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
+  FlatList,
   StyleSheet,
   Text,
   SafeAreaView,
@@ -8,10 +9,15 @@ import {
   View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as Notifications from 'expo-notifications';
+import firebase from 'firebase';
+/* lib */
+import { getGroupUserCollection } from '../lib/firebase';
 /* components */
 import { WalkthroughModal } from '../components/WalkthroughModal';
 /* contexts */
 import { UserContext } from '../contexts/UserContext';
+import { GroupContext } from '../contexts/GroupContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* types */
 import { RootStackParamList } from '../types/navigation';
@@ -23,17 +29,39 @@ type Props = {
 
 export const WaitHostScreen: React.FC<Props> = ({ navigation }: Props) => {
   const { user } = useContext(UserContext);
+  const { group } = useContext(GroupContext);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
+  const [groupUsers, setGroupUsers] = useState<
+    firebase.firestore.DocumentData[]
+  >([]);
 
-  const onNext = async () => {
-    navigation.navigate('TimeSelect');
+  // get permission
+  useEffect(() => {
+    requestPermissionsAsync();
+    const unsubscribe = getGroupUserCollection(group.id).onSnapshot((snap) => {
+      const users = snap.docs.map((doc) => doc.data());
+      setGroupUsers(users);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const requestPermissionsAsync = async () => {
+    const { granted } = await Notifications.getPermissionsAsync();
+    if (granted) {
+      return;
+    }
+    await Notifications.requestPermissionsAsync();
   };
 
   const dismissWalkthroughModal = async () => {
     setVisibleWalkthrough(false);
   };
+
+  const renderItem = ({ item }) => (
+    <Text style={styles.startText}>{item.name}</Text>
+  );
 
   // アルバムオブジェクトの有無で日の目画面を変更する
   return (
@@ -57,6 +85,12 @@ export const WaitHostScreen: React.FC<Props> = ({ navigation }: Props) => {
         />
         <View style={styles.startContainer}>
           <Text style={styles.nextButtonText}>ホストの開始待ち</Text>
+          <Text style={styles.startText}>メンバー</Text>
+          <FlatList
+            data={groupUsers}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+          />
         </View>
       </SafeAreaView>
     </LinearGradient>
@@ -73,43 +107,15 @@ const styles = StyleSheet.create({
   settingContainer: {
     top: '50%',
   },
-  nameInput: {
-    backgroundColor: 'white',
-    borderRadius: 0,
-    shadowColor: 'rgba(0, 0, 0, 00.20)',
-    shadowRadius: 25,
-    shadowOpacity: 1,
-    justifyContent: 'center',
-    padding: 0,
-    height: 60,
-    marginLeft: 50,
-    marginRight: 50,
-    marginBottom: 20,
-  },
-  idInput: {
-    backgroundColor: 'white',
-    borderRadius: 0,
-    shadowColor: 'rgba(0, 0, 0, 00.20)',
-    shadowRadius: 25,
-    shadowOpacity: 1,
-    justifyContent: 'center',
-    padding: 0,
-    height: 60,
-    marginLeft: 50,
-    marginRight: 50,
-    marginBottom: 20,
-  },
-  nextButton: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    shadowColor: 'rgba(0, 0, 0, 00.20)',
-    shadowRadius: 25,
-    shadowOpacity: 1,
-    justifyContent: 'center',
-    padding: 0,
-    height: 60,
-    marginLeft: 50,
-    marginRight: 50,
+  startText: {
+    color: 'white',
+    fontSize: 25,
+    fontStyle: 'normal',
+    fontWeight: 'normal',
+    fontFamily: 'MPLUS1p_400Regular',
+    textAlign: 'center',
+    backgroundColor: 'transparent',
+    marginTop: 20,
     marginBottom: 20,
   },
   nextButtonText: {

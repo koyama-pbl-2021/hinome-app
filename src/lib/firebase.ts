@@ -237,6 +237,38 @@ export const getGroupUserCollection = (
     .collection('users');
 };
 
+export const getGroupByCode = (groupCode: string) => {
+  return firebase
+    .firestore()
+    .collection('groups')
+    .where('code', '==', groupCode)
+    .limit(1)
+    .get();
+};
+
+export const addGroupToUserCollection = (
+  userId: string,
+  groupId: string,
+  groupName: string,
+  groupCode: string
+) => {
+  // groupをusers/user/groupsにも格納
+  firebase
+    .firestore()
+    .collection('users')
+    .doc(userId)
+    .collection('groups')
+    .doc(groupId)
+    .set({ name: groupName, code: groupCode });
+  // Group型のgroupを返却
+  const group = {
+    id: groupId,
+    name: groupName,
+    code: groupCode,
+  } as Group;
+  return group;
+};
+
 export const createNotificationRef = async (
   albumId: string,
   userId: string

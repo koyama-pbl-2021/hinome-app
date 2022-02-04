@@ -10,10 +10,18 @@ import {
   View,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useForm, Controller } from 'react-hook-form';
+/* lib */
+import {
+  getGroupByCode,
+  addGroupUser,
+  addGroupToUserCollection,
+} from '../lib/firebase';
 /* components */
 import { WalkthroughModal } from '../components/WalkthroughModal';
 /* contexts */
 import { UserContext } from '../contexts/UserContext';
+import { GroupContext } from '../contexts/GroupContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* types */
 import { RootStackParamList } from '../types/navigation';
@@ -23,13 +31,40 @@ type Props = {
   navigation: StackNavigationProp<RootStackParamList, 'JoinInput'>;
 };
 
+type FormData = {
+  userName: string;
+  groupCode: string;
+};
+
 export const JoinInputScreen: React.FC<Props> = ({ navigation }: Props) => {
   const { user } = useContext(UserContext);
+  const { setGroup } = useContext(GroupContext);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
+  // for validation
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>();
 
-  const onNext = async () => {
+  const onNext = async (d: FormData) => {
+    const group = getGroupByCode(d.groupCode);
+    group.then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        addGroupUser(doc.id, d.userName);
+        const data = doc.data();
+        const group = addGroupToUserCollection(
+          user.id,
+          doc.id,
+          data.code,
+          data.name
+        );
+        setGroup(group);
+        console.log(group);
+      });
+    });
     navigation.navigate('WaitHost');
   };
 
@@ -58,15 +93,64 @@ export const JoinInputScreen: React.FC<Props> = ({ navigation }: Props) => {
           dismissModal={dismissWalkthroughModal}
         />
         <View style={styles.startContainer}>
-          <TextInput
-            style={styles.nameInput}
-            placeholder="名前を入力してください"
-          ></TextInput>
-          <TextInput
-            style={styles.idInput}
-            placeholder="アルバムIDを入力してください"
-          ></TextInput>
-          <TouchableOpacity onPress={onNext} style={styles.nextButton}>
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+              minLength: 3,
+              maxLength: 128,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.userNameInput}
+                value={value}
+                onChangeText={(value) => {
+                  onChange(value);
+                }}
+                onBlur={onBlur}
+                placeholder="ユーザ名を入力してください"
+              />
+            )}
+            name="userName"
+            defaultValue=""
+          />
+          {errors.userName && errors.userName.type === 'required' && (
+            <Text style={styles.errorMessage}>必須項目です</Text>
+          )}
+          {errors.userName && errors.userName.type === 'minLength' && (
+            <Text style={styles.errorMessage}>3文字以上にしてください</Text>
+          )}
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+              minLength: 3,
+              maxLength: 128,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                style={styles.groupCodeInput}
+                value={value}
+                onChangeText={(value) => {
+                  onChange(value);
+                }}
+                onBlur={onBlur}
+                placeholder="コードを入力してください"
+              />
+            )}
+            name="groupCode"
+            defaultValue=""
+          />
+          {errors.groupCode && errors.groupCode.type === 'required' && (
+            <Text style={styles.errorMessage}>必須項目です</Text>
+          )}
+          {errors.groupCode && errors.groupCode.type === 'minLength' && (
+            <Text style={styles.errorMessage}>3文字以上にしてください</Text>
+          )}
+          <TouchableOpacity
+            onPress={handleSubmit(onNext)}
+            style={styles.nextButton}
+          >
             <Text style={styles.nextButtonText}>参加</Text>
           </TouchableOpacity>
         </View>
@@ -85,9 +169,9 @@ const styles = StyleSheet.create({
   settingContainer: {
     top: '50%',
   },
-  nameInput: {
+  userNameInput: {
     backgroundColor: 'white',
-    borderRadius: 0,
+    borderRadius: 20,
     justifyContent: 'center',
     padding: 20,
     height: 60,
@@ -96,12 +180,13 @@ const styles = StyleSheet.create({
     marginRight: 50,
     marginBottom: 20,
   },
-  idInput: {
+  groupCodeInput: {
     backgroundColor: 'white',
-    borderRadius: 0,
+    borderRadius: 20,
     justifyContent: 'center',
     padding: 20,
     height: 60,
+    marginTop: 20,
     marginLeft: 50,
     marginRight: 50,
     marginBottom: 20,
@@ -129,5 +214,12 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+  },
+  errorMessage: {
+    fontSize: 15,
+    color: 'white',
+    textAlign: 'center',
+    marginTop: 0,
+    marginBottom: 20,
   },
 });
