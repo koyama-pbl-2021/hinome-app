@@ -13,12 +13,14 @@ import { VisibleCameraContext } from './src/contexts/VisibleCameraContext';
 import { IsSingleContext } from './src/contexts/IsSingleContext';
 /* types */
 import { User } from './src/types/user';
+import { Group } from './src/types/group';
 import { Album } from './src/types/album';
 /* font */
 import { useFonts, MPLUS1p_400Regular } from '@expo-google-fonts/m-plus-1p';
 
 export default function App() {
   const [user, setUser] = useState<User>();
+  const [group, setGroup] = useState<Group>();
   const [count, setCount] = useState<number>();
   const [album, setAlbum] = useState<Album>();
   const [albums, setAlbums] = useState<Album[]>([]);
@@ -31,23 +33,25 @@ export default function App() {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
-      <AlbumsContext.Provider value={{ albums, setAlbums }}>
-        <AlbumContext.Provider value={{ album, setAlbum }}>
-          <VisibleWalkthroughContext.Provider
-            value={{ visibleWalkthrough, setVisibleWalkthrough }}
-          >
-            <VisibleCameraContext.Provider
-              value={{ visibleCamera, setVisibleCamera }}
+      <GroupContext.Provider value={{ group, setGroup }}>
+        <AlbumsContext.Provider value={{ albums, setAlbums }}>
+          <AlbumContext.Provider value={{ album, setAlbum }}>
+            <VisibleWalkthroughContext.Provider
+              value={{ visibleWalkthrough, setVisibleWalkthrough }}
             >
-              <CountContext.Provider value={{ count, setCount }}>
-                <IsSingleContext.Provider value={{ isSingle, setIsSingle }}>
-                  {!fontsLoaded ? <AppLoading /> : <AppNavigator />}
-                </IsSingleContext.Provider>
-              </CountContext.Provider>
-            </VisibleCameraContext.Provider>
-          </VisibleWalkthroughContext.Provider>
-        </AlbumContext.Provider>
-      </AlbumsContext.Provider>
+              <VisibleCameraContext.Provider
+                value={{ visibleCamera, setVisibleCamera }}
+              >
+                <CountContext.Provider value={{ count, setCount }}>
+                  <IsSingleContext.Provider value={{ isSingle, setIsSingle }}>
+                    {!fontsLoaded ? <AppLoading /> : <AppNavigator />}
+                  </IsSingleContext.Provider>
+                </CountContext.Provider>
+              </VisibleCameraContext.Provider>
+            </VisibleWalkthroughContext.Provider>
+          </AlbumContext.Provider>
+        </AlbumsContext.Provider>
+      </GroupContext.Provider>
     </UserContext.Provider>
   );
 }

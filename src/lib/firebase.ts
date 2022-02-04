@@ -227,6 +227,16 @@ export const addGroupUser = async (groupId: string, userName: string) => {
     .set({ name: userName });
 };
 
+export const getGroupUserCollection = (
+  groupId: string
+): firebase.firestore.CollectionReference<firebase.firestore.DocumentData> => {
+  return firebase
+    .firestore()
+    .collection('groups')
+    .doc(groupId)
+    .collection('users');
+};
+
 export const createNotificationRef = async (
   albumId: string,
   userId: string

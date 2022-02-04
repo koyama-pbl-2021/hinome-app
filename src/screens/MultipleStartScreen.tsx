@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
+  FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -13,8 +14,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import firebase from 'firebase';
 /* lib */
-import { createAlbumRef } from '../lib/firebase';
-import { saveNotifications } from '../lib/firebase';
+import {
+  createAlbumRef,
+  saveNotifications,
+  getGroupUserCollection,
+} from '../lib/firebase';
 /* components */
 import { Loading } from '../components/Loading';
 import { WalkthroughModal } from '../components/WalkthroughModal';
@@ -24,6 +28,7 @@ import { AlbumContext } from '../contexts/AlbumContext';
 import { AlbumsContext } from '../contexts/AlbumsContext';
 import { CountContext } from '../contexts/CountContext';
 import { UserContext } from '../contexts/UserContext';
+import { GroupContext } from '../contexts/GroupContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
 /* types */
 import { Album } from '../types/album';
@@ -52,9 +57,13 @@ export const MultipleStartScreen: React.FC<Props> = ({
   const { hour, groupCode } = route.params;
   const [loading, setLoading] = useState<boolean>(false);
   const [visibleStart, setVisibleStart] = useState<boolean>(false);
+  const [groupUsers, setGroupUsers] = useState<
+    firebase.firestore.DocumentData[]
+  >([]);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { setAlbum } = useContext(AlbumContext);
   const { user } = useContext(UserContext);
+  const { group } = useContext(GroupContext);
   const { setCount } = useContext(CountContext);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
@@ -63,6 +72,11 @@ export const MultipleStartScreen: React.FC<Props> = ({
   // get permission
   useEffect(() => {
     requestPermissionsAsync();
+    const unsubscribe = getGroupUserCollection(group.id).onSnapshot((snap) => {
+      const users = snap.docs.map((doc) => doc.data());
+      setGroupUsers(users);
+    });
+    return () => unsubscribe();
   }, []);
 
   const requestPermissionsAsync = async () => {
@@ -171,6 +185,10 @@ export const MultipleStartScreen: React.FC<Props> = ({
     setCount(notifications.length);
   };
 
+  const renderItem = ({ item }) => (
+    <Text style={styles.startText}>{item.name}</Text>
+  );
+
   return (
     <LinearGradient
       start={{
@@ -195,9 +213,11 @@ export const MultipleStartScreen: React.FC<Props> = ({
           <Text style={styles.codeText}>{groupCode}</Text>
           <Text style={styles.startText}>コードをシェアしてください</Text>
           <Text style={styles.startText}>メンバー</Text>
-          <Text style={styles.startText}>hoge</Text>
-          <Text style={styles.startText}>○○</Text>
-          <Text style={styles.startText}>■■</Text>
+          <FlatList
+            data={groupUsers}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+          />
           <TouchableOpacity onPress={onStart} style={styles.startButton}>
             <Text style={styles.startButtonText}>スタート</Text>
           </TouchableOpacity>
