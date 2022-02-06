@@ -162,6 +162,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     for (const notifyAt of notifyAts) {
       scheduleNotificationAsync(notifyAt);
     }
+    await Notifications.cancelAllScheduledNotificationsAsync();
     setLoading(false);
     setVisibleStart(true);
   };

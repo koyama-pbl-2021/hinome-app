@@ -1,4 +1,5 @@
 import { Album } from './album';
+import { Group } from './group';
 import { Notification } from './notification';
 
 export type RootStackParamList = {

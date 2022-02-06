@@ -90,19 +90,6 @@ export const logIn = async (email: string, password: string) => {
   }
 };
 
-// export const logInCheck = () => {
-//   firebase.auth().onAuthStateChanged((user) => {
-//     if (user) {
-//       return {
-//         userId: user.uid,
-//         email: user.email,
-//       } as User;
-//     } else {
-//       return null;
-//     }
-//   });
-// };
-
 export const logOut = async () => {
   try {
     await firebase.auth().signOut();
@@ -167,6 +154,24 @@ export const createAlbumRef = async (userId: string) => {
     .doc();
 };
 
+export const createGroupAlbumRef = async (groupId: string) => {
+  return await firebase
+    .firestore()
+    .collection('groups')
+    .doc(groupId)
+    .collection('albums')
+    .doc();
+};
+
+export const getGroupAlbumCollection = async (groupId: string) => {
+  return await firebase
+    .firestore()
+    .collection('groups')
+    .doc(groupId)
+    .collection('albums')
+    .get();
+};
+
 export const getAlbumRef = async (userId: string, albumId: string) => {
   return await firebase
     .firestore()
@@ -199,7 +204,7 @@ export const createGroup = async (
     .firestore()
     .collection('groups')
     .doc(id)
-    .set({ name: groupName, code: groupCode });
+    .set({ name: groupName, code: groupCode, status: 'standby' });
   // groupをusers/user/groupsにも格納
   await firebase
     .firestore()
@@ -207,7 +212,7 @@ export const createGroup = async (
     .doc(userId)
     .collection('groups')
     .doc(id)
-    .set({ name: groupName, code: groupCode });
+    .set({ name: groupName, code: groupCode, status: 'standby' });
   // Group型のgroupを返却
   const group = {
     id: id,
@@ -237,8 +242,14 @@ export const getGroupUserCollection = (
     .collection('users');
 };
 
-export const getGroupByCode = (groupCode: string) => {
-  return firebase
+export const getGroupRef = (
+  groupId: string
+): firebase.firestore.DocumentReference<firebase.firestore.DocumentData> => {
+  return firebase.firestore().collection('groups').doc(groupId);
+};
+
+export const getGroupByCode = async (groupCode: string) => {
+  return await firebase
     .firestore()
     .collection('groups')
     .where('code', '==', groupCode)
@@ -259,12 +270,13 @@ export const addGroupToUserCollection = (
     .doc(userId)
     .collection('groups')
     .doc(groupId)
-    .set({ name: groupName, code: groupCode });
+    .set({ name: groupName, code: groupCode, status: 'standby' });
   // Group型のgroupを返却
   const group = {
     id: groupId,
     name: groupName,
     code: groupCode,
+    status: 'standby',
   } as Group;
   return group;
 };

@@ -17,6 +17,7 @@ import { FinishModal } from '../components/FinishModal';
 import { WalkthroughModal } from '../components/WalkthroughModal';
 /* contexts */
 import { AlbumContext } from '../contexts/AlbumContext';
+import { GroupContext } from '../contexts/GroupContext';
 import { CountContext } from '../contexts/CountContext';
 import { IsSingleContext } from '../contexts/IsSingleContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
@@ -33,6 +34,7 @@ type Props = {
 export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
   const { setIsSingle } = useContext(IsSingleContext);
   const { album, setAlbum } = useContext(AlbumContext);
+  const { group, setGroup } = useContext(GroupContext);
   const { count, setCount } = useContext(CountContext);
   const [visibleFinish, setVisibleFinish] = useState<boolean>(false);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
@@ -42,6 +44,7 @@ export const HinomeScreen: React.FC<Props> = ({ navigation }: Props) => {
 
   useEffect(() => {
     checkLeftNotificatonCountAsync();
+    setGroup(null);
   }, [isFocused]);
 
   const onSingle = async () => {

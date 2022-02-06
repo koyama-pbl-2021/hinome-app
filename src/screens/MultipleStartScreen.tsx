@@ -15,9 +15,10 @@ import * as Notifications from 'expo-notifications';
 import firebase from 'firebase';
 /* lib */
 import {
-  createAlbumRef,
+  createGroupAlbumRef,
   saveNotifications,
   getGroupUserCollection,
+  getGroupRef,
 } from '../lib/firebase';
 /* components */
 import { Loading } from '../components/Loading';
@@ -72,11 +73,15 @@ export const MultipleStartScreen: React.FC<Props> = ({
   // get permission
   useEffect(() => {
     requestPermissionsAsync();
-    const unsubscribe = getGroupUserCollection(group.id).onSnapshot((snap) => {
-      const users = snap.docs.map((doc) => doc.data());
-      setGroupUsers(users);
-    });
-    return () => unsubscribe();
+    const userUnsubscribe = getGroupUserCollection(group.id).onSnapshot(
+      (snap) => {
+        const users = snap.docs.map((doc) => doc.data());
+        setGroupUsers(users);
+      }
+    );
+    return () => {
+      userUnsubscribe();
+    };
   }, []);
 
   const requestPermissionsAsync = async () => {
@@ -103,16 +108,16 @@ export const MultipleStartScreen: React.FC<Props> = ({
     return Math.floor(Math.random() * max);
   };
 
-  const createAlbumContext = async () => {
+  const createGroupAlbumContext = async () => {
     // create album reference
-    const albumDocRef = await createAlbumRef(user.id);
+    const albumDocRef = await createGroupAlbumRef(group.id);
     // create hinome endTime
     const dt = new Date();
     dt.setHours(dt.getHours() + Number(hour));
     const album = {
       id: albumDocRef.id,
       userId: user.id,
-      groupId: '', // 未実装なのでとりあえず空
+      groupId: group.id,
       // ベタがき・将来的になくす
       imageUrl:
         'https://firebasestorage.googleapis.com/v0/b/hinome-app-dev.appspot.com/o/public%2Fphoto.png?alt=media&token=76cbb9d2-dd1a-438b-8006-d76c5da1d186',
@@ -125,7 +130,7 @@ export const MultipleStartScreen: React.FC<Props> = ({
     // 写真をどのアルバムにいれるか、日の目開始情報として使う
     setAlbum(album);
     // ホーム画面への即時反映のため
-    setAlbums([album, ...albums]);
+    // setAlbums([album, ...albums]);
     return album;
   };
 
@@ -152,7 +157,12 @@ export const MultipleStartScreen: React.FC<Props> = ({
 
   const onStart = async () => {
     setLoading(true);
-    const { id, startAt, endAt } = await createAlbumContext();
+    // change group status
+    const groupRef = getGroupRef(group.id);
+    groupRef.update({
+      status: 'doing',
+    });
+    const { id, startAt, endAt } = await createGroupAlbumContext();
     try {
       await AsyncStorage.setItem('@albumId', id);
     } catch (e) {

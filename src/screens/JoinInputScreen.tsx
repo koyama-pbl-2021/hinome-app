@@ -38,7 +38,7 @@ type FormData = {
 
 export const JoinInputScreen: React.FC<Props> = ({ navigation }: Props) => {
   const { user } = useContext(UserContext);
-  const { setGroup } = useContext(GroupContext);
+  const { group, setGroup } = useContext(GroupContext);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
@@ -51,21 +51,23 @@ export const JoinInputScreen: React.FC<Props> = ({ navigation }: Props) => {
 
   const onNext = async (d: FormData) => {
     const group = getGroupByCode(d.groupCode);
-    group.then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        addGroupUser(doc.id, d.userName);
-        const data = doc.data();
-        const group = addGroupToUserCollection(
-          user.id,
-          doc.id,
-          data.code,
-          data.name
-        );
-        setGroup(group);
-        console.log(group);
+    group
+      .then((query) => {
+        query.forEach((doc) => {
+          addGroupUser(doc.id, d.userName);
+          const data = doc.data();
+          const group = addGroupToUserCollection(
+            user.id,
+            doc.id,
+            data.name,
+            data.code
+          );
+          setGroup(group);
+        });
+      })
+      .then(() => {
+        navigation.navigate('WaitHost');
       });
-    });
-    navigation.navigate('WaitHost');
   };
 
   const dismissWalkthroughModal = async () => {
