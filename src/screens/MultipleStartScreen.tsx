@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
+  FlatList,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -14,10 +15,10 @@ import * as Notifications from 'expo-notifications';
 import firebase from 'firebase';
 /* lib */
 import {
-  createAlbumRef,
+  createGroupAlbumRef,
   saveNotifications,
-  createGroup,
-  addGroupUser,
+  getGroupUserCollection,
+  getGroupRef,
 } from '../lib/firebase';
 /* components */
 import { Loading } from '../components/Loading';
@@ -30,18 +31,15 @@ import { CountContext } from '../contexts/CountContext';
 import { UserContext } from '../contexts/UserContext';
 import { GroupContext } from '../contexts/GroupContext';
 import { VisibleWalkthroughContext } from '../contexts/VisibleWalkthroughContext';
-import { IsSingleContext } from '../contexts/IsSingleContext';
 /* types */
 import { Album } from '../types/album';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
 import { StackNavigationProp } from '@react-navigation/stack';
-/* utils */
-import { genarateGroupCode } from '../utils/groupCode';
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParamList, 'HinomeStart'>;
-  route: RouteProp<RootStackParamList, 'HinomeStart'>;
+  navigation: StackNavigationProp<RootStackParamList, 'MultipleStart'>;
+  route: RouteProp<RootStackParamList, 'MultipleStart'>;
 };
 
 // アプリがフォアグラウンドの時に通知を受信した時の振る舞いを設定
@@ -53,26 +51,37 @@ Notifications.setNotificationHandler({
   }),
 });
 
-export const HinomeStartScreen: React.FC<Props> = ({
+export const MultipleStartScreen: React.FC<Props> = ({
   navigation,
   route,
 }: Props) => {
-  const { hour, userName, groupName } = route.params;
+  const { hour, groupCode } = route.params;
   const [loading, setLoading] = useState<boolean>(false);
   const [visibleStart, setVisibleStart] = useState<boolean>(false);
+  const [groupUsers, setGroupUsers] = useState<
+    firebase.firestore.DocumentData[]
+  >([]);
   const { albums, setAlbums } = useContext(AlbumsContext);
   const { setAlbum } = useContext(AlbumContext);
   const { user } = useContext(UserContext);
-  const { setGroup } = useContext(GroupContext);
+  const { group } = useContext(GroupContext);
   const { setCount } = useContext(CountContext);
   const { visibleWalkthrough, setVisibleWalkthrough } = useContext(
     VisibleWalkthroughContext
   );
-  const { isSingle } = useContext(IsSingleContext);
 
   // get permission
   useEffect(() => {
     requestPermissionsAsync();
+    const userUnsubscribe = getGroupUserCollection(group.id).onSnapshot(
+      (snap) => {
+        const users = snap.docs.map((doc) => doc.data());
+        setGroupUsers(users);
+      }
+    );
+    return () => {
+      userUnsubscribe();
+    };
   }, []);
 
   const requestPermissionsAsync = async () => {
@@ -90,7 +99,6 @@ export const HinomeStartScreen: React.FC<Props> = ({
     await Notifications.scheduleNotificationAsync({
       content: {
         body: 'さあ撮りましょう！タッチしてください',
-        sound: true,
       },
       trigger: date,
     });
@@ -100,16 +108,16 @@ export const HinomeStartScreen: React.FC<Props> = ({
     return Math.floor(Math.random() * max);
   };
 
-  const createAlbumContext = async () => {
+  const createGroupAlbumContext = async () => {
     // create album reference
-    const albumDocRef = await createAlbumRef(user.id);
+    const albumDocRef = await createGroupAlbumRef(group.id);
     // create hinome endTime
     const dt = new Date();
     dt.setHours(dt.getHours() + Number(hour));
     const album = {
       id: albumDocRef.id,
       userId: user.id,
-      groupId: '', // 未実装なのでとりあえず空
+      groupId: group.id,
       // ベタがき・将来的になくす
       imageUrl:
         'https://firebasestorage.googleapis.com/v0/b/hinome-app-dev.appspot.com/o/public%2Fphoto.png?alt=media&token=76cbb9d2-dd1a-438b-8006-d76c5da1d186',
@@ -122,7 +130,7 @@ export const HinomeStartScreen: React.FC<Props> = ({
     // 写真をどのアルバムにいれるか、日の目開始情報として使う
     setAlbum(album);
     // ホーム画面への即時反映のため
-    setAlbums([album, ...albums]);
+    // setAlbums([album, ...albums]);
     return album;
   };
 
@@ -149,7 +157,12 @@ export const HinomeStartScreen: React.FC<Props> = ({
 
   const onStart = async () => {
     setLoading(true);
-    const { id, startAt, endAt } = await createAlbumContext();
+    // change group status
+    const groupRef = getGroupRef(group.id);
+    groupRef.update({
+      status: 'doing',
+    });
+    const { id, startAt, endAt } = await createGroupAlbumContext();
     try {
       await AsyncStorage.setItem('@albumId', id);
     } catch (e) {
@@ -162,18 +175,8 @@ export const HinomeStartScreen: React.FC<Props> = ({
     for (const notifyAt of notifyAts) {
       scheduleNotificationAsync(notifyAt);
     }
-    await Notifications.cancelAllScheduledNotificationsAsync();
     setLoading(false);
     setVisibleStart(true);
-  };
-
-  const onMultipleStart = async () => {
-    // グループアルバム作成処理の追加
-    const groupCode = genarateGroupCode(6);
-    const group = await createGroup(user.id, groupName, groupCode);
-    setGroup(group);
-    addGroupUser(group.id, userName);
-    navigation.navigate('MultipleStart', { hour, groupCode });
   };
 
   const dismissWalkthroughModal = async () => {
@@ -191,6 +194,10 @@ export const HinomeStartScreen: React.FC<Props> = ({
       await Notifications.getAllScheduledNotificationsAsync();
     setCount(notifications.length);
   };
+
+  const renderItem = ({ item }) => (
+    <Text style={styles.startText}>{item.name}</Text>
+  );
 
   return (
     <LinearGradient
@@ -212,28 +219,19 @@ export const HinomeStartScreen: React.FC<Props> = ({
           dismissModal={dismissWalkthroughModal}
         />
         <StartModal visible={visibleStart} dismissModal={dismissStartModal} />
-        {isSingle ? (
-          <View style={styles.startContainer}>
-            <Text style={styles.startText}>
-              {hour}時間の間に撮影タイミングを{'\n'}10回通知します
-            </Text>
-            <TouchableOpacity onPress={onStart} style={styles.startButton}>
-              <Text style={styles.startButtonText}>スタート</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.startContainer}>
-            <Text style={styles.startText}>
-              {hour}時間の間に撮影タイミングを{'\n'}10回通知します
-            </Text>
-            <TouchableOpacity
-              onPress={onMultipleStart}
-              style={styles.startButton}
-            >
-              <Text style={styles.startButtonText}>アルバム作成</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+        <View style={styles.startContainer}>
+          <Text style={styles.codeText}>{groupCode}</Text>
+          <Text style={styles.startText}>コードをシェアしてください</Text>
+          <Text style={styles.startText}>メンバー</Text>
+          <FlatList
+            data={groupUsers}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => index.toString()}
+          />
+          <TouchableOpacity onPress={onStart} style={styles.startButton}>
+            <Text style={styles.startButtonText}>スタート</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
       <Loading visible={loading} />
     </LinearGradient>
@@ -247,16 +245,27 @@ const styles = StyleSheet.create({
   startContainer: {
     marginTop: 40,
   },
+  codeText: {
+    color: 'black',
+    fontSize: 40,
+    fontStyle: 'normal',
+    fontWeight: '900',
+    fontFamily: 'MPLUS1p_400Regular',
+    textAlign: 'center',
+    backgroundColor: 'transparent',
+    marginTop: 50,
+    marginBottom: 20,
+  },
   startText: {
     color: 'white',
-    fontSize: 30,
+    fontSize: 25,
     fontStyle: 'normal',
     fontWeight: 'normal',
     fontFamily: 'MPLUS1p_400Regular',
     textAlign: 'center',
     backgroundColor: 'transparent',
-    marginTop: 50,
-    marginBottom: 50,
+    marginTop: 20,
+    marginBottom: 20,
   },
   startButton: {
     backgroundColor: 'white',

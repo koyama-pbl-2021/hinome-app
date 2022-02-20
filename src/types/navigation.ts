@@ -1,4 +1,5 @@
 import { Album } from './album';
+import { Group } from './group';
 import { Notification } from './notification';
 
 export type RootStackParamList = {
@@ -7,5 +8,11 @@ export type RootStackParamList = {
   Album: { currentAlbum: Album };
   Camera: { currentNotification: Notification };
   Hinome: undefined;
-  HinomeStart: { hour: string };
+  TimeSelect: { userName: string; groupName: string };
+  HinomeStart: { hour: string; userName: string; groupName: string };
+  Multiple: undefined;
+  MultipleStart: { hour: string; groupCode: string };
+  HostInput: undefined;
+  JoinInput: undefined;
+  WaitHost: undefined;
 };

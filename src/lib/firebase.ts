@@ -5,6 +5,7 @@ import env from '../../env.json';
 import { initialUser, User } from '../types/user';
 import { Album } from '../types/album';
 import { Notification } from '../types/notification';
+import { Group } from '../types/group';
 
 const firebaseConfig = {
   apiKey: env.FIREBASE_API_KEY,
@@ -89,19 +90,6 @@ export const logIn = async (email: string, password: string) => {
   }
 };
 
-// export const logInCheck = () => {
-//   firebase.auth().onAuthStateChanged((user) => {
-//     if (user) {
-//       return {
-//         userId: user.uid,
-//         email: user.email,
-//       } as User;
-//     } else {
-//       return null;
-//     }
-//   });
-// };
-
 export const logOut = async () => {
   try {
     await firebase.auth().signOut();
@@ -166,6 +154,24 @@ export const createAlbumRef = async (userId: string) => {
     .doc();
 };
 
+export const createGroupAlbumRef = async (groupId: string) => {
+  return await firebase
+    .firestore()
+    .collection('groups')
+    .doc(groupId)
+    .collection('albums')
+    .doc();
+};
+
+export const getGroupAlbumCollection = async (groupId: string) => {
+  return await firebase
+    .firestore()
+    .collection('groups')
+    .doc(groupId)
+    .collection('albums')
+    .get();
+};
+
 export const getAlbumRef = async (userId: string, albumId: string) => {
   return await firebase
     .firestore()
@@ -184,6 +190,95 @@ export const createPhotoRef = async (albumId: string, userId: string) => {
     .doc(albumId)
     .collection('photos')
     .doc();
+};
+
+export const createGroup = async (
+  userId: string,
+  groupName: string,
+  groupCode: string
+) => {
+  const collection = await firebase.firestore().collection('groups');
+  // idを取得するため
+  const id = collection.doc().id;
+  await firebase
+    .firestore()
+    .collection('groups')
+    .doc(id)
+    .set({ name: groupName, code: groupCode, status: 'standby' });
+  // groupをusers/user/groupsにも格納
+  await firebase
+    .firestore()
+    .collection('users')
+    .doc(userId)
+    .collection('groups')
+    .doc(id)
+    .set({ name: groupName, code: groupCode, status: 'standby' });
+  // Group型のgroupを返却
+  const group = {
+    id: id,
+    name: groupName,
+    code: groupCode,
+  } as Group;
+  return group;
+};
+
+export const addGroupUser = async (groupId: string, userName: string) => {
+  await firebase
+    .firestore()
+    .collection('groups')
+    .doc(groupId)
+    .collection('users')
+    .doc()
+    .set({ name: userName });
+};
+
+export const getGroupUserCollection = (
+  groupId: string
+): firebase.firestore.CollectionReference<firebase.firestore.DocumentData> => {
+  return firebase
+    .firestore()
+    .collection('groups')
+    .doc(groupId)
+    .collection('users');
+};
+
+export const getGroupRef = (
+  groupId: string
+): firebase.firestore.DocumentReference<firebase.firestore.DocumentData> => {
+  return firebase.firestore().collection('groups').doc(groupId);
+};
+
+export const getGroupByCode = async (groupCode: string) => {
+  return await firebase
+    .firestore()
+    .collection('groups')
+    .where('code', '==', groupCode)
+    .limit(1)
+    .get();
+};
+
+export const addGroupToUserCollection = (
+  userId: string,
+  groupId: string,
+  groupName: string,
+  groupCode: string
+) => {
+  // groupをusers/user/groupsにも格納
+  firebase
+    .firestore()
+    .collection('users')
+    .doc(userId)
+    .collection('groups')
+    .doc(groupId)
+    .set({ name: groupName, code: groupCode, status: 'standby' });
+  // Group型のgroupを返却
+  const group = {
+    id: groupId,
+    name: groupName,
+    code: groupCode,
+    status: 'standby',
+  } as Group;
+  return group;
 };
 
 export const createNotificationRef = async (
